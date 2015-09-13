@@ -1,0 +1,38 @@
+/* 
+
+* Created CSS document for appendix.
+* Creates box around each definition.
+* Adds padding around definition term and offsets by 50px.
+
+11/11/2013
+* Removed 'padding-left: 100px' from dd element. This was done to allow the text to have the same indent.
+* Added 'float:clear'. This was done to clear any padding/margins that were causing the text not to be aligned.
+*/
+
+
+dt {
+	font-weight: bold;
+	font-size: 14px;
+	float: left;
+	
+}
+dd {
+	background:none no-repeat left top;
+	/*padding-left: 100px*/
+	font-style: italic;
+	padding-top: 15px;
+	float: clear;
+	clear: left;
+	}
+
+.box {
+
+border-style: solid;
+border-width: medium;
+border-color: gray;
+width: 900px;
+padding: 10px;
+border-top-left-radius: 15px;
+border-bottom-right-radius: 15px;
+text-align: left;
+}
