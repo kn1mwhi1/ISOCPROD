@@ -1,7 +1,7 @@
 <?php 
 require_once 'Class_BaseDataBase.php';
 
-class ISOCSupportFormDB_Out extends BaseDataBase{
+class LoginDB_Out extends BaseDataBase{
 
 	//  Main Options Drop Down
 	private $query_MAIN_OPTIONS = "SELECT DROPDOWN_OPTIONS FROM TB_SUPPORT_FORM_DROPDOWN WHERE DROPDOWN_NAME='MAIN' ORDER BY PRIORITY ASC";
@@ -45,7 +45,7 @@ class ISOCSupportFormDB_Out extends BaseDataBase{
 	
 	
 	// Constructor
-	function ISOCSupportFormDB_Out()
+	function LoginDB_Out()
 	{
 		// Call to Base constructor (its apparently necessary in php... sigh)
 		parent::BaseDataBase();	 

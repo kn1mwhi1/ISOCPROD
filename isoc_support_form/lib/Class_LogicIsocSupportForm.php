@@ -10,6 +10,7 @@ class LogicIsocSupportForm
 	private $email;
 	public $errorContainer;
 	public $cleanData;
+	public $responseData;
 	
 	// Values from Support Form
 	
@@ -56,6 +57,7 @@ class LogicIsocSupportForm
 		 $this->email = new ISOC_EMAIL();
 		 $this->errorContainer = array();
 		 $this->cleanData = array();
+		 $this->responseData = array();
 		 $this->requestTicketNumber = "";
 		 $this->requestContactID = "";
 		 
@@ -96,6 +98,73 @@ class LogicIsocSupportForm
 		return $this->FromDB;
 	}
 		
+		
+		
+	public function loadTicketInfoArray ( $aTicketNumber )
+	{
+		
+		$tempTicketInfo = array();
+		$tempTicketMeta = array();
+		$tempRequester = array();
+		
+		$tempTicketInfo = $this->FromDB->getOneRowWhereEquals( 'TB_SUPPORT_FORM_DATA', 'REQUEST_TICKET_NUMBER', $aTicketNumber );
+		$tempTicketMeta = $this->FromDB->getOneRowWhereEquals( 'TB_SUPPORT_FORM_METADATA' , 'REQUEST_TICKET_NUMBER', $aTicketNumber );
+		$tempRequester = $this->FromDB->getOneRowWhereEquals( 'TB_SUPPORT_FORM_REQUESTER', 'REQUESTER_ID' , $tempTicketInfo['REQUESTER_ID'] );
+		
+		$this->responseData = array_merge($tempTicketInfo, $tempTicketMeta, $tempRequester);
+		print_r($this->responseData);
+	}
+		
+	
+	public function getTicketInfo( $someValue )
+	{
+		if (isset($this->responseData['REQUEST_TICKET_NUMBER']) )
+		{
+			switch ($someValue) 
+			{
+				case 'ISOCTicketID':
+					return $this->responseData['REQUEST_TICKET_NUMBER'];
+					break;
+				case 'RequesterName':
+					return $this->responseData['REQUESTER_NAME'];
+					break;
+				case 'ReplyTo':
+					return $this->responseData['REQUESTER_EMAIL_ADDRESS'];
+					break;
+				case 'CopyTo':
+					return $this->responseData['REQUESTER_CC_ADDRESS'];
+					break;
+				case 'textboxSubject':
+					return $this->responseData['REQUESTER_EMAIL_SUBJECT'];
+					break;
+				case 'ISOCTechnician':
+					return $this->responseData['ISOC_TECH_ID_ASSIGNED'];
+					break;
+				case '':
+					return $this->responseData['REQUEST_TICKET_NUMBER'];
+					break;
+				default:
+					return '';
+			}
+		}
+		return '';
+	}
+	
+	public function isocUpdateRequestAccept( $aTicketNumber, $isocTechID )
+	{
+			$dateTimeNow = date('Y-m-d H:i:s');
+			$temp = array();
+			$temp = $this->FromDB->getOneRowWhereEquals('TB_SUPPORT_FORM_METADATA', 'REQUEST_TICKET_NUMBER', $aTicketNumber );
+			
+			if (! isset( $temp['REQUEST_ACCEPT_DATETIME'] ) )
+			{
+				$updateTemp = array("REQUEST_ACCEPT_DATETIME" => $dateTimeNow, "ISOC_TECH_ID_ASSIGNED" => "$isocTechID" );
+				$whereArray = array("REQUEST_TICKET_NUMBER"=> $aTicketNumber);
+				
+				$this->ToDB->updateRecordOneTable( $updateTemp , $whereArray, 'equals' , 'TB_SUPPORT_FORM_METADATA' , $fieldTypes = 'ssi');
+			}
+	}
+	
 	
 	// convert variables used to communicate with database to an array
 	public function convertVariablesToArray()
@@ -572,9 +641,9 @@ class LogicIsocSupportForm
 			$dateTimeNow = date('Y-m-d H:i:s');
 			$tempArray = array("REQUEST_TICKET_NUMBER"=>"$this->requestTicketNumber", "REQUEST_SUBMISSION_DATETIME"=>"$dateTimeNow");
 			$this->ToDB->insertRecordOneTable( $tempArray , 'TB_SUPPORT_FORM_METADATA', 'is' );
-	
 	}
 	
+
 	
 	private function isocEmailSend()
 	{
