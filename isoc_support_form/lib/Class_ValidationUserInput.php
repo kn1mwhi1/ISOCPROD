@@ -51,14 +51,29 @@ class ValidationUserInput
 		}	
 	}
 	
-	private function validateText( $nameOfObject )
+	private function validateAllCharaters( $nameOfObject )
 	{
-		print_r($_POST);
-		if ( check_POST($nameOfObject) && preg_match("/^[a-zA-Z ]*$/",$_POST[$nameOfObject]) )
+		
+		if ( $this->check_POST($nameOfObject) && preg_match("/^[a-zA-Z0-9@.]*$/",$_POST[$nameOfObject]) )
+		{
+			// Calls sanitize function and then saves results in the name box variable located in this class.
+			$_POST[$nameOfObject] = $this->sanitize_input($_POST[$nameOfObject]);
+			return true; // pass validation
+		}
+		else
 		{
 			
-			
-			// Calls sanitize function and then saves results in the nambox variable located in this class.
+			$this->addToErrorArray( $nameOfObject);
+			return false; // failed validation
+		}
+	}
+		
+	private function validateLettersOnly ($nameOfObject )
+	{
+		
+		if ( $this->check_POST($nameOfObject) && preg_match("/^[a-zA-Z ]*$/",$_POST[$nameOfObject]) )
+		{
+			// Calls sanitize function and then saves results in the name box variable located in this class.
 			$_POST[$nameOfObject] = $this->sanitize_input($_POST[$nameOfObject]);
 			return true; // pass validation
 		}
@@ -89,9 +104,28 @@ class ValidationUserInput
 		
 	}
 	
-	private function validatePhoneNumber ( $nameOfObject )
+	private function validateIntegers( $nameOfObject )
 	{
-		// Perform Data Sanitization on the Contact Numberbox
+		// Perform Data Sanitization on Email from User.
+	
+			// Calls sanitize function and then saves results in the name box variable located in this class.
+				
+			if ( check_POST($nameOfObject) && filter_var($_POST[$nameOfObject], FILTER_VALIDATE_INT) === true) 
+			{
+				 $_POST[$nameOfObject] = $this->sanitize_input($_POST[$nameOfObject]);
+				return true;  // pass validation
+			} 
+			else 
+			{
+				$this->addToErrorArray( $nameOfObject);
+				return false;  // fail validation
+			}
+		
+	}
+	
+	private function validateUSAPhoneNumber ( $nameOfObject )
+	{
+		// Perform Data Sanitization on the Contact Number box
 	
 			// Calls sanitize function and then saves results in the numberbox variable located in this class.
 				// Checks the length of the string and also ensures the data is only numbers
@@ -167,24 +201,28 @@ class ValidationUserInput
 	
 	public function validateInformation( $nameOfObject, $aType )
 	{
-		
-		
-		// Make type all uppercase
+		// Make type all upper-case
 		$aType = strtoupper( $aType );
 		
 		switch ($aType) 
 		{
-			case "TEXT":
-					return $this->validateText( $nameOfObject );
+			case "LETTER":
+					return $this->validateLettersOnly( $nameOfObject );
 				break;
 			case "EMAIL":
 					return $this->validateEmail( $nameOfObject );
 				break;
 			case "EMAILS":
 					return $this->validateMultipleEmails( $nameOfObject );
+			case "INT":
+					return $this->validateIntegers( $nameOfObject );//******************
+			case "USAPHONE":
+					return $this->validateUSAPhoneNumber( $nameOfObject );
+			case "ALL":
+					return $this->validateAllCharaters( $nameOfObject );//******************
 				break;
 			default:
-					return $this->validateText( $nameOfObject );
+					return $this->validateAllCharaters( $nameOfObject );
 		}	
 	}
 }

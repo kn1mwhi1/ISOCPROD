@@ -683,7 +683,7 @@ class LogicIsocSupportForm
                   <font style="font-family: Verdana, Geneva, sans-serif; color:#666766; font-size:13px; line-height:21px">
 				  
 				  '.$this->createISOCEmailBody().'
-					<a href="http://10.176.105.18/isoc_support_form/requestformresponse.html?'.$this->requestTicketNumber.'">Open Ticket</a>
+					<a href="http://10.176.105.18/isoc_support_form/requestformresponse.php?'.$this->requestTicketNumber.'">Open Ticket</a>
 				</font>
 				
 				</td>

@@ -8,6 +8,7 @@ $TierTwo->checkLoginInfo();
 <script type="text/javascript" src="script/bootstrap.js"></script>
 <script type="text/javascript" src="script/jquery.js"></script>
 <link rel="stylesheet" href="css/bootstrap.css" />
+<link rel="stylesheet" href="css/errorCSS.css" />
 </head>
 
  <div class="container">    
@@ -27,12 +28,12 @@ $TierTwo->checkLoginInfo();
                                     
                             <div style="margin-bottom: 25px" class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                        <input id="login-username <?php $TierTwo->input_error('namebox');?> " type="text" class="form-control" name="username" value="" placeholder="employee id or email">                                        
+                                        <input id="login-username" type="text" class="form-control <?php $TierTwo->getError('username');?>" name="username" value="" placeholder="employee id or email">                                        
                                     </div>
                                 
                             <div style="margin-bottom: 25px" class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                        <input id="login-password" type="password" class="form-control" name="password" placeholder="password">
+                                        <input id="login-password" type="password" class="form-control <?php $TierTwo->getError('password');?>" name="password" placeholder="password">
                                     </div>
                                     
 
