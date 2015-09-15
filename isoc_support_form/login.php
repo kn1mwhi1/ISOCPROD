@@ -2,6 +2,8 @@
 <head>
 <?php 
 require_once 'lib/Class_LoginLogic.php'; 
+$TierTwo = new LoginLogic();
+$TierTwo->checkLoginInfo();
 ?>
 <script type="text/javascript" src="script/bootstrap.js"></script>
 <script type="text/javascript" src="script/jquery.js"></script>
@@ -19,12 +21,13 @@ require_once 'lib/Class_LoginLogic.php';
                     <div style="padding-top:30px" class="panel-body" >
 
                         <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
+<!-- Beginning of login Form -->
                             
-                        <form id="loginform" class="form-horizontal" role="form">
+                        <form id="loginform" class="form-horizontal" role="form" method="post" action="" >
                                     
                             <div style="margin-bottom: 25px" class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                        <input id="login-username" type="text" class="form-control" name="username" value="" placeholder="employee id or email">                                        
+                                        <input id="login-username <?php $TierTwo->input_error('namebox');?> " type="text" class="form-control" name="username" value="" placeholder="employee id or email">                                        
                                     </div>
                                 
                             <div style="margin-bottom: 25px" class="input-group">
@@ -47,7 +50,8 @@ require_once 'lib/Class_LoginLogic.php';
                                     <!-- Button -->
 
                                     <div class="col-sm-12 controls">
-                                      <a id="btn-login" href="#" class="btn btn-success">Login  </a>
+ <!-- Submit button -->            
+										<input class="btn btn-success" type="submit" id='btn-login' value='Login'>
                                     </div>
                                 </div>
 
@@ -62,7 +66,10 @@ require_once 'lib/Class_LoginLogic.php';
                                         </div>
                                     </div>
                                 </div>    
-                            </form>     
+                            </form>   
+
+
+<!-- End of login Form --->							
 
 
 
