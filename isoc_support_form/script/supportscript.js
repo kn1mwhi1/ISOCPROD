@@ -344,6 +344,9 @@ function cleanContactNumber( value )
 
 
 
+
+// Methods for Cookies
+
 function setCookie(NameOfCookie, value, expiredays)
 { 
 	

@@ -5,7 +5,7 @@ require_once 'lib/Class_LoginLogic.php';
 $TierTwo = new LoginLogic();
 try
 {
-	$TierTwo->checkLoginInfo();
+	$TierTwo->checkPOSTLoginInfo();
 }
 catch (Exception  $e)
 {

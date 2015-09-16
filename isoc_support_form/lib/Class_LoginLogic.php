@@ -95,15 +95,24 @@ class LoginLogic extends ValidationUserInput
 	
 		if ($temp['ISOC_TECH_PASSWORD'] === $password )
 		{
-			// Starte a new session
+			// Start a new session
 			$this->startSession($temp);
 			
 			// update last login time in database
 			$this->updateLastLogin();
 			
-			print_r($_SESSION);
 			
-			header("location: ".$_SESSION['actual_link'] );
+			
+			$url = $_SESSION['actual_link'];
+			
+		session_write_close();
+			echo"
+		<script>
+				window.location = '".$url."';
+		</script>
+";
+
+			exit();
 			
 		}
 		else
@@ -111,57 +120,65 @@ class LoginLogic extends ValidationUserInput
 			echo "incorrect login";
 		}
 	}
+	private function setSessionTime( $timeSeconds = 43200)
+	{
+		$timeSeconds = 43200;
+		
+		if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > $timeSeconds)) 
+		{
+			
+			session_unset();     // unset $_SESSION variable for the run-time 
+			session_destroy();   // destroy session data in storage
+			echo "Session destroyed";
+		}
+	
+		$_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
+	}
+	
+	
 	private function startSession( $anArray )
 	{
-		if ( $this->is_session_started() === FALSE ) 
+		session_start();
+		
+		// Set the session time to 12 hours
+		//$this->setSessionTime();
+		
+		// Check if user has logged in yet.
+		if (empty($_SESSION['ISOC_TECH_EMPLOYEE_ID']) ) 
 		{
-			print_r($_SESSION);
-			echo "Trying to start session 2";
-			session_start;
-			$_SESSION = $anArray; // Initializing Session
+			//print_r($_SESSION);
+			echo "Starting Session";
+
 			
+			$_SESSION = array_merge($anArray, $_SESSION); // Initializing Session
 			
 		}
-		else
+		else  // User is already logged in.
 		{
-			$tempArray = $_SESSION;
-			$_SESSION = array_merge( $tempArray, $anArray); // Initializing Session
-			echo "We came here";
+			//$tempArray = $_SESSION;
+			//$_SESSION = array_merge( $anArray, $_SESSION); // Initializing Session
+			echo "Already logged in <br />";
 		}
 	}
 	
 	public function checkSession ()
 	{		
-
-		if ( $this->is_session_started() === FALSE ) 
+         // must be on all pages
+		 session_start();	
+		 
+		if ( empty($_SESSION['ISOC_TECH_EMPLOYEE_ID']) )
 		{
-			session_start();
-		}
-		
-		// get current link
-		$_SESSION['actual_link'] = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-		
-		
-		if ($_SESSION['ISOC_TECH_EMPLOYEE_ID'] == '')
-		{
-			//header("location: login.php");
-			print_r($_SESSION);
+			
+			$_SESSION['actual_link'] = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+			echo "Is empty";
+			session_write_close();
+			header("location: login.php");
+			
+			exit();
 		}
 		
 	}
 	
-	// Univeral funciton to find if the session has started.
-	private function is_session_started()
-	{
-		if ( php_sapi_name() !== 'cli' ) {
-			if ( version_compare(phpversion(), '5.4.0', '>=') ) {
-				return session_status() === PHP_SESSION_ACTIVE ? TRUE : FALSE;
-			} else {
-				return session_id() === '' ? FALSE : TRUE;
-			}
-		}
-		return FALSE;
-	}
 	
 	private function updateLastLogin()
 	{
@@ -176,7 +193,7 @@ class LoginLogic extends ValidationUserInput
 	
 	
 //Used to check information after user has "posted" the data from a from
-	public function checkLoginInfo()
+	public function checkPOSTLoginInfo()
 	{
 	    // Checks to see if user has posted before checking any validation
 		if ($_SERVER["REQUEST_METHOD"] == "POST") 
