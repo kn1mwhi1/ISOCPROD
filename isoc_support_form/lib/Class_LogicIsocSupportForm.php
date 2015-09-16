@@ -360,6 +360,12 @@ class LogicIsocSupportForm
 			if ($nameOfObject == 'textboxCC')
 			{	// Calls sanitize function and then saves results in the name box variable located in this class.
 					
+				// if emtpy then return true
+				if ($_POST[$nameOfObject] == "")
+				{
+					return true;
+				}
+				
 				// get email addresses from post variable
 				$emails = $_POST[$nameOfObject];
 				

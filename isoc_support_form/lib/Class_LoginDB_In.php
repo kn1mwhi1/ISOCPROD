@@ -110,22 +110,17 @@ class LoginDB_In extends BaseDataBase{
 		
 		// create the parametrized sql statement based upon parameters
 		$sql = $this->createUpdatePreparedSQLStatement( $updateArray, $whereArray, $aTableName, $equalsOrLike, $limit);
-		echo $sql;
-		
 		
 		$updateRefArray = array();
 		$updateWhereArray = array();
 		$result = array();
 		$values = array();
 		
-
-		
         foreach($updateArray as $key => $value)
 		{
       
 			// add value references to a new array
   		    $updateRefArray[$key] = &$updateArray[$key];
-			  
 		}
 				
 				
@@ -145,7 +140,6 @@ class LoginDB_In extends BaseDataBase{
 		
 	    // merge the datatype for the db fields and the values into one array. (references of )
 		$result = array_merge( array(&$fieldTypes), $values); 
-		
 		
 		
 		// Prepare, bind and execute the SQL based upon parameters

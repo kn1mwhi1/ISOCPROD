@@ -3,12 +3,24 @@
 <?php 
 require_once 'lib/Class_LoginLogic.php'; 
 $TierTwo = new LoginLogic();
-$TierTwo->checkLoginInfo();
+try
+{
+	$TierTwo->checkLoginInfo();
+}
+catch (Exception  $e)
+{
+	echo $e->getMessage() ;
+}
 ?>
 <script type="text/javascript" src="script/bootstrap.js"></script>
 <script type="text/javascript" src="script/jquery.js"></script>
+<script type="text/javascript" src="script/cookies.js"></script>
 <link rel="stylesheet" href="css/bootstrap.css" />
 <link rel="stylesheet" href="css/errorCSS.css" />
+<script>
+loadCookies();
+</script>
+
 </head>
 
  <div class="container">    
@@ -28,12 +40,12 @@ $TierTwo->checkLoginInfo();
                                     
                             <div style="margin-bottom: 25px" class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                        <input id="login-username" type="text" class="form-control <?php $TierTwo->getError('username');?>" name="username" value="" placeholder="employee id or email">                                        
+                                        <input id="loginusername" type="text" class="form-control <?php $TierTwo->getError('username');?>"  name="username" placeholder="employee id or email" onblur="setCookie('loginusername', document.getElementById('loginusername').value ,365);">                                        
                                     </div>
                                 
                             <div style="margin-bottom: 25px" class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                        <input id="login-password" type="password" class="form-control <?php $TierTwo->getError('password');?>" name="password" placeholder="password">
+                                        <input id="loginpassword" type="password" class="form-control <?php $TierTwo->getError('password');?>" name="password" placeholder="password" onblur="setCookie('loginpassword', document.getElementById('loginpassword').value ,365);">
                                     </div>
                                     
 
@@ -41,7 +53,7 @@ $TierTwo->checkLoginInfo();
                             <div class="input-group">
                                       <div class="checkbox">
                                         <label>
-                                          <input id="login-remember" type="checkbox" name="remember" value="1"> Remember me
+                                          <input id="loginremember" type="checkbox" name="remember" value="1" onblur="setCookie('loginremember', this.val ,365);"> Remember me
                                         </label>
                                       </div>
                                     </div>
@@ -87,6 +99,7 @@ $TierTwo->checkLoginInfo();
                             <div style="float:right; font-size: 85%; position: relative; top:-10px"><a id="signinlink" href="#" onclick="$('#signupbox').hide(); $('#loginbox').show()">Sign In</a></div>
                         </div>  
                         <div class="panel-body" >
+<!-- Register Form -->						
                             <form id="signupform" class="form-horizontal" role="form">
                                 
                                 <div id="signupalert" style="display:none" class="alert alert-danger">
@@ -126,6 +139,13 @@ $TierTwo->checkLoginInfo();
                                     <label for="password" class="col-md-3 control-label">Password</label>
                                     <div class="col-md-9">
                                         <input type="password" class="form-control" name="passwd" placeholder="Password">
+                                    </div>
+                                </div>
+								
+								<div class="form-group">
+                                    <label for="secretWord" class="col-md-3 control-label">Secret Word</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" name="secretWord" placeholder="Secret Word">
                                     </div>
                                 </div>
                                     

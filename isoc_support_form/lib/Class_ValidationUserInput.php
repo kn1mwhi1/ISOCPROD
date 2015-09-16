@@ -1,5 +1,7 @@
 <?php 
-class ValidationUserInput
+require_once 'Class_BaseDataBase.php';
+
+class ValidationUserInput extends BaseDataBase
 {
 	private $errorContainer;
 
@@ -25,6 +27,7 @@ class ValidationUserInput
 		 $astring = trim($astring);
 		 $astring = stripslashes($astring);
 		 $astring = htmlspecialchars($astring);
+		 $astring =  parent::getDbConnection()->real_escape_string( $astring );
 		 return $astring;
 	}
 	
