@@ -136,8 +136,14 @@ class ISOCSupportFormDB_Out extends BaseDataBase{
 					$tempValue[] = $field;
 				}
 			}
+		
+			
 			// strip keys
 			$tempValue = array_values( $tempValue );
+			//echo count($tempValue);
+			
+			// Double the keys
+			$tempKeys = array_combine( $tempKeys, $tempKeys);
 			
 			// combine
 			$tempValue = array_combine( $tempKeys, $tempValue);

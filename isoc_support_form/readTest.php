@@ -17,7 +17,7 @@ $test2 = new LoginLogic();
 //print_r( $test->getMainOptions() );
 
 //print_r( $test->getEmail() );
-session_start();
+//session_start();
 //print_r($_SESSION);
 $test2->checkSession();
 echo "Everything is awesome! <br />";
@@ -26,14 +26,17 @@ echo "Everything is awesome! <br />";
 
 print_r($_SESSION);
 //echo json_encode($test->getMainOptions() );
-
+/*
 function clear()
 {
 session_unset(); 
 session_destroy();
 }
+*/
 ?>
 
 <html>
-<input class="btn btn-success" type="button" id='btn-login' value='Clear Session' onclick="<?php clear(); ?>">
+<form method="get" action="logout.php">
+    <button type="submit">Clear Session</button>
+</form>
 </html>

@@ -110,22 +110,8 @@ class ISOC_EMAIL
 	
 	public function sendEmail()
 	{
-		
 		mail($this->to,$this->subject,$this->message,$this->headers);
 			echo "Email has been sent";
-		
-		/*
-		if (isset($this->to,$this->subject,$this->message,$this->headers) )
-		{
-			mail($this->to,$this->subject,$this->message,$this->headers);
-			echo "Email has been sent";
-		}
-		else
-		{
-			echo "Failed sending email, not all fields have a value";
-		}
-		
-		*/
 	}
 
 

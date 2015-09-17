@@ -94,7 +94,7 @@ class ValidationUserInput extends BaseDataBase
 	
 			// Calls sanitize function and then saves results in the name box variable located in this class.
 				
-			if ( check_POST($nameOfObject) && filter_var($_POST[$nameOfObject], FILTER_VALIDATE_EMAIL) === true) 
+			if ( $this->check_POST($nameOfObject) && filter_var($_POST[$nameOfObject], FILTER_VALIDATE_EMAIL) === true) 
 			{
 				 $_POST[$nameOfObject] = $this->sanitize_input($_POST[$nameOfObject]);
 				return true;  // pass validation
@@ -113,7 +113,7 @@ class ValidationUserInput extends BaseDataBase
 	
 			// Calls sanitize function and then saves results in the name box variable located in this class.
 				
-			if ( check_POST($nameOfObject) && filter_var($_POST[$nameOfObject], FILTER_VALIDATE_INT) === true) 
+			if ( $this->check_POST($nameOfObject) && filter_var($_POST[$nameOfObject], FILTER_VALIDATE_INT) === true) 
 			{
 				 $_POST[$nameOfObject] = $this->sanitize_input($_POST[$nameOfObject]);
 				return true;  // pass validation
@@ -132,7 +132,7 @@ class ValidationUserInput extends BaseDataBase
 	
 			// Calls sanitize function and then saves results in the numberbox variable located in this class.
 				// Checks the length of the string and also ensures the data is only numbers
-		if ( check_POST($nameOfObject) && ( strlen($_POST[$nameOfObject]) == 10 || strlen($_POST[$nameOfObject]) == 9) && preg_match('/^\d+$/',$_POST[$nameOfObject]) )
+		if ( $this->check_POST($nameOfObject) && ( strlen($_POST[$nameOfObject]) == 10 || strlen($_POST[$nameOfObject]) == 9) && preg_match('/^\d+$/',$_POST[$nameOfObject]) )
 		{
 			$_POST[$nameOfObject] = $this->sanitize_input($_POST[$nameOfObject]);
 			return true; // pass validation

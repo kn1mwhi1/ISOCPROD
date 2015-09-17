@@ -98,6 +98,9 @@ class LoginDB_Out extends BaseDataBase{
 			// strip keys
 			$tempValue = array_values( $tempValue );
 			
+			// Double the keys to make the same number of elements in each array on next combine.
+			$tempKeys = array_combine( $tempKeys, $tempKeys);
+			
 			// combine
 			$tempValue = array_combine( $tempKeys, $tempValue);
 			

@@ -6,6 +6,7 @@ $TierTwo = new LoginLogic();
 try
 {
 	$TierTwo->checkPOSTLoginInfo();
+	$TierTwo->checkPOSTRegisterInfo();
 }
 catch (Exception  $e)
 {
@@ -100,7 +101,7 @@ loadCookies();
                         </div>  
                         <div class="panel-body" >
 <!-- Register Form -->						
-                            <form id="signupform" class="form-horizontal" role="form">
+                            <form id="signupform" class="form-horizontal" role="form" method="post" action="">
                                 
                                 <div id="signupalert" style="display:none" class="alert alert-danger">
                                     <p>Error:</p>
@@ -112,47 +113,47 @@ loadCookies();
                                 <div class="form-group">
                                     <label for="email" class="col-md-3 control-label">Email</label>
                                     <div class="col-md-9">
-                                        <input type="text" class="form-control" name="email" placeholder="Email Address">
+                                        <input type="text" class="form-control <?php $TierTwo->getError('email');?>" name="email" placeholder="Email Address">
                                     </div>
                                 </div>
 								
 								 <div class="form-group">
                                     <label for="id" class="col-md-3 control-label">Employee ID</label>
                                     <div class="col-md-9">
-                                        <input type="text" class="form-control" name="id" placeholder="Employee ID">
+                                        <input type="text" class="form-control <?php $TierTwo->getError('id');?>" name="id" placeholder="Employee ID">
                                     </div>
                                 </div>
                                     
                                 <div class="form-group">
                                     <label for="firstname" class="col-md-3 control-label">First Name</label>
                                     <div class="col-md-9">
-                                        <input type="text" class="form-control" name="firstname" placeholder="First Name">
+                                        <input type="text" class="form-control <?php $TierTwo->getError('firstname');?>" name="firstname" placeholder="First Name">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="lastname" class="col-md-3 control-label">Last Name</label>
                                     <div class="col-md-9">
-                                        <input type="text" class="form-control" name="lastname" placeholder="Last Name">
+                                        <input type="text" class="form-control <?php $TierTwo->getError('lastname');?>" name="lastname" placeholder="Last Name">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="password" class="col-md-3 control-label">Password</label>
+                                    <label for="passwd" class="col-md-3 control-label">Password</label>
                                     <div class="col-md-9">
-                                        <input type="password" class="form-control" name="passwd" placeholder="Password">
+                                        <input type="password" class="form-control <?php $TierTwo->getError('passwd');?>" name="passwd" placeholder="Password">
                                     </div>
                                 </div>
 								
 								<div class="form-group">
                                     <label for="secretWord" class="col-md-3 control-label">Secret Word</label>
                                     <div class="col-md-9">
-                                        <input type="text" class="form-control" name="secretWord" placeholder="Secret Word">
+                                        <input type="text" class="form-control <?php $TierTwo->getError('secretWord');?>" name="secretWord" placeholder="Secret Word">
                                     </div>
                                 </div>
                                     
                                 <div class="form-group">
                                     <!-- Button -->                                        
                                     <div class="col-md-2 col-md-offset-5">
-                                        <button id="btn-signup" type="button" class="btn btn-info"><i class="icon-hand-right"></i> &nbsp Sign Up</button>
+                                        <input class="btn btn-success" type="submit" id='btn-register' value='Register'>
                                     </div>
                                 </div>
                             </form>
@@ -164,6 +165,7 @@ loadCookies();
                 
          </div> 
     </div>
-    
-
+ <?php 
+//$TierTwo->checkPOSTRegisterInfo();
+?>
 </html>

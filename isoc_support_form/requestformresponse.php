@@ -12,6 +12,10 @@
 
 <?php
 require('lib/Class_LogicIsocSupportForm.php');
+require('lib/Class_LoginLogic.php');
+
+$Login = new LoginLogic();
+$Login->checkSession();
 $TierTwo = new LogicIsocSupportForm();
 
 // get the request URI  anything with ?$DATA
