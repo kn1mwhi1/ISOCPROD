@@ -1,17 +1,105 @@
 <html>
 <head>
-<title>REGISTRATION FORM</title>
-<body>
+<?php 
+require_once 'lib/Class_LoginLogic.php'; 
+$TierTwo = new LoginLogic();
+try
+{
+	$TierTwo->checkSessionLoginRegister();
+	$TierTwo->checkPOSTRegisterInfo();
+}
+catch (Exception  $e)
+{
+	echo $e->getMessage() ;
+}
+?>
+<script type="text/javascript" src="script/bootstrap.js"></script>
+<script type="text/javascript" src="script/jquery.js"></script>
+<script type="text/javascript" src="script/sweetalert.min.js"></script>
+<script type="text/javascript" src="script/cookies.js"></script>
+<link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="css/sweetalert.css" />
+<link rel="stylesheet" type="text/css" href="css/errorCSS.css" />
+<script>
+loadCookies();
+</script>
 
-<form name="registration" method="post" action="registration.php">
-<!-- we will create registration.php after registration.html -->
-USERNAME:<input type="text" name="name" value=""></br>
-EMAIL-ID:<input type="text" name="email" value=""></br>
-PASSWORD:<input type="text" name="password" value=""></br>
-RE-PASSWORD:<input type="text" name="repassword" value=""></br>
-<input type="submit" name="submit" value="submit">
-</form>
-
-</body>
 </head>
+
+ <div class="container">    
+        <div id="signupbox" style="margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <div class="panel-title">Sign Up</div>
+                            <div style="float:right; font-size: 85%; position: relative; top:-10px"><a id="signinlink" href="login.php">Sign In</a></div>
+                        </div>  
+                        <div class="panel-body" >
+<!-- Register Form -->						
+                            <form id="signupform" class="form-horizontal" role="form" method="post" action="">
+                                
+                                <div id="signupalert" style="display:none" class="alert alert-danger">
+                                    <p>Error:</p>
+                                    <span></span>
+                                </div>
+                                    
+                                
+                                  
+                                <div class="form-group">
+                                    <label for="email" class="col-md-3 control-label">Email</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control <?php $TierTwo->getError('email');?>" name="email" placeholder="Email Address">
+                                    </div>
+                                </div>
+								
+								 <div class="form-group">
+                                    <label for="id" class="col-md-3 control-label">Employee ID</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control <?php $TierTwo->getError('id');?>" name="id" placeholder="Employee ID">
+                                    </div>
+                                </div>
+                                    
+                                <div class="form-group">
+                                    <label for="firstname" class="col-md-3 control-label">First Name</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control <?php $TierTwo->getError('firstname');?>" name="firstname" placeholder="First Name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastname" class="col-md-3 control-label">Last Name</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control <?php $TierTwo->getError('lastname');?>" name="lastname" placeholder="Last Name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="passwd" class="col-md-3 control-label">Password</label>
+                                    <div class="col-md-9">
+                                        <input type="password" class="form-control <?php $TierTwo->getError('passwd');?>" name="passwd" placeholder="Password">
+                                    </div>
+                                </div>
+								
+								<div class="form-group">
+                                    <label for="secretWord" class="col-md-3 control-label">Secret Word</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control <?php $TierTwo->getError('secretWord');?>" name="secretWord" placeholder="Secret Word"  >
+                                    </div>
+                                </div>
+                                    
+                                <div class="form-group">
+                                    <!-- Button -->                                        
+                                    <div class="col-md-2 col-md-offset-5">
+                                        <input class="btn btn-success" type="submit" id='btn-register' value='Register'>
+                                    </div>
+                                </div>
+                            </form>
+                         </div>
+                    </div>
+
+               
+               
+                
+         </div> 
+    </div>
+ <?php 
+$TierTwo->notifyMessage();
+?>
 </html>

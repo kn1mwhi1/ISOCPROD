@@ -3,6 +3,7 @@ require_once 'Class_LoginDB_In.php';
 require_once 'Class_LoginDB_Out.php';
 require_once 'Class_ValidationUserInput.php';
 require_once 'Class_ISOC_EMAIL.php';
+require_once 'lib/Class_ErrorPopup.php';
 
 class LoginLogic extends ValidationUserInput
 {
@@ -10,6 +11,7 @@ class LoginLogic extends ValidationUserInput
 	private $ToDB;
 	private $email;
 	private $validation;
+	private $messagePopup;
 	//private $targetLink;
 
 	// Constructor
@@ -25,6 +27,7 @@ class LoginLogic extends ValidationUserInput
 		 $this->ToDB = new LoginDB_In();
 		 $this->email = new ISOC_EMAIL();		
 		 $this->validation = new ValidationUserInput();
+		 $this->messagePopup = new ErrorPopup();
 		// $this->setTagertLink( '' );
 	}
 	/*
@@ -110,8 +113,8 @@ class LoginLogic extends ValidationUserInput
 	{
 		$temp = array();
 		
-		$temp[] = $this->validation->validateInformation( 'email' , 'EMAIL');
-		$temp[] = $this->validation->validateInformation( 'id' , 'INT');
+		$temp[] = $this->validation->validateInformation( 'email' , 'ALL');
+		$temp[] = $this->validation->validateInformation( 'id' , 'ALL');
 		$temp[] = $this->validation->validateInformation( 'firstname' , 'LETTER');
 		$temp[] = $this->validation->validateInformation( 'lastname' , 'LETTER');
 		$temp[] = $this->validation->validateInformation( 'passwd' , 'ALL');
@@ -132,7 +135,7 @@ class LoginLogic extends ValidationUserInput
 	
 	private function checkLoginPasswordRegister()
 	{
-		$email = $_POST['email '];
+		$email = $_POST['email'];
 		$id = $_POST['id'];
 		$firstname = $_POST['firstname'];
 		$lastname = $_POST['lastname'];
@@ -144,14 +147,14 @@ class LoginLogic extends ValidationUserInput
 		
 		
 		// Insert New User
-		$ToDB->insertRecordOneTable( $anArray ,'TB_ISOC_TECHS', $fieldTypes = 'issssss' );
+		$this->ToDB->insertRecordOneTable( $anArray ,'TB_ISOC_TECHS', 'issssss' );
 		
 		
 		$sql = "SELECT * FROM TB_ISOC_TECHS WHERE ISOC_TECH_EMPLOYEE_ID = '".$id."' OR ISOC_TECH_EMAIL = '".$email."' AND ISOC_TECH_PASSWORD = '".$passwd."'";
 		$temp = $this->FromDB->multiFieldChangeToArrayAssociative( $sql );		
 		
 	
-		if ($temp['ISOC_TECH_PASSWORD'] === $passwd )
+		if ($temp['ISOC_TECH_PASSWORD'] === $passwd && !isset($_SESSION['ISOC_TECH_EMPLOYEE_ID']))
 		{
 			// Start a new session
 			$this->startSession($temp);
@@ -159,26 +162,57 @@ class LoginLogic extends ValidationUserInput
 			// update last login time in database
 			$this->updateLastLogin();
 			
-			$url = $_SESSION['actual_link'];
+			
+			$url ='';
+			if (isset($_SESSION['actual_link']) )
+			{
+				$url = $_SESSION['actual_link'];
+			}
 			
 			//Send EMAIL confirmation
-			//$this->requesterEmailSend();
+			$this->requesterEmailSend();
 			
 			
-			session_write_close();
-			
-			// Javascript Redirct
-			echo"
-		<script>
-				window.location = '".$url."';
-		</script>";
-
-			exit();
-			
+			//session_write_close();
+		
+			if ($url != '')
+			{
+				// JavaScript Redirect
+				echo"
+				<script>
+						window.location = '".$url."';
+				</script>";
+            }
+			else
+			{
+				/*
+				echo"
+				<script>
+						window.location = 'dashboard.php';
+				</script>";
+				*/
+				// show pop-up registration complete.
+				$this->messagePopup->addTomessagePopUp( 'OK', 'Registration Complete!', $_SESSION['ISOC_TECH_FIRST_NAME'].', you have successfully registered! A confirmation email has been sent to you.' , 'success' );
+				
+				echo '
+				
+				<script type="text/javascript" src="script/bootstrap.js"></script>
+				<script type="text/javascript" src="script/sweetalert.min.js"></script>
+				<link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+				<link rel="stylesheet" type="text/css" href="css/sweetalert.css" />
+				
+				<script type="text/javascript"> 
+					swal({   title: "Registration Successful!",   text: "'.$_SESSION['ISOC_TECH_FIRST_NAME'].' , you have finished registering.",   type: "success",   confirmButtonText: "Ok" }); 
+				</script>';
+			}
+				
+				exit();	
 		}
 		else
 		{
-			echo "Failed to register!";
+			//echo "Failed to register! Id already exists";
+			$this->messagePopup->addTomessagePopUp( 'OK', 'Failed to register!', 'Id or Email already exists, please try again!' , 'error' );	
+
 		}
 	}
 	
@@ -226,7 +260,7 @@ class LoginLogic extends ValidationUserInput
 				<tr>
 				  <td valign="middle">
 				  
-				  <div style="text-align: center;font-family: Helvetica; font-variant: small-caps; color: #FFFFFF;  background: #66C285;">ISOC Request Form Conformation Email</div>
+				  <div style="text-align: center;font-family: Helvetica; font-variant: small-caps; color: #FFFFFF;  background: #66C285;">ISOC Registration Confirmation Email</div>
 					
 					</td>
 				</tr>
@@ -285,7 +319,9 @@ class LoginLogic extends ValidationUserInput
 			$this->email->setMessage( $message );
 			
 			// set the To field of email
-			$this->email->setTo( $_SESSION['ISOC_TECH_EMAIL'] );
+			$toEmail = 'matthew.white@uscellular.com';
+			
+			$this->email->setTo( $toEmail );
 			
 			$this->email->setFrom( 'ISOperationsCenter@uscellular.com');
 			
@@ -293,7 +329,7 @@ class LoginLogic extends ValidationUserInput
 			$this->email->setSubject( 'New Registration Confirmation' );
 			
 			// prepare headers which informs the mail client that this will be html and the from and to
-			$this->email->setHeaders();
+			$this->email->setHeadersNoCC();
 			
 			// send email
 			$this->email->sendEmail();
@@ -328,6 +364,10 @@ class LoginLogic extends ValidationUserInput
 
 			$_SESSION = array_merge($anArray, $_SESSION); // Initializing Session			
 		}
+		else // if session is not empty like user already logged in as another user.
+		{
+		   $_SESSION = array_merge($_SESSION, $anArray); // Initializing Session
+		}
 	}
 
 	// Track last login into database
@@ -347,7 +387,7 @@ class LoginLogic extends ValidationUserInput
 // Used by the login form only.
 	public function checkPOSTLoginInfo()
 	{
-	    // Checks to see if user has posted before checking any validation
+	   // Checks to see if user has posted before checking any validation
 		if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['username']) ) 
 		{
 			if ($this->callValidationMethodsLoginForm() )
@@ -357,17 +397,23 @@ class LoginLogic extends ValidationUserInput
 			}
 			else
 			{
-				echo "Did not pass validation for login";
-				// Maybe add a popup stating login failed please try again.
+				$this->messagePopup->addTomessagePopUp( 'OK', 'Validation Failed!', 'Please try again!' , 'error' );
 				
 			}
 		}
+		 
 	}
 	
 	
 	public function checkPOSTRegisterInfo()
 	{
-	    // Checks to see if user has posted before checking any validation
+         // must be on all pages
+		 if(!isset($_SESSION)) 
+		 {
+			session_start();
+		 }
+		
+		// Checks to see if user has posted before checking any validation
 		if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id']) )
 		{
 			if ( $this->callValidationMethodsRegisterForm() )
@@ -377,31 +423,95 @@ class LoginLogic extends ValidationUserInput
 			}
 			else
 			{
-				echo '<script type="text/javascript"> $("#loginbox").hide(); $("#signupbox").show(); </script>';
-				echo "Did not pass validation for registration";
-				// Maybe add a popup stating login failed please try again.
-				
+				$this->messagePopup->addTomessagePopUp( 'OK', 'Validation Failed!', 'Please try again!' , 'error' );	
 			}
 		}
 	}
 
-	// Should be called on all websites that require login.
-	public function checkSession ()
+	// Should be called on all websites that require login, besides login.php and register.php
+	public function checkSession()
 	{		
          // must be on all pages
-		 session_start();	
+		 if(!isset($_SESSION)) 
+		 {
+			session_start();
+		 }
 		 
 		if ( empty($_SESSION['ISOC_TECH_EMPLOYEE_ID']) )
 		{
 			
 			$_SESSION['actual_link'] = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-			echo "Is empty";
 			session_write_close();
-			header("location: login.php");
 			
-			exit();
+			$current = "$_SERVER[REQUEST_URI]";
+
+			
+			// If on register.php or login.php don't redirect, otherwise redirect
+			if (!preg_match( '~.*login.php~i' , $current ) )
+			{				
+					if (!preg_match( '~.*register.php~i' , $current ) )
+						{	
+							header("location: login.php");
+							//echo "trying to redirect";				
+							exit();
+						}
+			}
 		}
-		
+		else
+		{
+			//echo " you are logged in";
+			$this->messagePopup->addTomessagePopUp( 'OK', 'Logged In', $_SESSION['ISOC_TECH_FIRST_NAME'].', you are logged in!' , 'info' );
+		}
 	}	
+	
+	
+	
+		// Should be only on login.php and register.php
+	public function checkSessionLoginRegister()
+	{		
+         // must be on all pages
+		 if(!isset($_SESSION)) 
+		 {
+			session_start();
+		 }
+		 
+		if ( empty($_SESSION['ISOC_TECH_EMPLOYEE_ID']) )
+		{
+			
+			//$_SESSION['actual_link'] = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+			session_write_close();
+			
+			$current = "$_SERVER[REQUEST_URI]";
+
+			
+			// If on register.php or login.php don't redirect, otherwise redirect
+			if (!preg_match( '~.*login.php~i' , $current ) )
+			{				
+					if (!preg_match( '~.*register.php~i' , $current ) )
+						{	
+							if (!preg_match('~.*changepassword.php~i' , $current ))
+							{
+									if (!preg_match('~.*forgot.php~i' , $current ))
+									{
+										header("location: login.php");
+										//echo "trying to redirect";				
+										exit();
+									}
+							}
+						}
+			}
+		}
+		else
+		{
+			//echo " you are logged in";
+			$this->messagePopup->addTomessagePopUp( 'OK', 'Logged In', $_SESSION['ISOC_TECH_FIRST_NAME'].', you are logged in!' , 'info' );
+		}
+	}	
+	
+	// place at the bottom of all php/html pages
+	public function notifyMessage()
+	{
+        $this->messagePopup->notifyMessage();
+	}
 }
 ?>

@@ -34,12 +34,11 @@ catch (Exception  $e)
         <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">                    
             <div class="panel panel-info" >
                     <div class="panel-heading">
-                        <div class="panel-title">Sign In</div>
+                        <div class="panel-title">Change Password</div>
                         <div style="float:right; font-size: 80%; position: relative; top:-10px">
 						
-							<a href="forgot.php">Forgot password?</a>
-							<a href="changepassword.php">Change password</a>
-						
+							<a href="login.php">Log In</a>
+							
 						</div>
                     </div>     
 
@@ -57,17 +56,22 @@ catch (Exception  $e)
                                 
                             <div style="margin-bottom: 25px" class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                        <input id="loginpassword" type="password" class="form-control <?php $TierTwo->getError('password');?>" name="password" placeholder="password" onblur="setCookie('loginpassword', document.getElementById('loginpassword').value ,365);">
+                                        <input id="currentPassword" type="password" class="form-control <?php $TierTwo->getError('currentPassword');?>" name="currentPassword" placeholder="Current Password" onblur="setCookie('loginpassword', document.getElementById('loginpassword').value ,365);">
                                     </div>
                                     
+									<div style="margin-bottom: 25px" class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                        <input id="newPassword" type="password" class="form-control <?php $TierTwo->getError('newPassword');?>" name="newPassword" placeholder="New Password" onblur="setCookie('loginpassword', document.getElementById('loginpassword').value ,365);">
+                                    </div>
+									
+									<div style="margin-bottom: 25px" class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                        <input id="confirmPassword" type="password" class="form-control <?php $TierTwo->getError('newPassword');?>" name="confirmPassword" placeholder="Confirm Password" onblur="setCookie('loginpassword', document.getElementById('loginpassword').value ,365);">
+                                    </div>
 
                                 
                             <div class="input-group">
-                                      <div class="checkbox">
-                                        <label>
-                                          <input id="loginremember" type="checkbox" name="remember" value="1" onblur="setCookie('loginremember', this.val ,365);"> Remember me
-                                        </label>
-                                      </div>
+
                                     </div>
 
 
@@ -76,8 +80,8 @@ catch (Exception  $e)
 
                                     <div class="col-sm-12 controls">
  <!-- Submit button -->            
-										<input class="btn btn-primary" type="submit" id='btn-login' value='Login'>
-										<a class="btn btn-danger right" href="logout.php">Log Out</a>
+										<input class="btn btn-primary" type="submit" id='btn-login' value='Change'>
+										<!--<a class="btn btn-danger right" href="logout.php">Log Out</a> -->
                                     </div>
 
                                 </div>

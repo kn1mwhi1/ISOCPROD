@@ -97,6 +97,23 @@ class ISOC_EMAIL
 		
 	}
 	
+	public function setHeadersNoCC(  )
+	{
+		
+		// Always set content-type when sending HTML email
+		
+		// More headers
+		$headers = 'From: '.$this->getFrom()."\n";
+		//$headers .= 'From: IS Operations <ISOperationsCenter@uscellular.com>' . "\n";
+		$headers .= "Reply-To: ".$this->getFrom()."\n";
+		$headers .= "MIME-Version: 1.0 \n";
+		$headers .= "Content-Type: text/html; charset=ISO-8859-1 \n";
+		
+		$this->headers = $headers;
+	
+		
+	}
+	
 	
 	public function getFrom()
 	{

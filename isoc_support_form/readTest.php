@@ -20,7 +20,7 @@ $test2 = new LoginLogic();
 //session_start();
 //print_r($_SESSION);
 $test2->checkSession();
-echo "Everything is awesome! <br />";
+echo "Everything is awesome! http://  HTTPHost: $_SERVER[HTTP_HOST]  URI: $_SERVER[REQUEST_URI]<br />";
 
 
 
