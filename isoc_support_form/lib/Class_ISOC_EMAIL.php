@@ -128,7 +128,6 @@ class ISOC_EMAIL
 	public function sendEmail()
 	{
 		mail($this->to,$this->subject,$this->message,$this->headers);
-			echo "Email has been sent";
 	}
 
 

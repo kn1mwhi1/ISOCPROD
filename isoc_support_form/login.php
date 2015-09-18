@@ -37,7 +37,7 @@ catch (Exception  $e)
                         <div class="panel-title">Sign In</div>
                         <div style="float:right; font-size: 80%; position: relative; top:-10px">
 						
-							<a href="forgot.php">Forgot password?</a>
+							<a href="login.php?forget=true">Forgot password?</a>
 							<a href="changepassword.php">Change password</a>
 						
 						</div>

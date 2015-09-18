@@ -30,17 +30,7 @@ class LoginLogic extends ValidationUserInput
 		 $this->messagePopup = new ErrorPopup();
 		// $this->setTagertLink( '' );
 	}
-	/*
-	private function setTagertLink( $aLink )
-	{
-		$this->targetLink = $aLink;
-	}
-	
-	private function getTagetLink()
-	{
-		return $this->targetLink;
-	}
-    */
+
 
 	public function getError( $nameOfObject )
 	{
@@ -319,7 +309,7 @@ class LoginLogic extends ValidationUserInput
 			$this->email->setMessage( $message );
 			
 			// set the To field of email
-			$toEmail = 'matthew.white@uscellular.com';
+			$toEmail = $_SESSION['ISOC_TECH_EMAIL'];
 			
 			$this->email->setTo( $toEmail );
 			
@@ -327,6 +317,102 @@ class LoginLogic extends ValidationUserInput
 			
 			// set the subject field of email
 			$this->email->setSubject( 'New Registration Confirmation' );
+			
+			// prepare headers which informs the mail client that this will be html and the from and to
+			$this->email->setHeadersNoCC();
+			
+			// send email
+			$this->email->sendEmail();
+	}
+	
+	
+		private function forgotPasswordEmailSend()
+	{
+		// create email message
+		$message = '
+			
+		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+		<html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>ISOC Request Conformation Email</title>
+
+		</head>
+
+		<body bgcolor="#f2eded">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f2eded">
+		  <tr>
+			<td><table width="600" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" align="center">
+				<tr>
+				  <td valign="middle">
+				  
+				  <div style="text-align: center;font-family: Helvetica; font-variant: small-caps; color: #FFFFFF;  background: #66C285;">ISOC Forgot Password Reminder </div>
+					
+					</td>
+				</tr>
+				<tr>
+				  <td align="center">&nbsp;</td>
+				</tr>
+				<tr>
+				  <td>&nbsp;</td>
+				</tr>
+				<tr>
+				  <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+					  <tr>
+						<td width="10%">&nbsp;</td>
+						<td width="80%" align="left" valign="top"><font style="font-family: Georgia, "Times New Roman", Times, serif; color:#010101; font-size:24px"><strong><em>Hi '.$_SESSION['ISOC_TECH_FIRST_NAME'].',</em></strong></font><br /><br />
+						  <font style="font-family: Verdana, Geneva, sans-serif; color:#666766; font-size:13px; line-height:21px">
+						  
+						  '.$this->createRequesterEmailBody().'
+							<br />
+							<br />
+							<a href="http://10.176.105.18/isoc_support_form/login.php">ISOC Dashboard</a>
+						</font>
+						
+						</td>
+						<td width="10%">&nbsp;</td>
+					  </tr>
+					  
+					  
+					  
+					  <tr>
+						<td>&nbsp;</td>
+						<td align="right" valign="top"></td>
+						<td>&nbsp;</td>
+					  </tr>
+					</table></td>
+				</tr>
+				<tr>
+				  <td>&nbsp;</td>
+				</tr>
+				<tr>
+				  <td>&nbsp;</td>
+				</tr>
+				<tr>
+				  
+				</tr>
+				
+			  </table></td>
+		  </tr>
+		</table>
+		</body>
+		</html>
+
+
+		';
+			
+			// set the message
+			$this->email->setMessage( $message );
+			
+			// set the To field of email
+			$toEmail = $_SESSION['ISOC_TECH_EMAIL'];
+			
+			$this->email->setTo( $toEmail );
+			
+			$this->email->setFrom( 'ISOperationsCenter@uscellular.com');
+			
+			// set the subject field of email
+			$this->email->setSubject( 'Forgot Password Reminder - ISOC Login Form' );
 			
 			// prepare headers which informs the mail client that this will be html and the from and to
 			$this->email->setHeadersNoCC();
@@ -400,6 +486,20 @@ class LoginLogic extends ValidationUserInput
 				$this->messagePopup->addTomessagePopUp( 'OK', 'Validation Failed!', 'Please try again!' , 'error' );
 				
 			}
+		}
+		
+		// Send email to user when they press forgot link
+		if (isset($_GET['forget']) && isset($_SESSION['ISOC_TECH_EMPLOYEE_ID'])) 
+		{
+			$this->forgotPasswordEmailSend();	
+				
+			$this->messagePopup->addTomessagePopUp( 'OK', 'E-mail Sent!', 'An email has been sent containing your password.' , 'success' );
+		}
+		
+		// Tell user to login before forgot email can be sent.
+		if (isset($_GET['forget']) && !isset($_SESSION['ISOC_TECH_EMPLOYEE_ID'])) 
+		{
+			$this->messagePopup->addTomessagePopUp( 'OK', 'Please login', 'Please login to have your password emailed.' , 'info' );
 		}
 		 
 	}
