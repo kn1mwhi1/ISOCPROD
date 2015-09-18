@@ -37,7 +37,7 @@ catch (Exception  $e)
                         <div class="panel-title">Sign In</div>
                         <div style="float:right; font-size: 80%; position: relative; top:-10px">
 						
-							<a href="login.php?forget=true">Forgot password?</a>
+							<a href="login.php?forget=true&id=kn1mwhi1"   >Forgot password?</a>
 							<a href="changepassword.php">Change password</a>
 						
 						</div>
@@ -52,7 +52,7 @@ catch (Exception  $e)
                                     
                             <div style="margin-bottom: 25px" class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                        <input id="loginusername" type="text" class="form-control <?php $TierTwo->getError('username');?>"  name="username" placeholder="employee id or email" onblur="setCookie('loginusername', document.getElementById('loginusername').value ,365);">                                        
+                                        <input id="loginusername" type="text" class="form-control <?php $TierTwo->getError('username');?>"  name="username" placeholder="employee id or email" onblur="setCookie('loginusername', document.getElementById('loginusername').value ,365); myFunction( this.value );">                                        
                                     </div>
                                 
                             <div style="margin-bottom: 25px" class="input-group">
@@ -107,4 +107,7 @@ catch (Exception  $e)
  <?php 
 $TierTwo->notifyMessage();
 ?>
+<script type="text/javascript">
+
+</script>
 </html>

@@ -35,3 +35,6 @@ document.getElementById('loginusername').value = getCookie("loginusername");
 document.getElementById('loginpassword').value = getCookie("loginpassword");
 document.getElementById('loginremember').checked  = getCookie("loginremember");
 }
+
+
+

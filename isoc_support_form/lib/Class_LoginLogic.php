@@ -488,22 +488,26 @@ class LoginLogic extends ValidationUserInput
 			}
 		}
 		
+		$this->forgetPasswordClick();		 
+	}
+	
+	private function forgetPasswordClick()
+	{
 		// Send email to user when they press forgot link
 		if (isset($_GET['forget']) && isset($_SESSION['ISOC_TECH_EMPLOYEE_ID'])) 
-		{
-			$this->forgotPasswordEmailSend();	
-				
+		{		
+			$this->forgotPasswordEmailSend();			
 			$this->messagePopup->addTomessagePopUp( 'OK', 'E-mail Sent!', 'An email has been sent containing your password.' , 'success' );
 		}
 		
 		// Tell user to login before forgot email can be sent.
 		if (isset($_GET['forget']) && !isset($_SESSION['ISOC_TECH_EMPLOYEE_ID'])) 
 		{
-			$this->messagePopup->addTomessagePopUp( 'OK', 'Please login', 'Please login to have your password emailed.' , 'info' );
+			print_r($_GET);
+			
+		
 		}
-		 
 	}
-	
 	
 	public function checkPOSTRegisterInfo()
 	{
