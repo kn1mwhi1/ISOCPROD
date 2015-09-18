@@ -10,16 +10,76 @@
 	padding: 10px;
 	border-radius: 10px;
 	width: 900px;
-	height: 220px;
+	height: 230px;
 	text-align: center;
 	margin-left: auto;
 	margin-right: auto;
 }
-
+.block{
+	 display: block;
+}
 .center {
 	margin-left: auto;
 	margin-right: auto;
 	text-align: center;
+		width: auto;
+		height: auto;
+}
+
+.autoWidthHeight{
+	width: auto;
+	height: auto;
+
+}
+
+.customWidthHeight{
+	width: 800px;
+	height: 220px;
+	
+
+}
+
+.colorWhite{
+	color: white;
+}
+
+.leftTen{
+	margin-left: 25px;
+}
+
+.customMarginButton {
+	margin-left: 60px;
+}
+
+
+
+.input {
+	width: 375px;
+	height: 100px; 
+	margin-left: auto;
+	margin-right: auto;
+}
+
+
+.inputLeft {
+	width: 375px;
+	height: 100px; 
+	float: left;
+	/*
+	margin-left: auto;
+	margin-right: auto;
+	*/
+}
+
+
+.inputRight {
+	width: 375px;
+	height: 100px; 
+	float: right;
+	/*
+	margin-left: auto;
+	margin-right: auto;
+	*/
 }
 
 
@@ -69,8 +129,15 @@
 }
 
 .input_box {
-	width: 200px;
+	width: 250px;
 } 
+
+.customBlock{
+ 
+  width: 200px;
+  height: 5px;
+
+}
 
 
 #container_environment_request_type{
@@ -176,14 +243,6 @@ a:hover {
 }
 
 
-
-
-.input {
-	width: 375px;
-	height: 100px; 
-	margin-left: auto;
-	margin-right: auto;
-}
 
 
 .left {

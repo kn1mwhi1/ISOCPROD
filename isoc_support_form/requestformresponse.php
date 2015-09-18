@@ -6,17 +6,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <?php
 require('lib/Class_LogicIsocSupportForm.php');
 require('lib/Class_LoginLogic.php');
 
 $Login = new LoginLogic();
-$Login->checkSession();
 $TierTwo = new LogicIsocSupportForm();
+$Login->checkSession();
+
 
 // get the request URI  anything with ?$DATA
 $requestTicketNumber = parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY);
@@ -54,9 +54,9 @@ $requestTicketNumber = parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY);
 
 
 
-<center>
+
 <!-- <h1>Data Center Operations Support Request</h1> -->
-<img src="img/IS_Operations_Support_Request_Form_Response_New.gif" />
+<img class="center block" src="img/IS_Operations_Support_Request_Form_Response_New.gif" />
 
 
 
@@ -66,37 +66,53 @@ $requestTicketNumber = parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY);
 
 
 <!-- Input boxes for ISOC Technician, Name, Contact Number and Email.-->
-<form name = "contact_form">
+<form name="response_form" method="post" action="">
 
 
 <div class="Contact_Box">
-   
-	<div class="input">
-
+   <div class="center customWidthHeight leftTen">
+	<div class="inputLeft">
 	   <div class="left">
-		  <b>ISOC Technician ID</b>
+		  <b>ISOC Tech Name</b>
 		  <b>ISOC Ticket ID</b>
 		  <b>Requester Name:</b>
 		  <b>Reply to:</b>
 		  <b>Copy to:</b> 
 		  <b>Subject:</b>   
 	   </div>
-	   
 	   <div class="right">
-		  <input class="input_box form-control" type='text' name='ISOCTechnician' id='ISOCTechnician' value='<?php echo $TierTwo->getTicketInfo('ISOCTechnician');?>' onblur='' >
+		  <input class="input_box form-control" type='text' name='ISOCTechName' id='ISOCTechName' value='<?php echo $TierTwo->getTicketInfo('ISOCTechName');?>' onblur='' readonly>
 		  <input class="input_box form-control" type='text' name='ISOCTicketID' id='ISOCTicketID' value='<?php echo $TierTwo->getTicketInfo('ISOCTicketID');?>' onblur='' readonly>
 		  <input class="input_box form-control" type='text' name='RequesterName'id='RequesterName' value='<?php echo $TierTwo->getTicketInfo('RequesterName');?>' onblur='' readonly>
 		  <input class="input_box form-control" type='text' name='ReplyTo'  id='ReplyTo' value='<?php echo $TierTwo->getTicketInfo('ReplyTo');?>' onblur='' readonly>
 		  <input class="input_box form-control" type='text' name='CopyTo'  id='CopyTo' value='<?php echo $TierTwo->getTicketInfo('CopyTo');?>' onblur='' readonly>
 		  <input class="input_box form-control" type='text' name='textboxSubject' id='textboxSubject' value='<?php echo $TierTwo->getTicketInfo('textboxSubject');?>' onblur='' readonly>
 	   </div>
- 
-	   
-	 </div>
+	  </div>
+	 <div class="inputRight">
+	   <div class="left">
+		  <b>ISOC Technician ID:</b>
+		  <b class="colorWhite">Button</b>
+		  <b>Initial Submit Time:</b>
+		  <b>Response Time:</b>
+		  <b>Completion Counter:</b> 
+		  <b class="colorWhite">Subject:</b>   
+	   </div>
+	   <div class="right">
+		  <input class="input_box form-control" type='text' name='ISOCTechnician' id='ISOCTechnician' value='<?php echo $TierTwo->getTicketInfo('ISOCTechnician');?>' onblur='' >
+		  <div class="customBlock"></div><input class="btn-xs btn-danger customMarginButton" type='submit' name='submit' id='submit' value="Assume Ownership"><div class="customBlock"></div>
+		  <input class="input_box form-control" type='text' name='RequesterName'id='RequesterName' value='<?php echo $TierTwo->getTicketInfo('RequesterName');?>' onblur='' readonly>
+		  <input class="input_box form-control" type='text' name='ReplyTo'  id='ReplyTo' value='<?php echo $TierTwo->getTicketInfo('ReplyTo');?>' onblur='' readonly>
+		  <input class="input_box form-control" type='text' name='CopyTo'  id='CopyTo' value='<?php echo $TierTwo->getTicketInfo('CopyTo');?>' onblur='' readonly>
+		  <input class="input_box form-control" type='text' name='textboxSubject' id='textboxSubject' value='<?php echo $TierTwo->getTicketInfo('textboxSubject');?>' onblur='' readonly>
+	   </div>
+	 </div> 
+   </div>
+   </div>
 
  <!-- Selections for preferred contact method -->
 
- 	<div class="spacer10">
+ 	<div class="">
 			<!-- This div is used to add a space, much like a break -->
 	</div>
  
@@ -133,56 +149,24 @@ $requestTicketNumber = parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY);
 	</div>
 </div>
 
-<!-- SELECTIONS FOR WHEN REQUEST NEEDS TO BE COMPLETED -->
+<!-- FORM SUBMISSION --> 
 <div class='box'>
-<strong>Confirm the initial response time below </strong>
-	<div class="spacer10"></div>
-
-
-<!-- Date and time of initial response: <input type='text' name='datereq' value='(If Applicable)'/> * Please indicate whether 'calendar date' or 'plan date' in 'Request Details' section. -->
-<div id="start_end_date">
-		<div class="left_date">
-		DATE/TIME:
-		<div></div>
-		</div>
-		
-		<div class="right_date">
-		<input class="input_box form-control" id="datepick_1" placeholder="(If Applicable)" onclick="createDatePicker(datepick_1)" />
-			<div></div>
-		</div>
+<input class="btn btn-primary" type="submit" name="submit" id='submit' value="Send Response">
 </div>
-
-		
-<!-- DATEPICKER -->		
-<script type="text/javascript">
-	new datepickr('datepick_1');
-</script>
-</div>
-
-
+	
 </form>
 
 
-<!-- FORM SUBMISSION --> 
-<div class='box'>
-<button class="btn btn-primary" type="button" id='createrequest' onclick="submitRequest()">Send Response</button>
 
 
-</div>
-</center>
 </body>
-
-
 <footer>
-
-
-
 <hr>
-
 <!-- UPDATE TO REFLECT CURRENT REVISION OF PAGE -->
-
-
 <p id="Revision" >Rev. 5.27.2015</p></p>
 </footer>
+<?php
+$TierTwo->popup->notifyMessage();
 
+?>
 </html>

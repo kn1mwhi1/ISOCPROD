@@ -504,9 +504,18 @@ class LoginLogic extends ValidationUserInput
 		if (isset($_GET['forget']) && !isset($_SESSION['ISOC_TECH_EMPLOYEE_ID'])) 
 		{
 			print_r($_GET);
-			
-		
 		}
+		
+		if (isset($_GET['logout']) && isset($_SESSION['ISOC_TECH_EMPLOYEE_ID'])) 
+		{
+			$this->logout();
+		}
+		
+			if (isset($_GET['logout']) && !isset($_SESSION['ISOC_TECH_EMPLOYEE_ID'])) 
+		{
+			$this->messagePopup->addTomessagePopUp( 'OK', 'Not logged in!', 'You must be logged in order to be logged out.' , 'info' );
+		}
+		
 	}
 	
 	public function checkPOSTRegisterInfo()
@@ -617,5 +626,17 @@ class LoginLogic extends ValidationUserInput
 	{
         $this->messagePopup->notifyMessage();
 	}
+	private function logout()
+	{
+		  // must be on all pages
+		 if(!isset($_SESSION)) 
+		 {
+			session_start();
+		 }
+		 
+		session_destroy();
+		$this->messagePopup->addTomessagePopUp( 'OK', 'Logged Out', 'You are logged Out!' , 'info' );
+	}
+	
 }
 ?>

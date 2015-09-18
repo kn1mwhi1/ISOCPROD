@@ -1,5 +1,7 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <?php 
 require_once 'lib/Class_LoginLogic.php'; 
 $TierTwo = new LoginLogic();
@@ -37,8 +39,8 @@ catch (Exception  $e)
                         <div class="panel-title">Sign In</div>
                         <div style="float:right; font-size: 80%; position: relative; top:-10px">
 						
-							<a href="login.php?forget=true&id=kn1mwhi1"   >Forgot password?</a>
-							<a href="changepassword.php">Change password</a>
+						<!--	<a href="login.php?forget=true&id=kn1mwhi1"   >Forgot password?</a>
+							<a href="changepassword.php">Change password</a>  -->
 						
 						</div>
                     </div>     
@@ -48,7 +50,7 @@ catch (Exception  $e)
                         <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
 <!-- Beginning of login Form -->
                             
-                        <form id="loginform" class="form-horizontal" role="form" method="post" action="" >
+                        <form id="loginform" class="form-horizontal" role="form" method="post" action="login.php" >
                                     
                             <div style="margin-bottom: 25px" class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
@@ -76,8 +78,8 @@ catch (Exception  $e)
 
                                     <div class="col-sm-12 controls">
  <!-- Submit button -->            
-										<input class="btn btn-primary" type="submit" id='btn-login' value='Login'>
-										<a class="btn btn-danger right" href="logout.php">Log Out</a>
+										<input class="btn btn-primary" type="submit" id='btn-login' value='Login' href="login.php">
+										<a class="btn btn-danger right" href="login.php?logout=true">Log Out</a>
                                     </div>
 
                                 </div>
@@ -86,10 +88,10 @@ catch (Exception  $e)
                                 <div class="form-group">
                                     <div class="col-md-12 control">
                                         <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%" >
-                                            Don't have an account! 
-                                        <a href="register.php">
-                                            Sign Up Here
-                                        </a>
+                                     <!--        Don't have an account! 
+                                       <a href="register.php">
+                                            Sign Up Here               
+                                        </a>              -->
                                         </div>
                                     </div>
                                 </div>    

@@ -2,6 +2,7 @@
 require_once 'Class_ISOCSupportFormDB_Out.php';
 require_once 'Class_ISOCSupportFormDB_In.php';
 require_once 'Class_ISOC_EMAIL.php';
+require_once 'lib/Class_ErrorPopup.php';
 
 class LogicIsocSupportForm 
 {
@@ -11,6 +12,7 @@ class LogicIsocSupportForm
 	public $errorContainer;
 	public $cleanData;
 	public $responseData;
+	public $popup;
 	
 	// Values from Support Form
 	
@@ -60,6 +62,7 @@ class LogicIsocSupportForm
 		 $this->responseData = array();
 		 $this->requestTicketNumber = "";
 		 $this->requestContactID = "";
+		 $this->popup = new ErrorPopup();
 		 
 		 // Text box variables
 		 $this->namebox = "";
