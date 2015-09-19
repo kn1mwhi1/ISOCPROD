@@ -83,9 +83,7 @@
 }
 
 
-.displayBlock{
-	display:block;
-}
+
 
 .testblack {
 	border-style: solid;
@@ -367,3 +365,19 @@ a:hover {
 	bottom:-10px;
 }
 
+.textAlignLeft{
+	text-align: left;
+}
+
+.displayBlock{
+	display:block;
+}
+
+.customW400HAuto{
+	width: 400px;
+	height: auto;
+    margin-left: auto;
+	margin-right: auto;
+	
+
+}

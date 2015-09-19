@@ -16,19 +16,8 @@ require('lib/Class_LoginLogic.php');
 $Login = new LoginLogic();
 $TierTwo = new LogicIsocSupportForm();
 $Login->checkSession();
+$TierTwo->retrieveTicket();
 
-
-// get the request URI  anything with ?$DATA
-$requestTicketNumber = parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY);
-
-	if ( is_numeric ($requestTicketNumber) )
-	{
-		// load fields
-		$TierTwo->loadTicketInfoArray( $requestTicketNumber);
-		$isocTechID = '53741';
-		$TierTwo->isocUpdateRequestAccept( $requestTicketNumber, $isocTechID );
-	}
-	
 ?>	
 
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -94,17 +83,17 @@ $requestTicketNumber = parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY);
 		  <b>ISOC Technician ID:</b>
 		  <b class="colorWhite">Button</b>
 		  <b>Initial Submit Time:</b>
-		  <b>Response Time:</b>
-		  <b>Completion Counter:</b> 
-		  <b class="colorWhite">Subject:</b>   
+		  <b>Response Date-Time:</b>
+		  <b>Complete Date-Time:</b> 
+		  <b>Total Time:</b>   
 	   </div>
 	   <div class="right">
 		  <input class="input_box form-control" type='text' name='ISOCTechnician' id='ISOCTechnician' value='<?php echo $TierTwo->getTicketInfo('ISOCTechnician');?>' onblur='' >
 		  <div class="customBlock"></div><input class="btn-xs btn-danger customMarginButton" type='submit' name='submit' id='submit' value="Assume Ownership"><div class="customBlock"></div>
-		  <input class="input_box form-control" type='text' name='RequesterName'id='RequesterName' value='<?php echo $TierTwo->getTicketInfo('RequesterName');?>' onblur='' readonly>
-		  <input class="input_box form-control" type='text' name='ReplyTo'  id='ReplyTo' value='<?php echo $TierTwo->getTicketInfo('ReplyTo');?>' onblur='' readonly>
-		  <input class="input_box form-control" type='text' name='CopyTo'  id='CopyTo' value='<?php echo $TierTwo->getTicketInfo('CopyTo');?>' onblur='' readonly>
-		  <input class="input_box form-control" type='text' name='textboxSubject' id='textboxSubject' value='<?php echo $TierTwo->getTicketInfo('textboxSubject');?>' onblur='' readonly>
+		  <input class="input_box form-control" type='text' name='initialSubmitTime'id='initialSubmitTime' value='<?php echo $TierTwo->getTicketInfo('initialSubmitTime');?>' onblur='' readonly>
+		  <input class="input_box form-control" type='text' name='responseTime'  id='responseTime' value='<?php echo $TierTwo->getTicketInfo('responseTime');?>' onblur='' readonly>
+		  <input class="input_box form-control" type='text' name='completeTime'  id='completeTime' value='<?php echo $TierTwo->getTicketInfo('completeTime');?>' onblur='' readonly>
+		  <input class="input_box form-control" type='text' name='textboxSubject' id='textboxSubject' value='' onblur='' readonly>
 	   </div>
 	 </div> 
    </div>
@@ -128,24 +117,29 @@ $requestTicketNumber = parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY);
 
 	<!-- RESPONSE TEST BOX -->
 	<div class="spacer10"></div>
-	<strong>*** Request Overview ***</strong>
+	<b><u>Request Overview</u></b> 
+	
+	
+	
 	<div class="spacer10">
 			<!-- This div is used to add a space, much like a break -->
 	</div>
-	<div>
 	
-	Blah blah blah a response
+	<div class="customW400HAuto textAlignLeft" name="request_overview" id="request_overview">
+		<?php echo $TierTwo->getTicketInfo('request_overview');?>
 	</div>
 	
 	
 
 	<!-- RESPONSE TEST BOX -->
 	<div class="spacer10"></div>
-	<strong>*** Enter your response below ***</strong>
+	<div class="spacer10"></div>
+	<div class="spacer10"></div>
+	<b><u>Enter your response below</u></b>
 	<div class="spacer10">
 			<!-- This div is used to add a space, much like a break -->
 	</div>
-	<textarea class='form-control' id='test' name='details' rows='7' cols='100' placeholder="An IS Operations Technician is submitting your request." ></textarea>
+	<textarea class='form-control' id='test' name='details' rows='7' cols='100' placeholder="Leave blank for default message of: Your request has been completed." ></textarea>
 	</div>
 </div>
 
