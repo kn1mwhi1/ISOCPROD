@@ -47,7 +47,8 @@ class ErrorPopup
 		switch ($aType) 
 		{
 			case "OK":
-					return $this->okNotify();
+					$this->okNotify();
+					return true;
 				break;
 			case "temp1":
 					return $this->validateEmail( $nameOfObject );

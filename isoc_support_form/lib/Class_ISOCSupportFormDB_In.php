@@ -110,7 +110,7 @@ class ISOCSupportFormDB_In extends BaseDataBase{
 		
 		// create the parametrized sql statement based upon parameters
 		$sql = $this->createUpdatePreparedSQLStatement( $updateArray, $whereArray, $aTableName, $equalsOrLike, $limit);
-		echo $sql;
+		//echo $sql;
 		
 		
 		$updateRefArray = array();

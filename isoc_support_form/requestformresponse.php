@@ -17,6 +17,7 @@ $Login = new LoginLogic();
 $TierTwo = new LogicIsocSupportForm();
 $Login->checkSession();
 $TierTwo->retrieveTicket();
+$TierTwo->checkPost();
 
 ?>	
 
@@ -26,11 +27,13 @@ $TierTwo->retrieveTicket();
 	<!--  Load JavaScript --> 
 	<script type="text/javascript" src="script/supportscript.js" async></script> 
 	<script type="text/javascript" src="script/bootstrap.js"></script>
+	<script type="text/javascript" src="script/sweetalert.min.js"></script>
 	<script type="text/javascript" src="script/bootstrap-datetimepicker.js"></script>
 		
 	<!--  Load CSS -->
 	<link rel="stylesheet" href="css/bootstrap-datetimepicker.css" />
 	<link rel="stylesheet" href="css/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="css/sweetalert.css" />
 	<link rel="stylesheet" type="text/css" href="css/menubar.css" /> 
 	<link rel="stylesheet" type="text/css" href="css/SupportRequestForm.css" /> 
 
@@ -160,7 +163,10 @@ $TierTwo->retrieveTicket();
 <p id="Revision" >Rev. 5.27.2015</p></p>
 </footer>
 <?php
-$TierTwo->popup->notifyMessage();
+if ($TierTwo->popup->notifyMessage())
+{
+		
+}
 
 ?>
 </html>

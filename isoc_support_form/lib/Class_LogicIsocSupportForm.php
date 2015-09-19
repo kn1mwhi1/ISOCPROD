@@ -937,11 +937,13 @@ class LogicIsocSupportForm
 		$tempTicketInfo = array();
 		$tempTicketMeta = array();
 		$tempRequester = array();
+		$tempTechID = array();
 		
 		
 		$tempTicketInfo = $this->FromDB->getOneRowWhereEquals( 'TB_SUPPORT_FORM_DATA', 'REQUEST_TICKET_NUMBER', $aTicketNumber );
 		$tempTicketMeta = $this->FromDB->getOneRowWhereEquals( 'TB_SUPPORT_FORM_METADATA' , 'REQUEST_TICKET_NUMBER', $aTicketNumber );
 		$tempRequester = $this->FromDB->getOneRowWhereEquals( 'TB_SUPPORT_FORM_REQUESTER', 'REQUESTER_ID' , $tempTicketInfo['REQUESTER_ID'] );
+		$tempTechID = $this->FromDB->getOneRowWhereEquals( 'TB_ISOC_TECHS', 'ISOC_TECH_EMPLOYEE_ID' , $tempTicketMeta['ISOC_TECH_ID_ASSIGNED'] );
 		
 		// Convert Time Format
 		$tempTicketMeta['REQUEST_SUBMISSION_DATETIME'] = date( 'H:i:s m/d/Y', strtotime($tempTicketMeta['REQUEST_SUBMISSION_DATETIME']) );
@@ -949,7 +951,7 @@ class LogicIsocSupportForm
 	
 		
 		$this->responseData = array_merge($tempTicketInfo, $tempTicketMeta, $tempRequester);
-		$tempCurrentTech = array("ISOC_TECH_FULL_NAME"=>$_SESSION['ISOC_TECH_FIRST_NAME'].' '.$_SESSION['ISOC_TECH_LAST_NAME'], "REQUEST_OVERVIEW"=>$this->createRequestOverview() );
+		$tempCurrentTech = array("ISOC_TECH_FULL_NAME"=>$tempTechID['ISOC_TECH_FIRST_NAME'].' '.$tempTechID['ISOC_TECH_LAST_NAME'], "REQUEST_OVERVIEW"=>$this->createRequestOverview() );
 		$this->responseData = array_merge($this->responseData, $tempCurrentTech);
 		
 		print_r($this->responseData);
@@ -972,11 +974,45 @@ class LogicIsocSupportForm
 			
 	}
 	
+	public function checkPost()
+	{
+		// Checks to see if user has posted before checking any validation
+		if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST['submit'] == 'Assume Ownership' ) 
+		{
+			$this->isocUpdateISOCTech();
+		}
+	}
 	
 	private function isocUpdateISOCTech()
 	{
+		// sanitize user input
+		$_POST['ISOCTechnician'] = $this->sanitize_input($_POST['ISOCTechnician']);
 		
+		// get row of matching
+		$techIDRowTemp = array();
+		$techIDRowTemp = $this->FromDB->getOneRowWhereEquals( 'TB_ISOC_TECHS', 'ISOC_TECH_EMPLOYEE_ID', $_POST['ISOCTechnician'] );
 		
+
+		
+		if ($techIDRowTemp['ISOC_TECH_EMPLOYEE_ID'] == $_POST['ISOCTechnician'] )
+		{
+			// save to database
+			$updateTemp = array("ISOC_TECH_ID_ASSIGNED" => $_POST['ISOCTechnician'] );
+			$whereArray = array("REQUEST_TICKET_NUMBER"=> $this->responseData['REQUEST_TICKET_NUMBER'] );
+					
+			$this->ToDB->updateRecordOneTable( $updateTemp , $whereArray, 'equals' , 'TB_SUPPORT_FORM_METADATA' , $fieldTypes = 'si');
+			
+			// Show pop-up of success
+			$this->popup->addTomessagePopUp( 'OK' , 'Ownership Changed!' , 'You have successfully taken ownership of ticket '.$this->responseData['REQUEST_TICKET_NUMBER'], 'success' );
+			
+		}
+		else
+		{
+			$this->popup->addTomessagePopUp( 'OK' , 'Failed Ownership Change' , 'The ownership did not change please ensure you have the correct ID and try again.', 'error' );
+			
+		}
+		
+		$this->retrieveTicket();
 	}
 	
 	private function createRequestOverview()
