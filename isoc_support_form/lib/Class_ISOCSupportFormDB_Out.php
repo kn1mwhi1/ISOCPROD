@@ -142,8 +142,15 @@ class ISOCSupportFormDB_Out extends BaseDataBase{
 			$tempValue = array_values( $tempValue );
 			//echo count($tempValue);
 			
+			if (count($tempValue) == 0)
+			{
+					return array("REQUEST_TICKET_NUMBER"=>'');
+			}
+				
+			
 			// Double the keys
 			$tempKeys = array_combine( $tempKeys, $tempKeys);
+
 			
 			// combine
 			$tempValue = array_combine( $tempKeys, $tempValue);

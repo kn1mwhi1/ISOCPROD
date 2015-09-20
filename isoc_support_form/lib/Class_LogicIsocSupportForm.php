@@ -923,10 +923,7 @@ class LogicIsocSupportForm
 		
 			// Set the respnce date time and ISOC Tech if its not been set.
 			$this->isocUpdateRequestAcceptAndTech( $requestTicketNumber);
-			// Send Email
-			
-			
-			
+			// Send Email	
 		}
 	}
 	
@@ -941,26 +938,47 @@ class LogicIsocSupportForm
 		
 		
 		$tempTicketInfo = $this->FromDB->getOneRowWhereEquals( 'TB_SUPPORT_FORM_DATA', 'REQUEST_TICKET_NUMBER', $aTicketNumber );
-		$tempTicketMeta = $this->FromDB->getOneRowWhereEquals( 'TB_SUPPORT_FORM_METADATA' , 'REQUEST_TICKET_NUMBER', $aTicketNumber );
-		$tempRequester = $this->FromDB->getOneRowWhereEquals( 'TB_SUPPORT_FORM_REQUESTER', 'REQUESTER_ID' , $tempTicketInfo['REQUESTER_ID'] );
-		$tempTechID = $this->FromDB->getOneRowWhereEquals( 'TB_ISOC_TECHS', 'ISOC_TECH_EMPLOYEE_ID' , $tempTicketMeta['ISOC_TECH_ID_ASSIGNED'] );
+		if ( $tempTicketInfo['REQUEST_TICKET_NUMBER'] != '')
+		{
+			$tempTicketMeta = $this->FromDB->getOneRowWhereEquals( 'TB_SUPPORT_FORM_METADATA' , 'REQUEST_TICKET_NUMBER', $aTicketNumber );
+			$tempRequester = $this->FromDB->getOneRowWhereEquals( 'TB_SUPPORT_FORM_REQUESTER', 'REQUESTER_ID' , $tempTicketInfo['REQUESTER_ID'] );
+			$tempTechID = $this->FromDB->getOneRowWhereEquals( 'TB_ISOC_TECHS', 'ISOC_TECH_EMPLOYEE_ID' , $tempTicketMeta['ISOC_TECH_ID_ASSIGNED'] );
 		
-		// Convert Time Format
-		$tempTicketMeta['REQUEST_SUBMISSION_DATETIME'] = date( 'H:i:s m/d/Y', strtotime($tempTicketMeta['REQUEST_SUBMISSION_DATETIME']) );
-		$tempTicketMeta['REQUEST_ACCEPT_DATETIME'] = date( 'H:i:s m/d/Y', strtotime($tempTicketMeta['REQUEST_ACCEPT_DATETIME']) );
-	
-		
-		$this->responseData = array_merge($tempTicketInfo, $tempTicketMeta, $tempRequester);
-		$tempCurrentTech = array("ISOC_TECH_FULL_NAME"=>$tempTechID['ISOC_TECH_FIRST_NAME'].' '.$tempTechID['ISOC_TECH_LAST_NAME'], "REQUEST_OVERVIEW"=>$this->createRequestOverview() );
-		$this->responseData = array_merge($this->responseData, $tempCurrentTech);
-		
-		print_r($this->responseData);
+
+			// RECORD DATE AND TIMES
+			$_SESSION['REQUEST_SUBMISSION_DATETIME']= $tempTicketMeta['REQUEST_SUBMISSION_DATETIME'];
+			$_SESSION['REQUEST_ACCEPT_DATETIME']= $tempTicketMeta['REQUEST_ACCEPT_DATETIME'];
+			$_SESSION['REQUEST_COMPLETION_DATETIME']= $tempTicketMeta['REQUEST_COMPLETION_DATETIME'];
+			
+			// Convert Time Format
+			$tempTicketMeta['REQUEST_SUBMISSION_DATETIME'] = date( 'H:i:s m/d/Y', strtotime($tempTicketMeta['REQUEST_SUBMISSION_DATETIME']) );
+			$tempTicketMeta['REQUEST_ACCEPT_DATETIME'] = date( 'H:i:s m/d/Y', strtotime($tempTicketMeta['REQUEST_ACCEPT_DATETIME']) );
+			
+				if ($tempTicketMeta['REQUEST_COMPLETION_DATETIME'] != '')
+				{
+					$tempTicketMeta['REQUEST_COMPLETION_DATETIME'] = date( 'H:i:s m/d/Y', strtotime($tempTicketMeta['REQUEST_COMPLETION_DATETIME']) );
+				}
+			
+			$this->responseData = array_merge($tempTicketInfo, $tempTicketMeta, $tempRequester);
+			$tempCurrentTech = array("ISOC_TECH_FULL_NAME"=>$tempTechID['ISOC_TECH_FIRST_NAME'].' '.$tempTechID['ISOC_TECH_LAST_NAME'], "REQUEST_OVERVIEW"=>$this->createRequestOverview() );
+			$this->responseData = array_merge($this->responseData, $tempCurrentTech);
+		}
+		else
+		{
+			$_SESSION['REQUEST_SUBMISSION_DATETIME']= '';
+			$_SESSION['REQUEST_ACCEPT_DATETIME']= '';
+			$_SESSION['REQUEST_COMPLETION_DATETIME']= '';
+		}
+		//print_r($this->responseData);
 	}
 	
 	// Dectects if the Submission time has been set.. if not then set it with the ISOC Tech.
 	private function isocUpdateRequestAcceptAndTech( $aTicketNumber )
 	{
 			$dateTimeNow = date('Y-m-d H:i:s');
+			
+			
+			
 			$temp = array();
 			$temp = $this->FromDB->getOneRowWhereEquals('TB_SUPPORT_FORM_METADATA', 'REQUEST_TICKET_NUMBER', $aTicketNumber );
 			
@@ -980,6 +998,43 @@ class LogicIsocSupportForm
 		if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST['submit'] == 'Assume Ownership' ) 
 		{
 			$this->isocUpdateISOCTech();
+		}
+		
+		// Checks to see if user has posted before checking any validation
+		if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST['submit'] == 'Send Response' ) 
+		{
+			$this->updateCompletionTime();
+		}
+		
+		
+	}
+	
+	// Update Ticket Completion Time
+	private function updateCompletionTime()
+	{
+		
+		if ($this->responseData['REQUEST_COMPLETION_DATETIME'] == '' )
+		{
+			$dateTimeNow = date('Y-m-d H:i:s');
+			
+			// save to database
+				$updateTemp = array("REQUEST_COMPLETION_DATETIME" => $dateTimeNow );
+				$whereArray = array("REQUEST_TICKET_NUMBER"=> $this->responseData['REQUEST_TICKET_NUMBER'] );
+						
+				$this->ToDB->updateRecordOneTable( $updateTemp , $whereArray, 'equals' , 'TB_SUPPORT_FORM_METADATA' , $fieldTypes = 'si');
+				
+				// Send completion email to Requester with comments.
+				
+				// Show pop-up of success
+				$this->popup->addTomessagePopUp( 'OK' , 'Ticket Complete' , 'You have successfully completed ticket '.$this->responseData['REQUEST_TICKET_NUMBER'], 'success' );
+				
+				// Refresh
+				$this->retrieveTicket();
+		}
+		else
+		{
+			// Show pop-up of success
+			$this->popup->addTomessagePopUp( 'OK' , 'Completion already set' , 'You can not adjust the completion time once its been saved', 'error' );
 		}
 	}
 	

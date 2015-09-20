@@ -29,6 +29,7 @@ $TierTwo->checkPost();
 	<script type="text/javascript" src="script/bootstrap.js"></script>
 	<script type="text/javascript" src="script/sweetalert.min.js"></script>
 	<script type="text/javascript" src="script/bootstrap-datetimepicker.js"></script>
+	<script type="text/javascript" src="script/jquery.js"></script>
 		
 	<!--  Load CSS -->
 	<link rel="stylesheet" href="css/bootstrap-datetimepicker.css" />
@@ -36,6 +37,7 @@ $TierTwo->checkPost();
 	<link rel="stylesheet" type="text/css" href="css/sweetalert.css" />
 	<link rel="stylesheet" type="text/css" href="css/menubar.css" /> 
 	<link rel="stylesheet" type="text/css" href="css/SupportRequestForm.css" /> 
+	<link rel="stylesheet" type="text/css" href="css/countDown.css" />
 
 </head>
 
@@ -91,12 +93,32 @@ $TierTwo->checkPost();
 		  <b>Total Time:</b>   
 	   </div>
 	   <div class="right">
-		  <input class="input_box form-control" type='text' name='ISOCTechnician' id='ISOCTechnician' value='<?php echo $TierTwo->getTicketInfo('ISOCTechnician');?>' onblur='' >
-		  <div class="customBlock"></div><input class="btn-xs btn-danger customMarginButton" type='submit' name='submit' id='submit' value="Assume Ownership"><div class="customBlock"></div>
-		  <input class="input_box form-control" type='text' name='initialSubmitTime'id='initialSubmitTime' value='<?php echo $TierTwo->getTicketInfo('initialSubmitTime');?>' onblur='' readonly>
-		  <input class="input_box form-control" type='text' name='responseTime'  id='responseTime' value='<?php echo $TierTwo->getTicketInfo('responseTime');?>' onblur='' readonly>
-		  <input class="input_box form-control" type='text' name='completeTime'  id='completeTime' value='<?php echo $TierTwo->getTicketInfo('completeTime');?>' onblur='' readonly>
-		  <input class="input_box form-control" type='text' name='textboxSubject' id='textboxSubject' value='' onblur='' readonly>
+		  <input class="input_box form-control metaBox" type='text' name='ISOCTechnician' id='ISOCTechnician' value='<?php echo $TierTwo->getTicketInfo('ISOCTechnician');?>' onblur='' >
+		  <input class="btn-xs btn-danger buttonMargin" type='submit' name='submit' id='submit' value="Assume Ownership">
+		  <input class="input_box form-control metaBox" type='text' name='initialSubmitTime'id='initialSubmitTime' value='<?php echo $TierTwo->getTicketInfo('initialSubmitTime');?>' onblur='' readonly>
+		  <input class="input_box form-control metaBox" type='text' name='responseTime'  id='responseTime' value='<?php echo $TierTwo->getTicketInfo('responseTime');?>' onblur='' readonly>
+		  <input class="input_box form-control metaBox" type='text' name='completeTime'  id='completeTime' value='<?php echo $TierTwo->getTicketInfo('completeTime');?>' onblur='' readonly>
+		  
+		  <div class="timer" id="timer" name="timer">
+				<ul class="countdown">
+				<li> <span class="days"id="days">00</span>
+				<p class="days_ref">days</p>
+				</li>
+				<li class="seperator">.</li>
+				<li> <span class="hours" id="hours">00</span>
+				<p class="hours_ref">hours</p>
+				</li>
+				<li class="seperator">:</li>
+				<li> <span class="minutes" id="minutes">00</span>
+				<p class="minutes_ref">minutes</p>
+				</li>
+				<li class="seperator">:</li>
+				<li> <span class="seconds" id="seconds">00</span>
+				<p class="seconds_ref">seconds</p>
+				</li>
+				</ul>
+		  </div>
+		  
 	   </div>
 	 </div> 
    </div>
@@ -154,6 +176,26 @@ $TierTwo->checkPost();
 </form>
 
 
+<script>
+ $(document).ready(function(){
+     setInterval(ajaxcall, 1000);
+ });
+ function ajaxcall(){
+     $.ajax({
+         url: 'gettime.php',
+         success: function(data) {
+             data = data.split(':');
+             $('#days').html(data[0]);
+			 $('#hours').html(data[1]);
+             $('#minutes').html(data[2]);
+             $('#seconds').html(data[3]);
+         }
+     });
+ }
+</script>
+<!--<span id="hours">0</span>:<span id="minutes">0</span>:<span id="seconds">0</span>-->
+
+
 
 
 </body>
@@ -169,4 +211,8 @@ if ($TierTwo->popup->notifyMessage())
 }
 
 ?>
+
+
+
+
 </html>

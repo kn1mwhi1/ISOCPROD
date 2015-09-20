@@ -47,11 +47,6 @@
 	margin-left: 25px;
 }
 
-.customMarginButton {
-	margin-left: 60px;
-}
-
-
 
 .input {
 	width: 375px;
@@ -381,3 +376,15 @@ a:hover {
 	
 
 }
+
+.metaBox{
+	width: 225px;
+}
+
+.buttonMargin{
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-left: 55px;
+	margin-right: auto;
+}
+
