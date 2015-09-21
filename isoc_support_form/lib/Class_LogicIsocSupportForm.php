@@ -806,6 +806,7 @@ class LogicIsocSupportForm
 		return $tempRequester;
 	}
 	
+	
 	private function convertRequestDetailsVariablesToArray()
 	{
 	
@@ -815,6 +816,7 @@ class LogicIsocSupportForm
 								"REQUEST_DETAILS_DATA"=>"$this->detailsTextArea", "REQUEST_URGENCY"=>"$this->Urgency", "REQUEST_START_DATETIME"=>"$this->datetime1", "REQUEST_END_DATETIME"=>"$this->datetime2");
 		return $tempRequestDetails;
 	}
+	
 	
 	private function submitRequesterToDB()
 	{
@@ -832,6 +834,7 @@ class LogicIsocSupportForm
 			return $requesterID;
 		}
 	}
+	
 	
 	private function submitEntireRequesterToDB()
 	{
@@ -927,7 +930,6 @@ class LogicIsocSupportForm
 			// Set the respnce date time and ISOC Tech if its not been set.
 			$this->isocUpdateRequestAcceptAndTech( $requestTicketNumber);
 			
-			// Send Email to user that a specific Tech is now working their request.
 			
 			
 			
@@ -935,6 +937,107 @@ class LogicIsocSupportForm
 			
 		}
 	}
+	
+	
+	
+
+	private function inProgressEmailBody()
+	{		
+		$message = 'Your Ticket is now being worked by.'.$this->responseData['ISOC_TECH_FULL_NAME'].'<br />
+					<p>Once your request has been completed you will recieve another email.</p>
+
+					<br />
+					<br />
+					<br />
+					<br />
+					Thanks for using the ISOC request form,<br />
+					IS Operations
+									
+					';
+					
+		return $message;
+	}
+	
+	private function requestEmailWrapper( $body, $subject ='ISOC Request Form Conformation Email')
+	{
+		// create email message
+		$message = '
+			
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>ISOC Request Conformation Email</title>
+
+</head>
+
+<body bgcolor="#f2eded">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f2eded">
+  <tr>
+    <td><table width="600" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" align="center">
+        <tr>
+          <td valign="middle">
+		  
+		  <div style="text-align: center;font-family: Helvetica; font-variant: small-caps; color: #FFFFFF;  background: #66C285;">'.$subject.'</div>
+			
+			</td>
+        </tr>
+        <tr>
+          <td align="center">&nbsp;</td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="10%">&nbsp;</td>
+                <td width="80%" align="left" valign="top"><font style="font-family: Georgia, "Times New Roman", Times, serif; color:#010101; font-size:24px"><strong><em>Hi '.$this->responseData['REQUESTER_NAME'].',</em></strong></font><br /><br />
+                  <font style="font-family: Verdana, Geneva, sans-serif; color:#666766; font-size:13px; line-height:21px">
+				  
+				  '.$body.'
+					<br />
+					<br />
+					<a href="http://10.176.105.18/isoc_support_form/supportrequestform.php">ISOC Request Form</a>
+				</font>
+				
+				</td>
+                <td width="10%">&nbsp;</td>
+              </tr>
+			  
+			  
+			  
+              <tr>
+                <td>&nbsp;</td>
+                <td align="right" valign="top"></td>
+                <td>&nbsp;</td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          
+        </tr>
+        
+      </table></td>
+  </tr>
+</table>
+</body>
+</html>
+
+
+';
+			
+	return $message;
+	}	
+	
+	// ********************************  END in progress email ***************************************************
+	
 	
 	// Function loads all values to array in order to be retrived by the getTicketInfo() function.
 	private function loadTicketInfoArray ( $aTicketNumber )
@@ -997,6 +1100,12 @@ class LogicIsocSupportForm
 				$whereArray = array("REQUEST_TICKET_NUMBER"=> $aTicketNumber);
 				
 				$this->ToDB->updateRecordOneTable( $updateTemp , $whereArray, 'equals' , 'TB_SUPPORT_FORM_METADATA' , $fieldTypes = 'ssi');
+				
+				// Send Email to user that a specific Tech is now working their request.
+				$subject = 'Ticket Number: '.$this->responseData['REQUEST_TICKET_NUMBER'].'is now in progress.';
+				$message = $this->requestEmailWrapper( $this->inProgressEmailBody() , $subject);
+				$this->email->sendEmailNoCC( $this->responseData['REQUESTER_EMAIL_ADDRESS'], 'isoperationscenter@uscellular.com', $subject, $message);			
+		    
 			}
 			
 	}
@@ -1024,6 +1133,7 @@ class LogicIsocSupportForm
 	}
 	
 	// ********************************************  complete email template *******************************************************************************
+
 	private function createCompleteEmailBody()
 	{
 		if ($_POST['request_overview'] = '')
@@ -1061,6 +1171,8 @@ class LogicIsocSupportForm
 					
 		return $message;
 	}
+	
+	
 	
 	private function requestCompleteEmailSend( $body, $subject ='ISOC Request Form Conformation Email')
 	{
@@ -1176,6 +1288,7 @@ class LogicIsocSupportForm
 			$this->popup->addTomessagePopUp( 'OK' , 'Completion already set' , 'You can not adjust the completion time once its been saved', 'error' );
 		}
 	}
+	
 	
 	private function updateISOCTech()
 	{
