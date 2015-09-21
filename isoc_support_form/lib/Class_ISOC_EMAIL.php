@@ -97,7 +97,7 @@ class ISOC_EMAIL
 		
 	}
 	
-	public function setHeadersNoCC(  )
+	public function setHeadersNoCC()
 	{
 		
 		// Always set content-type when sending HTML email
@@ -114,7 +114,6 @@ class ISOC_EMAIL
 		
 	}
 	
-	
 	public function getFrom()
 	{
 		return $this->from;
@@ -129,7 +128,41 @@ class ISOC_EMAIL
 	{
 		mail($this->to,$this->subject,$this->message,$this->headers);
 	}
+	
+	public function sendEmailNoCC( $to, $from, $subject, $message)
+	{	
+		$this->setTo( $to);
+		
+		$this->setFrom( $from );
+		
+		$this->setSubject( $subject);
+		
+		$this->setMessage( $message );
+		// set Headers
+		$this->setHeadersNoCC();
+		
+		// send email
+		$this->sendEmail();
+	}
 
+	public function sendEmailWithCC( $to, $from, $CC, $subject, $message)
+	{	
+		$this->setTo( $to);
+		
+		$this->setFrom( $from );
+		
+		$this->setCCEmail( $CC );
+		
+		$this->setSubject( $subject);
+		
+		$this->setMessage( $message );
+		
+		// set Headers
+		$this->setHeaders();
+		
+		// send email
+		$this->sendEmail();
+	}
 
 
 }

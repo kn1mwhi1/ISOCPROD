@@ -566,8 +566,9 @@ class LogicIsocSupportForm
 
 ';  // End of Echo statement
 
-				// send requester email
-					$this->requesterEmailSend();
+				// send requester email *******************************************************************************
+					
+					$this->requesterEmailSend( $this->createRequesterEmailBody() );
 					
 				// send email to ISOC
 					$this->isocEmailSend();
@@ -585,6 +586,8 @@ class LogicIsocSupportForm
 		}
 	}
 
+	
+	
 	
 	private function isocUpateSubmissionDateTime()
 	{
@@ -697,7 +700,7 @@ class LogicIsocSupportForm
 	
 	
 	
-	private function requesterEmailSend()
+	private function requesterEmailSend( $message, $subject ='ISOC Request Form Conformation Email')
 	{
 		// create email message
 		$message = '
@@ -717,7 +720,7 @@ class LogicIsocSupportForm
         <tr>
           <td valign="middle">
 		  
-		  <div style="text-align: center;font-family: Helvetica; font-variant: small-caps; color: #FFFFFF;  background: #66C285;">ISOC Request Form Conformation Email</div>
+		  <div style="text-align: center;font-family: Helvetica; font-variant: small-caps; color: #FFFFFF;  background: #66C285;">'.$subject.'</div>
 			
 			</td>
         </tr>
@@ -734,7 +737,7 @@ class LogicIsocSupportForm
                 <td width="80%" align="left" valign="top"><font style="font-family: Georgia, "Times New Roman", Times, serif; color:#010101; font-size:24px"><strong><em>Hi '.$this->namebox.',</em></strong></font><br /><br />
                   <font style="font-family: Verdana, Geneva, sans-serif; color:#666766; font-size:13px; line-height:21px">
 				  
-				  '.$this->createRequesterEmailBody().'
+				  '.$message.'
 					<br />
 					<br />
 					<a href="http://10.176.105.18/isoc_support_form/supportrequestform.php">ISOC Request Form</a>
@@ -923,7 +926,13 @@ class LogicIsocSupportForm
 		
 			// Set the respnce date time and ISOC Tech if its not been set.
 			$this->isocUpdateRequestAcceptAndTech( $requestTicketNumber);
-			// Send Email	
+			
+			// Send Email to user that a specific Tech is now working their request.
+			
+			
+			
+			
+			
 		}
 	}
 	
@@ -997,17 +1006,147 @@ class LogicIsocSupportForm
 		// Checks to see if user has posted before checking any validation
 		if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST['submit'] == 'Assume Ownership' ) 
 		{
-			$this->isocUpdateISOCTech();
+			$this->updateISOCTech();
 		}
 		
 		// Checks to see if user has posted before checking any validation
 		if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST['submit'] == 'Send Response' ) 
 		{
 			$this->updateCompletionTime();
+			
+			// send email that response is complete
+			$subject = 'Ticket: '.$this->responseData['REQUEST_TICKET_NUMBER'].' has been completed.';
+			$message = $this->requestCompleteEmailSend( $this->createCompleteEmailBody() , $subject );
+			$this->email->sendEmailWithCC( $this->responseData['REQUESTER_EMAIL_ADDRESS'], 'isoperationscenter@uscellular.com', $this->responseData['REQUESTER_CC_ADDRESS'], $subject, $message);
+		}
+		
+		print_r($this->responseData);
+	}
+	
+	// ********************************************  complete email template *******************************************************************************
+	private function createCompleteEmailBody()
+	{
+		if ($_POST['request_overview'] = '')
+		{
+			$_POST['request_overview'] = 'Your request has been completed.';
 		}
 		
 		
+		
+		$message = 'This request has been completed.<br />
+					<b>ISOC Tech Response:</b> '.$_POST['request_overview'].'<br />
+					<br />
+					<br />
+					The below is a summary of the actions taken:
+					<br />
+					<br />
+					<b><u>Ticket Number: '.$this->responseData['REQUEST_TICKET_NUMBER'].'</u></b><br />
+					<br />
+					<b>Perform:</b>      '.$this->responseData['REQUEST_URGENCY'].'<br /> 
+					<b>Environment:</b>  '.$this->responseData['ENVIRONMENT_OPTIONS_VALUE'].'<br />
+					<b> Option:</b>       '.$this->responseData['MAIN_OPTIONS_VALUE'].' -> '.$this->responseData['PROCESS_DETAILS_DATA'].'<br />
+					<b>Request Type:</b> '.$this->responseData['REQUEST_TYPE_OPTIONS_VALUE'].'<br />
+					<b>Details:</b>      '.$this->responseData['ADDITIONAL_OPTIONS_VALUE'].'<br />
+					<br />'.$this->responseData['REQUEST_DETAILS_DATA'].'<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					Thanks for using the ISOC request form,<br />
+					IS Operations
+					
+					
+					
+					';
+					
+		return $message;
 	}
+	
+	private function requestCompleteEmailSend( $body, $subject ='ISOC Request Form Conformation Email')
+	{
+		// create email message
+		$message = '
+			
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>ISOC Request Conformation Email</title>
+
+</head>
+
+<body bgcolor="#f2eded">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f2eded">
+  <tr>
+    <td><table width="600" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" align="center">
+        <tr>
+          <td valign="middle">
+		  
+		  <div style="text-align: center;font-family: Helvetica; font-variant: small-caps; color: #FFFFFF;  background: #66C285;">'.$subject.'</div>
+			
+			</td>
+        </tr>
+        <tr>
+          <td align="center">&nbsp;</td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="10%">&nbsp;</td>
+                <td width="80%" align="left" valign="top"><font style="font-family: Georgia, "Times New Roman", Times, serif; color:#010101; font-size:24px"><strong><em>Hi '.$this->responseData['REQUESTER_NAME'].',</em></strong></font><br /><br />
+                  <font style="font-family: Verdana, Geneva, sans-serif; color:#666766; font-size:13px; line-height:21px">
+				  
+				  '.$body.'
+					<br />
+					<br />
+					<a href="http://10.176.105.18/isoc_support_form/supportrequestform.php">ISOC Request Form</a>
+				</font>
+				
+				</td>
+                <td width="10%">&nbsp;</td>
+              </tr>
+			  
+			  
+			  
+              <tr>
+                <td>&nbsp;</td>
+                <td align="right" valign="top"></td>
+                <td>&nbsp;</td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          
+        </tr>
+        
+      </table></td>
+  </tr>
+</table>
+</body>
+</html>
+
+
+';
+			
+	return $message;
+	}
+	
+	// ********************************************************   End Email *********************************************************************
+	
+	
+	
+	
+	
+	
 	
 	// Update Ticket Completion Time
 	private function updateCompletionTime()
@@ -1038,7 +1177,7 @@ class LogicIsocSupportForm
 		}
 	}
 	
-	private function isocUpdateISOCTech()
+	private function updateISOCTech()
 	{
 		// sanitize user input
 		$_POST['ISOCTechnician'] = $this->sanitize_input($_POST['ISOCTechnician']);
@@ -1049,7 +1188,7 @@ class LogicIsocSupportForm
 		
 
 		
-		if ($techIDRowTemp['ISOC_TECH_EMPLOYEE_ID'] == $_POST['ISOCTechnician'] )
+		if ($techIDRowTemp['ISOC_TECH_EMPLOYEE_ID'] == $_POST['ISOCTechnician'] && $this->responseData['REQUEST_COMPLETION_DATETIME'] == '' )
 		{
 			// save to database
 			$updateTemp = array("ISOC_TECH_ID_ASSIGNED" => $_POST['ISOCTechnician'] );
@@ -1063,7 +1202,7 @@ class LogicIsocSupportForm
 		}
 		else
 		{
-			$this->popup->addTomessagePopUp( 'OK' , 'Failed Ownership Change' , 'The ownership did not change please ensure you have the correct ID and try again.', 'error' );
+			$this->popup->addTomessagePopUp( 'OK' , 'Failed Ownership Change' , 'The ownership did not change please ensure you have the correct ID and the ticket is not complete.', 'error' );
 			
 		}
 		

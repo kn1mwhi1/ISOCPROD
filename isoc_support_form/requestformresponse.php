@@ -206,9 +206,9 @@ $TierTwo->checkPost();
 </footer>
 <?php
 if ($TierTwo->popup->notifyMessage())
-{
-		
+{		
 }
+
 
 ?>
 
