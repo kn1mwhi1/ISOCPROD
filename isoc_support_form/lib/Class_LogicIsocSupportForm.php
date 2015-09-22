@@ -102,13 +102,6 @@ class LogicIsocSupportForm
 	}
 		
 		
-		
-	
-	
-	
-	
-
-	
 	
 	// convert variables used to communicate with database to an array
 	public function convertVariablesToArray()
@@ -304,12 +297,7 @@ class LogicIsocSupportForm
 			if ($nameOfObject == 'textboxCC')
 			{	// Calls sanitize function and then saves results in the name box variable located in this class.
 					
-				// if emtpy then return true
-				if ($_POST[$nameOfObject] == "")
-				{
-					return true;
-				}
-				
+	
 				// get email addresses from post variable
 				$emails = $_POST[$nameOfObject];
 				
@@ -487,6 +475,13 @@ class LogicIsocSupportForm
 	{
 		if ( empty($_POST[ $nameOfObject ]) || $this->validate_input($nameOfObject ) ) 
 		{
+			// if emtpy then return true only for the CC textbox
+				if ($_POST['textboxCC'] == "")
+				{
+					return true;
+				}
+				
+			
 			$this->errorContainer[] = $nameOfObject;
 			return false;  // do not send info to database 
 		}
@@ -517,54 +512,12 @@ class LogicIsocSupportForm
 				// submit requester to DB
 				try
 				{
-					// Create popup 
 					
-					// Display Ticket number
+					$this->popup->addTomessagePopUp( 'OK' , 'Ticket Successfully Submitted!' , 'Your request ticket number is: '.$this->submitEntireRequesterToDB().'  \n\nA summary email has been sent to your contact email.', 'success' );
 					
-					echo '<link rel="stylesheet" type="text/css" href="css/cssPopup.css" />';
 					
-					echo '
-						<div id="submitted" class="overlay">
-							<div class="popup center">
-											
-								<h2>'.$this->namebox.' your request has been successfully submitted.</h2>'
-								
-						 ;
-					echo '	<div class="content center">
-							<br />Your request ticket number is: <b>'.$this->submitEntireRequesterToDB().'</b>
-							<br />A summary email has been sent to your contact email.
-							<div class="space10"></div>
-							<br />Thank you for using the ISOC Request Form!
 					
-							<form action="supportrequestform.php">
-								<input type="submit" class="btn btn-primary center bottom" value="Ok">
-							</form>
-							
-						 </div>
-
-											
-							</div>
-							</div>
-
-
-
-
-							<script type="text/javascript">
-
-							// Show popup
-							loadUrl("#submitted");
-							
-							// stop scrolling
-							$("body").addClass("stop-scrolling")
-
-							function loadUrl(newLocation)
-							{
-							window.location = newLocation;
-							return false;
-							}
-							</script>
-
-';  // End of Echo statement
+ // End of Echo statement
 
 				// send requester email *******************************************************************************
 					
@@ -683,7 +636,7 @@ class LogicIsocSupportForm
 			$this->email->setCCEmail( $this->textboxCC );
 			
 			// set the subject field of email
-			$this->email->setSubject( 'New ISOC Support Request Ticket: '.$this->requestTicketNumber );
+			$this->email->setSubject( 'New ISOC Support Request Ticket: '.$this->requestTicketNumber.' -'.$this->eventIdName.'-('.$this->select_dynamic_request_type.')-Perform: '.$this->Urgency );
 			
 			// prepare headers which informs the mail client that this will be html and the from and to
 			$this->email->setHeaders();
@@ -775,26 +728,34 @@ class LogicIsocSupportForm
 
 ';
 			
-			// set the message
-			$this->email->setMessage( $message );
 			
-			// set the To field of email
-			$this->email->setTo( $this->emailbox.'; '.$this->textboxCC );
-			
-			$this->email->setFrom( 'ISOperationsCenter@uscellular.com');
-			
-			// set the cc email field
-			$this->email->setCCEmail( $this->textboxCC );
-			
-			// set the subject field of email
-			$this->email->setSubject( 'ISOC Request# '.$this->requestTicketNumber.' has been received.' );
-			
-			// prepare headers which informs the mail client that this will be html and the from and to
-			$this->email->setHeaders();
-			
-			// send email
-			$this->email->sendEmail();
-	
+			if ($this->textboxCC = '')
+			{
+				$this->email->sendEmailNoCC( $this->emailbox, 'ISOperationsCenter@uscellular.com' , 'ISOC Request# '.$this->requestTicketNumber.' has been received.', $message);
+			}
+			else
+			{
+				// set the message
+				$this->email->setMessage( $message );
+				
+				// set the To field of email
+				$this->email->setTo( $this->emailbox.'; '.$this->textboxCC );
+				
+				$this->email->setFrom( 'ISOperationsCenter@uscellular.com');
+				
+				
+				// set the cc email field
+				$this->email->setCCEmail( $this->textboxCC );
+				
+				// set the subject field of email
+				$this->email->setSubject( 'ISOC Request# '.$this->requestTicketNumber.' has been received.' );
+				
+				// prepare headers which informs the mail client that this will be html and the from and to
+				$this->email->setHeaders();
+				
+				// send email
+				$this->email->sendEmail();
+			}
 	}
 	
 
@@ -821,20 +782,31 @@ class LogicIsocSupportForm
 	private function submitRequesterToDB()
 	{
 		
+		$requesterRow = array();
 		// check requester with what is in database if false submit, if true get id
-		$requesterID = $this->FromDB->checkUserIDExist( $this->emailbox );
+		$requesterRow = $this->FromDB->checkUserIDExist( $this->emailbox );
+		//print_r($requesterRow);
 		
-		if ($requesterID == '')
+		if (!isset($requesterRow['REQUESTER_ID']))
 		{
 			$this->ToDB->insertRecordOneTable( $this->convertRequesterVariablesToArray(), 'TB_SUPPORT_FORM_REQUESTER' , 'ssssss' ) ;
 			return $this->requestContactID = $this->ToDB->getLastTransactionID();
 		}
-		else
+		
+		if (isset($requesterRow['REQUESTER_ID']))
 		{
-			return $requesterID;
+			$updateArray = $this->convertRequesterVariablesToArray();
+			$whereArray = array("REQUESTER_ID"=>$requesterRow['REQUESTER_ID']);
+			$this->ToDB->updateRecordOneTable( $updateArray , $whereArray, 'equals', 'TB_SUPPORT_FORM_REQUESTER' ,'sssssss');
+			
+			$tempString = $requesterRow['REQUESTER_ID'];
+			return $tempString;
 		}
+		
+		
+		
+		
 	}
-	
 	
 	private function submitEntireRequesterToDB()
 	{
@@ -943,7 +915,7 @@ class LogicIsocSupportForm
 
 	private function inProgressEmailBody()
 	{		
-		$message = 'Your Ticket is now being worked by.'.$this->responseData['ISOC_TECH_FULL_NAME'].'<br />
+		$message = 'Your Ticket is now being worked by '.$this->responseData['ISOC_TECH_FULL_NAME'].'.'.'<br />
 					<p>Once your request has been completed you will recieve another email.</p>
 
 					<br />
@@ -1050,12 +1022,22 @@ class LogicIsocSupportForm
 		
 		
 		$tempTicketInfo = $this->FromDB->getOneRowWhereEquals( 'TB_SUPPORT_FORM_DATA', 'REQUEST_TICKET_NUMBER', $aTicketNumber );
+		
 		if ( $tempTicketInfo['REQUEST_TICKET_NUMBER'] != '')
 		{
 			$tempTicketMeta = $this->FromDB->getOneRowWhereEquals( 'TB_SUPPORT_FORM_METADATA' , 'REQUEST_TICKET_NUMBER', $aTicketNumber );
 			$tempRequester = $this->FromDB->getOneRowWhereEquals( 'TB_SUPPORT_FORM_REQUESTER', 'REQUESTER_ID' , $tempTicketInfo['REQUESTER_ID'] );
+			
+			// Checks if a Tech has been assiged, if not assigns the Tech pulling up the ticket (from log in)
+			if ($tempTicketMeta['ISOC_TECH_ID_ASSIGNED'] == '' )
+			{
+				$tempTicketMeta['ISOC_TECH_ID_ASSIGNED'] = $_SESSION['ISOC_TECH_EMPLOYEE_ID'];
+			}
+			
 			$tempTechID = $this->FromDB->getOneRowWhereEquals( 'TB_ISOC_TECHS', 'ISOC_TECH_EMPLOYEE_ID' , $tempTicketMeta['ISOC_TECH_ID_ASSIGNED'] );
+			
 		
+			
 
 			// RECORD DATE AND TIMES
 			$_SESSION['REQUEST_SUBMISSION_DATETIME']= $tempTicketMeta['REQUEST_SUBMISSION_DATETIME'];
@@ -1071,9 +1053,12 @@ class LogicIsocSupportForm
 					$tempTicketMeta['REQUEST_COMPLETION_DATETIME'] = date( 'H:i:s m/d/Y', strtotime($tempTicketMeta['REQUEST_COMPLETION_DATETIME']) );
 				}
 			
+			
 			$this->responseData = array_merge($tempTicketInfo, $tempTicketMeta, $tempRequester);
 			$tempCurrentTech = array("ISOC_TECH_FULL_NAME"=>$tempTechID['ISOC_TECH_FIRST_NAME'].' '.$tempTechID['ISOC_TECH_LAST_NAME'], "REQUEST_OVERVIEW"=>$this->createRequestOverview() );
 			$this->responseData = array_merge($this->responseData, $tempCurrentTech);
+			
+			
 		}
 		else
 		{
@@ -1081,7 +1066,7 @@ class LogicIsocSupportForm
 			$_SESSION['REQUEST_ACCEPT_DATETIME']= '';
 			$_SESSION['REQUEST_COMPLETION_DATETIME']= '';
 		}
-		//print_r($this->responseData);
+		
 	}
 	
 	// Dectects if the Submission time has been set.. if not then set it with the ISOC Tech.
@@ -1089,10 +1074,10 @@ class LogicIsocSupportForm
 	{
 			$dateTimeNow = date('Y-m-d H:i:s');
 			
-			
-			
 			$temp = array();
 			$temp = $this->FromDB->getOneRowWhereEquals('TB_SUPPORT_FORM_METADATA', 'REQUEST_TICKET_NUMBER', $aTicketNumber );
+			
+			
 			
 			if (!isset( $temp['REQUEST_ACCEPT_DATETIME'] ) )
 			{
@@ -1101,8 +1086,9 @@ class LogicIsocSupportForm
 				
 				$this->ToDB->updateRecordOneTable( $updateTemp , $whereArray, 'equals' , 'TB_SUPPORT_FORM_METADATA' , $fieldTypes = 'ssi');
 				
+				
 				// Send Email to user that a specific Tech is now working their request.
-				$subject = 'Ticket Number: '.$this->responseData['REQUEST_TICKET_NUMBER'].'is now in progress.';
+				$subject = 'Ticket Number: '.$this->responseData['REQUEST_TICKET_NUMBER'].' is now in progress.';
 				$message = $this->requestEmailWrapper( $this->inProgressEmailBody() , $subject);
 				$this->email->sendEmailNoCC( $this->responseData['REQUESTER_EMAIL_ADDRESS'], 'isoperationscenter@uscellular.com', $subject, $message);			
 		    
@@ -1129,22 +1115,29 @@ class LogicIsocSupportForm
 			$this->email->sendEmailWithCC( $this->responseData['REQUESTER_EMAIL_ADDRESS'], 'isoperationscenter@uscellular.com', $this->responseData['REQUESTER_CC_ADDRESS'], $subject, $message);
 		}
 		
-		print_r($this->responseData);
+		//print_r($this->responseData);
 	}
 	
 	// ********************************************  complete email template *******************************************************************************
 
 	private function createCompleteEmailBody()
 	{
-		if ($_POST['request_overview'] = '')
+		// if the Post variable does not exist create an empty one.
+		if (!isset($_POST['details']))
 		{
-			$_POST['request_overview'] = 'Your request has been completed.';
+			$_POST['details'] = '';
 		}
 		
+		// if the request overview is empty then fill in a default.
+		if ( $_POST['details'] == '')
+		{
+			$_POST['details'] = 'Your request has been completed.';
+		}
 		
+		//print_r($_POST);
 		
-		$message = 'This request has been completed.<br />
-					<b>ISOC Tech Response:</b> '.$_POST['request_overview'].'<br />
+		$message = '
+					<b>ISOC Tech Response:</b> '.$_POST['details'].'<br />
 					<br />
 					<br />
 					The below is a summary of the actions taken:
@@ -1292,19 +1285,17 @@ class LogicIsocSupportForm
 	
 	private function updateISOCTech()
 	{
-		// sanitize user input
-		$_POST['ISOCTechnician'] = $this->sanitize_input($_POST['ISOCTechnician']);
 		
 		// get row of matching
 		$techIDRowTemp = array();
-		$techIDRowTemp = $this->FromDB->getOneRowWhereEquals( 'TB_ISOC_TECHS', 'ISOC_TECH_EMPLOYEE_ID', $_POST['ISOCTechnician'] );
+		$techIDRowTemp = $this->FromDB->getOneRowWhereEquals( 'TB_ISOC_TECHS', 'ISOC_TECH_EMPLOYEE_ID', $_SESSION['ISOC_TECH_EMPLOYEE_ID'] );
 		
 
 		
-		if ($techIDRowTemp['ISOC_TECH_EMPLOYEE_ID'] == $_POST['ISOCTechnician'] && $this->responseData['REQUEST_COMPLETION_DATETIME'] == '' )
+		if ($this->responseData['REQUEST_COMPLETION_DATETIME'] == '' )
 		{
 			// save to database
-			$updateTemp = array("ISOC_TECH_ID_ASSIGNED" => $_POST['ISOCTechnician'] );
+			$updateTemp = array("ISOC_TECH_ID_ASSIGNED" => $_SESSION['ISOC_TECH_EMPLOYEE_ID'] );
 			$whereArray = array("REQUEST_TICKET_NUMBER"=> $this->responseData['REQUEST_TICKET_NUMBER'] );
 					
 			$this->ToDB->updateRecordOneTable( $updateTemp , $whereArray, 'equals' , 'TB_SUPPORT_FORM_METADATA' , $fieldTypes = 'si');
@@ -1315,7 +1306,7 @@ class LogicIsocSupportForm
 		}
 		else
 		{
-			$this->popup->addTomessagePopUp( 'OK' , 'Failed Ownership Change' , 'The ownership did not change please ensure you have the correct ID and the ticket is not complete.', 'error' );
+			$this->popup->addTomessagePopUp( 'OK' , 'Failed Ownership Change' , 'The ownership did not change please ensure the ticket is not complete.', 'error' );
 			
 		}
 		

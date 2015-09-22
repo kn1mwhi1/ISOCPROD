@@ -83,18 +83,22 @@ $TierTwo->checkPost();
 		  <input class="input_box form-control" type='text' name='textboxSubject' id='textboxSubject' value='<?php echo $TierTwo->getTicketInfo('textboxSubject');?>' onblur='' readonly>
 	   </div>
 	  </div>
-	 <div class="inputRight">
+	 <div class="inputRight ">
 	   <div class="left">
 		  <b>ISOC Technician ID:</b>
-		  <b class="colorWhite">Button</b>
+		  <b>Ticket Status:</b>
 		  <b>Initial Submit Time:</b>
 		  <b>Response Date-Time:</b>
 		  <b>Complete Date-Time:</b> 
 		  <b>Total Time:</b>   
 	   </div>
-	   <div class="right">
-		  <input class="input_box form-control metaBox" type='text' name='ISOCTechnician' id='ISOCTechnician' value='<?php echo $TierTwo->getTicketInfo('ISOCTechnician');?>' onblur='' >
-		  <input class="btn-xs btn-danger buttonMargin" type='submit' name='submit' id='submit' value="Assume Ownership">
+	   <div class="right testRed">
+		
+			  <input class="input_box form-control techIDSize inner" type='text' name='ISOCTechnician' id='ISOCTechnician' value='<?php echo $TierTwo->getTicketInfo('ISOCTechnician');?>' onblur='' readonly>
+			  <input class="btn-xs btn-danger buttonMargin inner" type='submit' name='submit' id='submit' value="Assume Ownership">
+		<div class="status testRed" >
+				<!-- Status indicator -->
+		</div>
 		  <input class="input_box form-control metaBox" type='text' name='initialSubmitTime'id='initialSubmitTime' value='<?php echo $TierTwo->getTicketInfo('initialSubmitTime');?>' onblur='' readonly>
 		  <input class="input_box form-control metaBox" type='text' name='responseTime'  id='responseTime' value='<?php echo $TierTwo->getTicketInfo('responseTime');?>' onblur='' readonly>
 		  <input class="input_box form-control metaBox" type='text' name='completeTime'  id='completeTime' value='<?php echo $TierTwo->getTicketInfo('completeTime');?>' onblur='' readonly>

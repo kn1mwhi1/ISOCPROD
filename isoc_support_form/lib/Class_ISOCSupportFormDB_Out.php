@@ -293,16 +293,19 @@ class ISOCSupportFormDB_Out extends BaseDataBase{
 		
 		
 		// Query database to see if an email address exists
-		$qurey_RequesterEmailAddressExists = "SELECT REQUESTER_ID FROM TB_SUPPORT_FORM_REQUESTER WHERE REQUESTER_EMAIL_ADDRESS LIKE '%$aEmailAddress%'";
+		$qurey_RequesterEmailAddressExists = "SELECT * FROM TB_SUPPORT_FORM_REQUESTER WHERE REQUESTER_EMAIL_ADDRESS LIKE '%$aEmailAddress%'";
 		
 		// place result in tmpArray
-		$tmpArray = $this->multiFieldChangeToArray( $qurey_RequesterEmailAddressExists) ;
+		$tmpArray = $this->multiFieldChangeToArrayAssociative( $qurey_RequesterEmailAddressExists) ;
 		
+		/*
 		// convert array into a string
 		$requestID = implode( '', $tmpArray);
+		*/
+		
 		
 		// return the RequestID
-		return $requestID;
+		return $tmpArray;
 	}
 	
 	public function getOneRowWhereEquals( $aTable, $aFieldName, $aPrimaryKey )

@@ -25,6 +25,7 @@ $TierTwo = new LogicIsocSupportForm();
 	<script type="text/javascript" src="script/supportscript.js" ></script>
 	<script type="text/javascript" src="script/jquery.js"></script>
 	<script type="text/javascript" src="script/moment.js"></script>
+	<script type="text/javascript" src="script/sweetalert.min.js"></script>
 	<script type="text/javascript" src="script/bootstrap.js"></script>
 	<script type="text/javascript" src="script/bootstrap-datetimepicker.js"></script>
 	
@@ -34,6 +35,7 @@ $TierTwo = new LogicIsocSupportForm();
 	<link rel="stylesheet" href="css/bootstrap-datetimepicker.css" />
 	<link rel="stylesheet" href="css/bootstrap.css" />
 	<link rel="stylesheet" type="text/css" href="css/menubar.css" /> 
+	<link rel="stylesheet" type="text/css" href="css/sweetalert.css" />
 	<link rel="stylesheet" type="text/css" href="css/SupportRequestForm.css" /> 
 	
 <?php $TierTwo->checkUserSubmittedData(); ?>
@@ -279,7 +281,9 @@ $TierTwo = new LogicIsocSupportForm();
 
 <p id="Revision" >Rev. 5.28.2015</p></p>
 </footer>
-
+<?php
+if ($TierTwo->popup->notifyMessage()){}
+?>
 
 
 </div>

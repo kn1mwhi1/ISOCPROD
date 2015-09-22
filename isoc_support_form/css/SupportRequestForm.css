@@ -68,8 +68,8 @@
 
 
 .inputRight {
-	width: 375px;
-	height: 100px; 
+	width: auto;
+	height: auto; 
 	float: right;
 	/*
 	margin-left: auto;
@@ -254,12 +254,7 @@ a:hover {
     text-align: left;
 	padding:7px 0px 7px 0px;
 }
-.right {
-    float: left;
-    width: 225px;
-	height: auto;
-    text-align: left;
-}
+
 
 #start_end_date{
 	width: 320px;
@@ -384,7 +379,36 @@ a:hover {
 .buttonMargin{
 	margin-top: 5px;
 	margin-bottom: 5px;
-	margin-left: 55px;
-	margin-right: auto;
+	margin-left: 0px;
+	margin-right: 10px;
+	width: 130px;
+	float: right;
 }
+
+.right {
+    float: left;
+    width: 225px;
+	height: auto;
+    text-align: left;
+}
+
+
+.techIDSize{
+ width: 75px;
+}
+.inner{
+display: inline-block;
+}
+
+.status{
+ width: 220px;
+ height: 30px;
+}
+
+
+
+
+
+
+
 
