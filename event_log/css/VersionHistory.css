@@ -1,0 +1,42 @@
+/* Version History CSS */
+
+.box {
+
+border-style: solid;
+border-width: medium;
+border-color: gray;
+padding: 10px;
+border-radius: 10px;
+width: 900px;
+text-align: left;
+font-family: "Calibri";
+}
+
+.box p {
+width: 300px;
+}
+
+.box li {
+padding: 5px;
+}
+
+.box h1 {
+font-style: italic;
+}
+
+p.submit{
+padding: 5px;
+width: 10%;
+text-align: center;
+}
+
+.buttons {
+color: white;
+background-color: gray;
+font-style: bold;
+padding: 5px;
+}
+
+p {
+font-family: arial;
+}
