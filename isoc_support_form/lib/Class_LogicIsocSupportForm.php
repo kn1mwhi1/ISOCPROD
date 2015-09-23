@@ -545,7 +545,7 @@ class LogicIsocSupportForm
 	private function isocUpateSubmissionDateTime()
 	{
 			$dateTimeNow = date('Y-m-d H:i:s');
-			$tempArray = array("REQUEST_TICKET_NUMBER"=>"$this->requestTicketNumber", "REQUEST_SUBMISSION_DATETIME"=>"$dateTimeNow");
+			$tempArray = array("REQUEST_TICKET_NUMBER"=>"$this->requestTicketNumber", "REQUEST_SUBMISSION_DATETIME"=>"$dateTimeNow", "REQUEST_STATUS"=>"ACTIVE");
 			$this->ToDB->insertRecordOneTable( $tempArray , 'TB_SUPPORT_FORM_METADATA', 'is' );
 	}
 	
@@ -873,12 +873,66 @@ class LogicIsocSupportForm
 				case 'request_overview':
 					return $this->responseData['REQUEST_OVERVIEW'];
 					break;
+				case 'status_indicator':
+					return $this->statusIndicator();
+					break;
+				case 'assume_button':
+					return $this->hideButtonCancelComplete();
+					break;
+				case 'timer_hide':
+					return $this->hideButtonCancel();
+					break;
 				default:
 					return '';
 			}
 		}
 		return '';
 	}
+	
+	
+	private function hideButtonCancelComplete()
+	{
+		if (isset($this->responseData['REQUEST_STATUS']) && ($this->responseData['REQUEST_STATUS'] == 'COMPLETE' || $this->responseData['REQUEST_STATUS'] == 'CANCELED') )
+		{
+			echo 'hide';	
+		}
+	}
+	
+private function hideButtonCancel()
+	{
+		if (isset($this->responseData['REQUEST_STATUS']) && $this->responseData['REQUEST_STATUS'] == 'CANCELED' )
+		{
+			echo 'hide';	
+		}
+	}
+	
+	// Prints out the html tags needed to see the status indicator
+	private function statusIndicator()
+	{
+		
+		if(isset($this->responseData['REQUEST_STATUS']) && $this->responseData['REQUEST_STATUS'] != '')
+		{
+			if($this->responseData['REQUEST_STATUS'] == 'ACTIVE')
+			{
+				echo '<div class="led-box"><div class="led-yellow"><p class="status">Active</p></div></div>';
+			}
+			
+			if($this->responseData['REQUEST_STATUS'] == 'COMPLETE')
+			{
+				echo '<div class="led-box"><div class="led-green"><p class="status">Completed</p></div></div>';
+			}
+			
+			if($this->responseData['REQUEST_STATUS'] == 'CANCELED')
+			{
+				echo'  <div class="led-box"><div class="led-red"><p class="status">Canceled</p></div></div>';
+			}
+		}
+		else
+		{
+			echo '<div class="led-box"><div class="led-blue"><p class="status">Not Loaded</p></div></div>';
+		}
+	}
+	
 	
 	
 	public function retrieveTicket()
@@ -901,11 +955,6 @@ class LogicIsocSupportForm
 		
 			// Set the respnce date time and ISOC Tech if its not been set.
 			$this->isocUpdateRequestAcceptAndTech( $requestTicketNumber);
-			
-			
-			
-			
-			
 			
 		}
 	}
@@ -1023,62 +1072,65 @@ class LogicIsocSupportForm
 		
 		$tempTicketInfo = $this->FromDB->getOneRowWhereEquals( 'TB_SUPPORT_FORM_DATA', 'REQUEST_TICKET_NUMBER', $aTicketNumber );
 		
-		if ( $tempTicketInfo['REQUEST_TICKET_NUMBER'] != '')
-		{
-			$tempTicketMeta = $this->FromDB->getOneRowWhereEquals( 'TB_SUPPORT_FORM_METADATA' , 'REQUEST_TICKET_NUMBER', $aTicketNumber );
-			$tempRequester = $this->FromDB->getOneRowWhereEquals( 'TB_SUPPORT_FORM_REQUESTER', 'REQUESTER_ID' , $tempTicketInfo['REQUESTER_ID'] );
-			
-			// Checks if a Tech has been assiged, if not assigns the Tech pulling up the ticket (from log in)
-			if ($tempTicketMeta['ISOC_TECH_ID_ASSIGNED'] == '' )
-			{
-				$tempTicketMeta['ISOC_TECH_ID_ASSIGNED'] = $_SESSION['ISOC_TECH_EMPLOYEE_ID'];
-			}
-			
-			$tempTechID = $this->FromDB->getOneRowWhereEquals( 'TB_ISOC_TECHS', 'ISOC_TECH_EMPLOYEE_ID' , $tempTicketMeta['ISOC_TECH_ID_ASSIGNED'] );
-			
-		
-			
-
-			// RECORD DATE AND TIMES
-			$_SESSION['REQUEST_SUBMISSION_DATETIME']= $tempTicketMeta['REQUEST_SUBMISSION_DATETIME'];
-			$_SESSION['REQUEST_ACCEPT_DATETIME']= $tempTicketMeta['REQUEST_ACCEPT_DATETIME'];
-			$_SESSION['REQUEST_COMPLETION_DATETIME']= $tempTicketMeta['REQUEST_COMPLETION_DATETIME'];
-			
-			// Convert Time Format
-			$tempTicketMeta['REQUEST_SUBMISSION_DATETIME'] = date( 'H:i:s m/d/Y', strtotime($tempTicketMeta['REQUEST_SUBMISSION_DATETIME']) );
-			$tempTicketMeta['REQUEST_ACCEPT_DATETIME'] = date( 'H:i:s m/d/Y', strtotime($tempTicketMeta['REQUEST_ACCEPT_DATETIME']) );
-			
-				if ($tempTicketMeta['REQUEST_COMPLETION_DATETIME'] != '')
+				if ( isset($tempTicketInfo['REQUEST_TICKET_NUMBER']) && $tempTicketInfo['REQUEST_TICKET_NUMBER'] != '')
 				{
-					$tempTicketMeta['REQUEST_COMPLETION_DATETIME'] = date( 'H:i:s m/d/Y', strtotime($tempTicketMeta['REQUEST_COMPLETION_DATETIME']) );
+					$tempTicketMeta = $this->FromDB->getOneRowWhereEquals( 'TB_SUPPORT_FORM_METADATA' , 'REQUEST_TICKET_NUMBER', $aTicketNumber );
+					$tempRequester = $this->FromDB->getOneRowWhereEquals( 'TB_SUPPORT_FORM_REQUESTER', 'REQUESTER_ID' , $tempTicketInfo['REQUESTER_ID'] );
+					
+					// Checks if a Tech has been assiged, if not assigns the Tech pulling up the ticket (from log in)
+					if ($tempTicketMeta['ISOC_TECH_ID_ASSIGNED'] == '' )
+					{
+						$tempTicketMeta['ISOC_TECH_ID_ASSIGNED'] = $_SESSION['ISOC_TECH_EMPLOYEE_ID'];
+					}
+					
+					$tempTechID = $this->FromDB->getOneRowWhereEquals( 'TB_ISOC_TECHS', 'ISOC_TECH_EMPLOYEE_ID' , $tempTicketMeta['ISOC_TECH_ID_ASSIGNED'] );
+					
+				
+					
+
+					// RECORD DATE AND TIMES
+					$_SESSION['REQUEST_SUBMISSION_DATETIME']= $tempTicketMeta['REQUEST_SUBMISSION_DATETIME'];
+					$_SESSION['REQUEST_ACCEPT_DATETIME']= $tempTicketMeta['REQUEST_ACCEPT_DATETIME'];
+					$_SESSION['REQUEST_COMPLETION_DATETIME']= $tempTicketMeta['REQUEST_COMPLETION_DATETIME'];
+					
+					// Convert Time Format
+					$tempTicketMeta['REQUEST_SUBMISSION_DATETIME'] = date( 'H:i:s m/d/Y', strtotime($tempTicketMeta['REQUEST_SUBMISSION_DATETIME']) );
+					$tempTicketMeta['REQUEST_ACCEPT_DATETIME'] = date( 'H:i:s m/d/Y', strtotime($tempTicketMeta['REQUEST_ACCEPT_DATETIME']) );
+					
+						if ($tempTicketMeta['REQUEST_COMPLETION_DATETIME'] != '')
+						{
+							$tempTicketMeta['REQUEST_COMPLETION_DATETIME'] = date( 'H:i:s m/d/Y', strtotime($tempTicketMeta['REQUEST_COMPLETION_DATETIME']) );
+						}
+					
+					
+					$this->responseData = array_merge($tempTicketInfo, $tempTicketMeta, $tempRequester);
+					$tempCurrentTech = array("ISOC_TECH_FULL_NAME"=>$tempTechID['ISOC_TECH_FIRST_NAME'].' '.$tempTechID['ISOC_TECH_LAST_NAME'], "REQUEST_OVERVIEW"=>$this->createRequestOverview() );
+					$this->responseData = array_merge($this->responseData, $tempCurrentTech);
+					
+					
 				}
-			
-			
-			$this->responseData = array_merge($tempTicketInfo, $tempTicketMeta, $tempRequester);
-			$tempCurrentTech = array("ISOC_TECH_FULL_NAME"=>$tempTechID['ISOC_TECH_FIRST_NAME'].' '.$tempTechID['ISOC_TECH_LAST_NAME'], "REQUEST_OVERVIEW"=>$this->createRequestOverview() );
-			$this->responseData = array_merge($this->responseData, $tempCurrentTech);
-			
-			
-		}
-		else
-		{
-			$_SESSION['REQUEST_SUBMISSION_DATETIME']= '';
-			$_SESSION['REQUEST_ACCEPT_DATETIME']= '';
-			$_SESSION['REQUEST_COMPLETION_DATETIME']= '';
-		}
+				else
+				{
+					$_SESSION['REQUEST_SUBMISSION_DATETIME']= '';
+					$_SESSION['REQUEST_ACCEPT_DATETIME']= '';
+					$_SESSION['REQUEST_COMPLETION_DATETIME']= '';
+				}
 		
 	}
 	
 	// Dectects if the Submission time has been set.. if not then set it with the ISOC Tech.
 	private function isocUpdateRequestAcceptAndTech( $aTicketNumber )
 	{
+		if (isset($this->responseData['REQUEST_TICKET_NUMBER']) )
+		{
 			$dateTimeNow = date('Y-m-d H:i:s');
-			
 			$temp = array();
+			
+			// get the row that equals the ticket number in the metadata table
 			$temp = $this->FromDB->getOneRowWhereEquals('TB_SUPPORT_FORM_METADATA', 'REQUEST_TICKET_NUMBER', $aTicketNumber );
 			
 			
-			
+			// Update initial accept time and send an email to the requester if it has not been done.
 			if (!isset( $temp['REQUEST_ACCEPT_DATETIME'] ) )
 			{
 				$updateTemp = array("REQUEST_ACCEPT_DATETIME" => $dateTimeNow, "ISOC_TECH_ID_ASSIGNED" => $_SESSION['ISOC_TECH_EMPLOYEE_ID'] );
@@ -1093,7 +1145,7 @@ class LogicIsocSupportForm
 				$this->email->sendEmailNoCC( $this->responseData['REQUESTER_EMAIL_ADDRESS'], 'isoperationscenter@uscellular.com', $subject, $message);			
 		    
 			}
-			
+		}	
 	}
 	
 	public function checkPost()
@@ -1115,11 +1167,136 @@ class LogicIsocSupportForm
 			$this->email->sendEmailWithCC( $this->responseData['REQUESTER_EMAIL_ADDRESS'], 'isoperationscenter@uscellular.com', $this->responseData['REQUESTER_CC_ADDRESS'], $subject, $message);
 		}
 		
+		// Checks to see if user has posted before checking any validation
+		if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST['submit'] == 'Cancel Request' ) 
+		{
+			$this->updateCancel();
+			
+			// send email that response is complete
+			$subject = 'Ticket: '.$this->responseData['REQUEST_TICKET_NUMBER'].' has been canceled.';
+			$message = $this->requestCancelEmailSend( $this->createCancelEmailBody() , $subject );
+			$this->email->sendEmailWithCC( $this->responseData['REQUESTER_EMAIL_ADDRESS'], 'isoperationscenter@uscellular.com', $this->responseData['REQUESTER_CC_ADDRESS'], $subject, $message);
+		}
+		
+		
 		//print_r($this->responseData);
 	}
 	
 	// ********************************************  complete email template *******************************************************************************
 
+	private function createCancelEmailBody()
+	{
+		// if the Post variable does not exist create an empty one.
+		if (!isset($_POST['details']))
+		{
+			$_POST['details'] = '';
+		}
+		
+		// if the request overview is empty then fill in a default.
+		if ( $_POST['details'] == '')
+		{
+			$_POST['details'] = 'Your request has been canceled.  If this is by error please inquire by replying to this email.';
+		}
+		
+		//print_r($_POST);
+		
+		$message = '
+					<b>ISOC Tech Response:</b> '.$_POST['details'].'<br />
+					<br />
+					<br />
+					<b><u>Ticket Number: '.$this->responseData['REQUEST_TICKET_NUMBER'].'</u></b><br />
+					<br />
+					Thanks for using the ISOC request form,<br />
+					IS Operations
+					
+					
+					
+					';
+					
+		return $message;
+	}
+	
+	
+	
+	private function requestCancelEmailSend( $body, $subject ='ISOC Request Form Conformation Email')
+	{
+		// create email message
+		$message = '
+			
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>ISOC Request Conformation Email</title>
+
+</head>
+
+<body bgcolor="#f2eded">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f2eded">
+  <tr>
+    <td><table width="600" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" align="center">
+        <tr>
+          <td valign="middle">
+		  
+		  <div style="text-align: center;font-family: Helvetica; font-variant: small-caps; color: #FFFFFF;  background: #66C285;">'.$subject.'</div>
+			
+			</td>
+        </tr>
+        <tr>
+          <td align="center">&nbsp;</td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="10%">&nbsp;</td>
+                <td width="80%" align="left" valign="top"><font style="font-family: Georgia, "Times New Roman", Times, serif; color:#010101; font-size:24px"><strong><em>Hi '.$this->responseData['REQUESTER_NAME'].',</em></strong></font><br /><br />
+                  <font style="font-family: Verdana, Geneva, sans-serif; color:#666766; font-size:13px; line-height:21px">
+				  
+				  '.$body.'
+					<br />
+					<br />
+					<a href="http://10.176.105.18/isoc_support_form/supportrequestform.php">ISOC Request Form</a>
+				</font>
+				
+				</td>
+                <td width="10%">&nbsp;</td>
+              </tr>
+			  
+			  
+			  
+              <tr>
+                <td>&nbsp;</td>
+                <td align="right" valign="top"></td>
+                <td>&nbsp;</td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          
+        </tr>
+        
+      </table></td>
+  </tr>
+</table>
+</body>
+</html>
+
+
+';
+			
+	return $message;
+	}
+	
+	
 	private function createCompleteEmailBody()
 	{
 		// if the Post variable does not exist create an empty one.
@@ -1248,7 +1425,34 @@ class LogicIsocSupportForm
 	// ********************************************************   End Email *********************************************************************
 	
 	
-	
+	// Update Ticket Completion Time
+	private function updateCancel()
+	{
+		
+		if ($this->responseData['REQUEST_COMPLETION_DATETIME'] == '' && $this->responseData['REQUEST_STATUS'] != 'CANCELED')
+		{
+			$dateTimeNow = date('Y-m-d H:i:s');
+			
+			// save to database
+				$updateTemp = array("REQUEST_STATUS"=>"CANCELED" );
+				$whereArray = array("REQUEST_TICKET_NUMBER"=> $this->responseData['REQUEST_TICKET_NUMBER'] );
+						
+				$this->ToDB->updateRecordOneTable( $updateTemp , $whereArray, 'equals' , 'TB_SUPPORT_FORM_METADATA' , $fieldTypes = 'si');
+				
+				// Send completion email to Requester with comments.
+				
+				// Show pop-up of success
+				$this->popup->addTomessagePopUp( 'OK' , 'Ticket Canceled' , 'You have successfully canceled ticket: '.$this->responseData['REQUEST_TICKET_NUMBER'], 'success' );
+				
+				// Refresh
+				$this->retrieveTicket();
+		}
+		else
+		{
+			// Show pop-up of success
+			$this->popup->addTomessagePopUp( 'OK' , 'Ticket already canceled!' , 'You cannot cancel a ticket that has been completed.', 'error' );
+		}
+	}
 	
 	
 	
@@ -1262,10 +1466,10 @@ class LogicIsocSupportForm
 			$dateTimeNow = date('Y-m-d H:i:s');
 			
 			// save to database
-				$updateTemp = array("REQUEST_COMPLETION_DATETIME" => $dateTimeNow );
+				$updateTemp = array("REQUEST_COMPLETION_DATETIME" => $dateTimeNow, "REQUEST_STATUS"=>"COMPLETE" );
 				$whereArray = array("REQUEST_TICKET_NUMBER"=> $this->responseData['REQUEST_TICKET_NUMBER'] );
 						
-				$this->ToDB->updateRecordOneTable( $updateTemp , $whereArray, 'equals' , 'TB_SUPPORT_FORM_METADATA' , $fieldTypes = 'si');
+				$this->ToDB->updateRecordOneTable( $updateTemp , $whereArray, 'equals' , 'TB_SUPPORT_FORM_METADATA' , $fieldTypes = 'ssi');
 				
 				// Send completion email to Requester with comments.
 				

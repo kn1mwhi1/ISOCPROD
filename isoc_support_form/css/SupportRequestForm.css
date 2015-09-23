@@ -400,11 +400,9 @@ a:hover {
 display: inline-block;
 }
 
-.status{
- width: 220px;
- height: 30px;
+.hide{
+	display: none;
 }
-
 
 
 

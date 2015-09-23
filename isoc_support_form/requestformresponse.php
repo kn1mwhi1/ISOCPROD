@@ -38,6 +38,7 @@ $TierTwo->checkPost();
 	<link rel="stylesheet" type="text/css" href="css/menubar.css" /> 
 	<link rel="stylesheet" type="text/css" href="css/SupportRequestForm.css" /> 
 	<link rel="stylesheet" type="text/css" href="css/countDown.css" />
+	<link rel="stylesheet" type="text/css" href="css/ledlights.css" />
 
 </head>
 
@@ -51,11 +52,6 @@ $TierTwo->checkPost();
 
 <!-- <h1>Data Center Operations Support Request</h1> -->
 <img class="center block" src="img/IS_Operations_Support_Request_Form_Response_New.gif" />
-
-
-
-
-
 
 
 
@@ -90,20 +86,20 @@ $TierTwo->checkPost();
 		  <b>Initial Submit Time:</b>
 		  <b>Response Date-Time:</b>
 		  <b>Complete Date-Time:</b> 
-		  <b>Total Time:</b>   
+		  <b class="<?php $TierTwo->getTicketInfo('timer_hide'); ?>" >Total Time:</b>   
 	   </div>
-	   <div class="right testRed">
+	   <div class="right">
 		
 			  <input class="input_box form-control techIDSize inner" type='text' name='ISOCTechnician' id='ISOCTechnician' value='<?php echo $TierTwo->getTicketInfo('ISOCTechnician');?>' onblur='' readonly>
-			  <input class="btn-xs btn-danger buttonMargin inner" type='submit' name='submit' id='submit' value="Assume Ownership">
-		<div class="status testRed" >
-				<!-- Status indicator -->
-		</div>
+			  <input class="btn-xs btn-danger buttonMargin inner <?php $TierTwo->getTicketInfo('assume_button'); ?>" type='submit' name='submit' id='submit' value="Assume Ownership">
+		
+				<?php $TierTwo->getTicketInfo('status_indicator'); ?>
+		
 		  <input class="input_box form-control metaBox" type='text' name='initialSubmitTime'id='initialSubmitTime' value='<?php echo $TierTwo->getTicketInfo('initialSubmitTime');?>' onblur='' readonly>
 		  <input class="input_box form-control metaBox" type='text' name='responseTime'  id='responseTime' value='<?php echo $TierTwo->getTicketInfo('responseTime');?>' onblur='' readonly>
 		  <input class="input_box form-control metaBox" type='text' name='completeTime'  id='completeTime' value='<?php echo $TierTwo->getTicketInfo('completeTime');?>' onblur='' readonly>
 		  
-		  <div class="timer" id="timer" name="timer">
+		  <div class="timer <?php $TierTwo->getTicketInfo('timer_hide'); ?>" id="timer" name="timer">
 				<ul class="countdown">
 				<li> <span class="days"id="days">00</span>
 				<p class="days_ref">days</p>
@@ -175,10 +171,10 @@ $TierTwo->checkPost();
 <!-- FORM SUBMISSION --> 
 <div class='box'>
 <input class="btn btn-primary" type="submit" name="submit" id='submit' value="Send Response">
+<input class="btn btn-danger" type="submit" name="submit" id='submit' value="Cancel Request">
 </div>
 	
 </form>
-
 
 <script>
  $(document).ready(function(){
@@ -196,7 +192,14 @@ $TierTwo->checkPost();
          }
      });
  }
-</script>
+
+ 
+ $( function() {
+  var $winHeight = $( window ).height()
+  $( '.container' ).height( $winHeight );
+});
+ 
+ </script>
 <!--<span id="hours">0</span>:<span id="minutes">0</span>:<span id="seconds">0</span>-->
 
 
@@ -212,9 +215,9 @@ $TierTwo->checkPost();
 if ($TierTwo->popup->notifyMessage())
 {		
 }
-
-
 ?>
+
+
 
 
 
