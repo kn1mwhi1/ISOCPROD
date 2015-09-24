@@ -1,7 +1,10 @@
 <?php
+require_once 'lib/Class_Event_Logic.php';
+$tierTwo = new Event_Logic();
+
+
 	echo '
-	
-	
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 <link rel="stylesheet" href="css/bootstrap-table.css">
 <script src="script/jquery.js"></script>

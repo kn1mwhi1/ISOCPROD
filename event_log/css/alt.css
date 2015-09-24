@@ -14,14 +14,6 @@ padding-bottom:80px;
 	
 }
 
-#EventLog {
-	border: 2px solid black;
-	margin: 5px;
-	clear: both;
-	text-align: center;
-	height: 200px;
-}
-
 
 .header {
         text-align: center;
@@ -46,3 +38,24 @@ outline-color: #66C285;
 .btn-info{
 color:#FFFFFF;
 }
+
+.other{
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-left: 0px;
+	margin-right: 10px;
+	width: 130px;
+	float: right;
+
+}
+
+
+.spacing{
+	margin-top: 10px;
+}
+
+textarea {
+    width: 300px;
+    height: 1000px;
+}
+
