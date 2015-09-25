@@ -59,43 +59,7 @@ class Event_Logic extends ValidationUserInput
 	
 
 	
-	private function checkLoginPassword()
-	{
-		$temp = array();
-		
-		$username = $_POST['username'];
-		$password = $_POST['password'];
-		
-		$sql = "SELECT * FROM TB_ISOC_TECHS WHERE ISOC_TECH_EMPLOYEE_ID = '".$username."' OR ISOC_TECH_EMAIL = '".$username."' AND ISOC_TECH_PASSWORD = '".$password."'";
-		$temp = $this->FromDB->multiFieldChangeToArrayAssociative( $sql );		
-		
 	
-		if ($temp['ISOC_TECH_PASSWORD'] === $password )
-		{
-			// Start a new session
-			$this->startSession($temp);
-			
-			// update last login time in database
-			$this->updateLastLogin();
-			
-			$url = $_SESSION['actual_link'];
-			
-		session_write_close();
-			
-			// Javascript Redirct
-			echo"
-		<script>
-				window.location = '".$url."';
-		</script>";
-
-			exit();
-			
-		}
-		else
-		{
-			echo "incorrect login";
-		}
-	}
 	
 	private function callValidationMethodsRegisterForm()
 	{
@@ -128,37 +92,109 @@ class Event_Logic extends ValidationUserInput
         $this->messagePopup->notifyMessage();
 	}
 	//************************************************  EVENT Functions ********************************************************
-	// Retrieve all rows from event DB Table
-	private function getAllEventsFromDB()
+	
+	public function checkEventPost()
 	{
-		$temp = array();
-		$sql = "SELECT * FROM TB_ISOC_EVENT";
-		$temp = $this->FromDB->multiRowAndFieldChangeToArrayAssociative( $sql );	
+		echo "The ID is: ".$_GET['ID'];
 		
+		if(isset($_POST['ID']))
+		{
+			switch ($_POST['ID']) 
+			{
+				case is_numeric($_POST['ID']):
+						header("Content-type: text/javascript");
+						echo json_encode($this->getTicketInfo( $_POST['ID'] ));
+						
+						
+					  
+					  
+					  
+					  
+					break;
+				default:
+					//$this->createTableActiveExpiredCustomFields();
+					
+			}
+			echo $_POST['ID'];
+		}
+		else
+		{
+			$this->createTableActiveExpiredCustomFields();
+		}
+		
+		print_r($_POST);
+		
+	}
+	
+	
+	public function createTableActiveExpiredCustomFields()
+	{
+		$now = $this->getCurrentTime();
+		$twelveplus = $this->get12Hours();
+
+		$sql = 'SELECT `EVENT_ID`, `START_DATETIME`, `END_DATETIME`, `ACTION REQUIRED`, `INITIATOR`, `REFERENCE`, `STATUS` FROM TB_ISOC_EVENT WHERE (`START_DATETIME` < "'.$twelveplus.'"
+				AND (`STATUS` = "ACTIVE" OR `STATUS` = "PENDING")) OR `STATUS` = "EXPIRED"';
+		
+		$this->createTable($sql);
+	}
+	
+	public function createTableALLFields()
+	{
+		$sql = "SELECT * FROM TB_ISOC_EVENT";
+		$this->createTable($sql);
+	}
+	
+	public function getTicketInfo( $ticketNumber )
+	{
+		$sql = 'SELECT * FROM TB_ISOC_EVENT WHERE EVENT_ID = "'.$ticketNumber.'"';
+		
+		$temp = array();
+		$temp = $this->FromDB->multiFieldChangeToArrayAssociative( $sql );	
 		return $temp;
 	}
 	
+	
+	
+				//*********************************************** generic functions **************************************************************//
+	// Retrieve all rows from event DB Table
+	private function getFromDB( $sql )
+	{
+		$temp = array();
+		$temp = $this->FromDB->multiRowAndFieldChangeToArrayAssociative( $sql );	
+		return $temp;
+	}
+	
+	
 	// create and format table output.
-	public function createTable ()
+	private function createTable ( $sqlStatement )
 	{
 		$getArray = array();
 		$keyNames = array();
 		$values = array();
 		
 		// Seperate Arrays in order to get keys and values easier
-		$getArray = &$this->getAllEventsFromDB();
-		$keyNames = &$getArray['KEYS'];
-		$values = &$getArray['VALUES'];
+		$getArray = $this->getFromDB( $sqlStatement );
+		$keyNames = $getArray['KEYS'];
+		$values = $getArray['VALUES'];
+		
+		// clean key Names remove any underscores and personal formatting
+		$keyNames = $this->cleanKeys( $keyNames );
 		
 		$tableStartDeclaration = '
 							<table id="table"
 							   data-toggle="table"
+							   data-toolbar="#toolbar"
+							   data-show-toggle="true"
+							   data-show-columns="true"
+							   data-query-params="queryParams"
+							   data-response-handler="responseHandler"
 							   data-height="460"
 							   data-search="true"
 							   >';
 							   
 		$tableEndDeclaration = '</table>';
-							   
+		
+		// display dynamicaly created table using html tags
 		echo $this->createCssScripts().$tableStartDeclaration.$this->createTableHead( $keyNames ).$this->createTbodyTrowTdata($values, count($keyNames) ).$tableEndDeclaration;
 		
 		//echo $this->get12Hours();
@@ -197,6 +233,23 @@ class Event_Logic extends ValidationUserInput
 		return $thFields;
 	}
 	
+	private function retrievebegRowExpired( &$anArray )
+	{
+		
+		for($x=0;$x < count($anArray);$x++)
+		{
+	
+			// get ticket number to mark as expired
+			if ( $anArray[$x] == 'EXPIRED' )
+			{
+				return ($x-5);
+			}
+		}
+		
+		return NULL;
+	}	
+	
+	
 	private function createTbodyTrowTdata( &$anArray , $numberOfFields)
 	{
 		$id = '';
@@ -205,19 +258,42 @@ class Event_Logic extends ValidationUserInput
 		$allData = $tbodyStart;
 		$countFields =0;
 		
+		// assumes that STatus is the last field
+		$offset=$numberOfFields-1;
+	
+		$switch=false;
+		
+		//$expire = $this->retrievebegRowExpired( $anArray );
+		//echo "EXPIRE: $expire <br />";
 		
 		for($x=0;$x < count($anArray);$x++)
 		{
+			// Adds the beginning of each row for the Table
 			if ($countFields == 0)
 			{
-				$allData = $allData.'<tr>';
+				// capture the Ticket ID
 				$id = $anArray[$x];
+				
+				// Logic to mark entire row has the class danger if expire exists.
+				if ($anArray[$x+$offset] == 'EXPIRED' )
+				{
+					$offset = $offset - 1;
+					$switch = true;
+					$allData = $allData.'<tr class="danger" >';
+				}
+				else
+				{
+					$offset = $numberOfFields-1;
+					$switch = false;
+					$allData = $allData.'<tr>';
+				}
 			}
 			
-			// create table data
+			// Adds the Table Data.
 			$allData = $allData.'<td id="'.$id.'" data-value="'.$anArray[$x].'">'.$anArray[$x].'</td>';
 			
-			// accumalator
+			// Adds the end of the row tag
+			// accumulator
 			$countFields = $countFields + 1;
 			if ($countFields == $numberOfFields)
 			{
@@ -232,27 +308,48 @@ class Event_Logic extends ValidationUserInput
 		return $allData;
 	}
 	
-	private function removeUnderscores()
+	// Replace Underscores and..
+	// Replace EVENT_ID with ID.
+	private function cleanKeys( $keyArray )
 	{
+		// copy array values to new array
+		$tempKeys = array();
+		$tempKeys =  $keyArray;
 		
+		// clear the key array
+		unset($keyArray);
 		
+		for ($x=0;$x<count($tempKeys);$x++)
+		{
+			// replace any underscores with a space	
+			$tempKeys[$x] = str_replace('_', ' ', $tempKeys[$x]);
+			
+			// replace EVENT ID with ID
+			$tempKeys[$x] = str_replace('EVENT ID', 'ID', $tempKeys[$x]);
+		}
+		
+		return $tempKeys;
 	}
 	
 	private function getCurrentTime()
 	{
-		$dateNow = date('m/d/Y h:i:s a', time());
-		$date = new DateTime($dateNow);
+		$date = date('Y-m-d H:i:s', time());
+	;
 		
-		return $date->format("Y-m-d H:i:s");
+		return $date;
 	}
 	
 	private function get12Hours()
 	{
-	    $dateNow = date('m/d/Y h:i:s a', time());
+	    $dateNow = date('Y-m-d H:i:s', time());
 		$date = new DateTime($dateNow);
 		$date->modify("+12 hours");
+		$date = $date->format("Y-m-d H:i:s");
+		$date = date('Y-m-d H:i:s', strtotime($date ));
+		// convert datetime to date object
 		
-		return $date->format("Y-m-d H:i:s");
+		
+		return $date;
 	}
 	
 }
