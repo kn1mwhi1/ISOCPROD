@@ -75,15 +75,15 @@ $tierTwo = new Event_Logic();
 						</td>
 
 						<td id="actionRequiredTD" name="actionRequiredTD" >
-						    <textarea style="height:100px;width:300px" id="actionRequired" name="actionRequired" placeholder="Job Name" class="form-control"></textarea>
+						    <textarea style="height:100px;width:300px" id="actionRequiredInput" name="actionRequiredInput" placeholder="Job Name" class="form-control"></textarea>
 						</td>
     				
 						<td id="startTime" name="startTime" >
-						    <input  style="width:200px" type="datetime-local"  name="startTime"  class="form-control"/>	
+						    <input  style="width:200px" type="datetime-local"  id="startTimeInput" name="startTimeInput"  class="form-control"/>	
 						</td>
 						<td id="endTime" name="endTime" class="table-hover">
-						    <input  style="width:200px" type="datetime-local"  name="endTime"  class="form-control"/>
-							<label class="checkbox-inline"><input type="checkbox" value="" class="" >No End Date</label>
+						    <input  style="width:200px" type="datetime-local"  id="endTimeInput" name="endTimeInput"  class="form-control"/>
+							<label class="checkbox-inline"><input type="checkbox" id="noEndDateInput" name="noEndDateInput" value="" class="" >No End Date</label>
 						</td>
 					</tr>
 					
@@ -134,57 +134,70 @@ $(document).ready(function(){
      setInterval(ajaxcall, 1000);
  });
  
- 
- 
- 
 
+ /*
+ 
+ $(document).on('click', 'td', function (){
+  
+    var postID = this.id;
+    $.get('eventLogCustomActive.php', { ID:postID }, function(data) {
+       
+      
+       alert(data);
+    });
+    return false; // prevent default
+  
+});
+
+ */
+ 
  $(document).on('click', 'td', function () {
 			var postID = this.id;
 			//alert(postID);
 
-				$.getJSON('eventLogCustomActive.php', {name:'Darian Brown',age:40}, function(data) {
-						alert('made it');
-				});
-  
-  
-			
-	 /*		
 	   $.ajax({
 			 type: "POST",
-			 url: 'eventLogCustomActive.php',
-			 data: 'data1=testdata1&data2=testdata2&data3=testdata3&data4=testdata4&data5=testdata5&data6=testdata6&data7=testdata7&data8=testdata8&data9=testdata9&data10=testdata10&data11=testdata11&data12=testdata12&data13=testdata13',
-             dataType: 'json',
-             cache: false,
-			 success: function(someData){
-					alert(someData);
-					var ticketID = someData[0];
-					var startTime = someData[1];
-					var endTime = someData[2];
-					var noEndTime = someData[3];
-					var status = someData[4];
-					var reference = someData[5];
-					var initiator = someData[6];
-					var actionRequired = someData[7];
-					var creatorTech = someData[8];
-					var createTime = someData[9];
-					var completeNotes = someData[10];
-					var completionTech = someData[11];
-					var requestTicket = someData[12];
+			 url: "eventLogCustomActive.php",
+			 data: { ID : postID },
+			 success: function(data){
+					//alert(data);
+					var someData = JSON.parse(data);
 					
-					alert(ticketID);
+					
+					var ticketID = someData.EVENT_ID;
+					var startTime = someData.START_DATETIME;
+					var endTime = someData.END_DATETIME;
+					var noEndTime = someData.NO_ENDDATE;
+					var status = someData.STATUS;
+					var reference = someData.REFERENCE;
+					var initiator = someData.INITIATOR;
+					var actionRequired = someData.ACTION_REQUIRED;
+					var creatorTech = someData.CREATOR_TECH;
+					var createTime = someData.CREATE_DATETIME;
+					var completeNotes = someData.COMPLETION_NOTES;
+					var completionTech = someData.COMPLETION_TECH;
+					var requestTicket = someData.REQUEST_TICKET;
+					
+					//alert(ticketID);
+					
+					
 					// place values in inputs
-					//$(initiator).value(initiator);
+					$(initiatorInput).val(initiator);
+					$(actionRequiredInput).val(actionRequired);
 					
-					$(dynamicTable).html(ticketID);
-					$(dynamicTable).html(ticketID);
-					$(dynamicTable).html(ticketID);
-					$(dynamicTable).html(ticketID);
-					$(dynamicTable).html(ticketID);
+				
+					$(startTimeInput).val('2014-01-02T11:42:13.510');
+					//document.getElementById("startTimeInput").value = "2014-01-02T11:42:13.510";
+					//$(endTimeInput).datepicker({ defaultDate: +7 });
+					//$(endTimeInput).datepicker({endTime});
 					
+					
+					$(noEndDateInput).val(noEndTime);
+
 					
 			 }
 		 });
-*/
+
 
 });
 

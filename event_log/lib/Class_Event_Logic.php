@@ -95,34 +95,26 @@ class Event_Logic extends ValidationUserInput
 	
 	public function checkEventPost()
 	{
-		echo "The ID is: ".$_GET['ID'];
 		
 		if(isset($_POST['ID']))
 		{
-			switch ($_POST['ID']) 
-			{
-				case is_numeric($_POST['ID']):
-						header("Content-type: text/javascript");
+			
+						//header("Content-type: text/javascript");
 						echo json_encode($this->getTicketInfo( $_POST['ID'] ));
 						
 						
-					  
-					  
-					  
-					  
-					break;
-				default:
-					//$this->createTableActiveExpiredCustomFields();
-					
-			}
-			echo $_POST['ID'];
+		
 		}
 		else
 		{
 			$this->createTableActiveExpiredCustomFields();
 		}
 		
-		print_r($_POST);
+		if(isset($_GET['ID']))
+		{
+						//header("Content-type: text/javascript");
+						echo json_encode($this->getTicketInfo( $_GET['ID'] ));
+		}
 		
 	}
 	
@@ -132,7 +124,7 @@ class Event_Logic extends ValidationUserInput
 		$now = $this->getCurrentTime();
 		$twelveplus = $this->get12Hours();
 
-		$sql = 'SELECT `EVENT_ID`, `START_DATETIME`, `END_DATETIME`, `ACTION REQUIRED`, `INITIATOR`, `REFERENCE`, `STATUS` FROM TB_ISOC_EVENT WHERE (`START_DATETIME` < "'.$twelveplus.'"
+		$sql = 'SELECT `EVENT_ID`, `START_DATETIME`, `END_DATETIME`, `ACTION_REQUIRED`, `INITIATOR`, `REFERENCE`, `STATUS` FROM TB_ISOC_EVENT WHERE (`START_DATETIME` < "'.$twelveplus.'"
 				AND (`STATUS` = "ACTIVE" OR `STATUS` = "PENDING")) OR `STATUS` = "EXPIRED"';
 		
 		$this->createTable($sql);
