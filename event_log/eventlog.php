@@ -112,7 +112,7 @@ $(document).ready(function(){
  
  function ajaxcall(){
      $.ajax({
-         url: 'eventLogActive.php',
+         url: 'eventLogAll.php',
          success: function(data){
 			if ( temp != data)
 			{

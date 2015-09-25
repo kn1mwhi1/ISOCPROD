@@ -118,6 +118,13 @@ class ISOCSupportFormDB_Out extends BaseDataBase{
 			{
 				$tempKeys[] = $val->name;
 			}
+			
+			/*
+			echo "<br />";
+			print_r($tempKeys);
+			echo "<br />Count Keys before flip: ".count($tempKeys);
+			*/
+			
 			// flip the values to keys
 			$tempKeys = array_flip($tempKeys);
 			// strip values
@@ -131,12 +138,16 @@ class ISOCSupportFormDB_Out extends BaseDataBase{
 				
 				
 				// Iterate through array and place in temporary array.
-				foreach ($row as &$field)
+				foreach ($row as $key => &$field)
 				{
-					$tempValue[] = $field;
+					$tempValue[$key] = $field;
 				}
 			}
-		
+			/*
+			echo "<br />";
+			print_r($tempValue);
+			echo "<br />Count values before flip: ".count($tempValue);
+			*/
 			
 			// strip keys
 			$tempValue = array_values( $tempValue );
@@ -148,13 +159,16 @@ class ISOCSupportFormDB_Out extends BaseDataBase{
 			}
 				
 			
-			// Double the keys
-			$tempKeys = array_combine( $tempKeys, $tempKeys);
-
+			
+			// strip keys
+			$tempValue = array_values( $tempValue);
+			
+			// Double the keys to make the same number of elements in each array on next combine.
+			//$tempKeys = array_combine( $tempKeys, $tempKeys);
 			
 			// combine
 			$tempValue = array_combine( $tempKeys, $tempValue);
-			
+				
 			/* free result set <-- memory*/
 			$result->free();
 

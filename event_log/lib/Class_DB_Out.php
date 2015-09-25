@@ -73,36 +73,53 @@ class DB_Out extends BaseDataBase{
 		if ( $result = parent::getDbConnection()->query($aQuery) ) 
 		{
 			$fetchFields = $result->fetch_fields();
+			
 			foreach ($fetchFields as $val)
 			{
 				$tempKeys[] = $val->name;
 			}
+			/*
+			echo "<br />";
+			print_r($tempKeys);
+			echo "<br />Count Keys before flip: ".count($tempKeys);
+			*/
 			// flip the values to keys
 			$tempKeys = array_flip($tempKeys);
 			// strip values
 			$tempKeys = array_keys($tempKeys);
 			
 			
+			
 			// Returns true or false, true if there is a row
 			// Creates a numeric array for each value that was fetched from database
 			while ($row = $result->fetch_array(MYSQLI_NUM) ) 
 			{
-				
-				
 				// Iterate through array and place in temporary array.
-				foreach ($row as &$field)
+				foreach ($row as $key => &$field)
 				{
-					$tempValue[] = $field;
+					$tempValue[$key] = $field;
 				}
 			}
+			/*
+			echo "<br />";
+			print_r($tempValue);
+			echo "<br />Count values before flip: ".count($tempValue);
+			*/
+
 			// strip keys
-			$tempValue = array_values( $tempValue );
+			$tempValue = array_values( $tempValue);
 			
 			// Double the keys to make the same number of elements in each array on next combine.
-			$tempKeys = array_combine( $tempKeys, $tempKeys);
+			//$tempKeys = array_combine( $tempKeys, $tempKeys);
 			
 			// combine
 			$tempValue = array_combine( $tempKeys, $tempValue);
+			
+			/*
+			echo "<br />";
+			print_r($tempValue);
+			echo "<br />Count all combine: ".count($tempValue);
+			*/
 			
 			/* free result set <-- memory*/
 			$result->free();
@@ -116,6 +133,76 @@ class DB_Out extends BaseDataBase{
 		}
 	}
 	
+	
+	
+	public function multiRowAndFieldChangeToArrayAssociative ($aQuery)
+	{
+			$tempKeys = array();
+			$tempValue = array();
+			$fetchFields = array();
+			
+
+		// run SQL query using database connection
+		if ( $result = parent::getDbConnection()->query($aQuery) ) 
+		{
+			$fetchFields = $result->fetch_fields();
+			
+			foreach ($fetchFields as $val)
+			{
+				$tempKeys[] = $val->name;
+			}
+			/*
+			echo "<br />";
+			print_r($tempKeys);
+			echo "<br />Count Keys before flip: ".count($tempKeys);
+			*/
+			// flip the values to keys
+			$tempKeys = array_flip($tempKeys);
+			// strip values
+			$tempKeys = array_keys($tempKeys);
+			
+			
+			
+			// Returns true or false, true if there is a row
+			// Creates a numeric array for each value that was fetched from database
+			while ($row = $result->fetch_array(MYSQLI_NUM) ) 
+			{
+				// Iterate through array and place in temporary array.
+				foreach ($row as $key => &$field)
+				{
+					$tempValue[] = $field;
+				}
+			}
+			/*
+			echo "<br />";
+			print_r($tempValue);
+			echo "<br />Count values before flip: ".count($tempValue);
+			*/
+
+			// strip keys
+			$tempValue = array_values( $tempValue);
+	
+			
+			// combine
+			$twoArrays = array("KEYS" => $tempKeys, "VALUES" => $tempValue);
+			
+			/*
+			echo "<br />";
+			print_r($tempValue);
+			echo "<br />Count all combine: ".count($tempValue);
+			*/
+			
+			/* free result set <-- memory*/
+			$result->free();
+
+			// return the array
+			return  $twoArrays;
+		} 
+		else 
+		{
+			echo "No results from database, check your sql statement.";
+		}
+	}
 	
 	public function printResults( $anArray )
 	{
