@@ -95,33 +95,41 @@ class Event_Logic extends ValidationUserInput
 	
 	public function checkEventPost()
 	{
-		
-		if(isset($_POST['ID']))
+		if(isset($_POST['ID']) && is_numeric($_POST['ID']))
 		{
-			
-						//header("Content-type: text/javascript");
-						echo json_encode($this->getTicketInfo( $_POST['ID'] ));
-						
-						
-		
+			// Retreive Ticket Information.
+			echo json_encode($this->getTicketInfo( $_POST['ID'] ));
 		}
 		else
 		{
-			$this->createTableActiveExpiredCustomFields();
+			switch ($_POST['submit']) 
+			{
+				case "CUSTOM":
+					$this->createTableActiveExpiredCustomFields();
+					break;
+				case "blue":
+					echo "Your favorite color is blue!";
+					break;
+				case "green":
+					echo "Your favorite color is green!";
+					break;
+				default:
+					$this->createTableActiveExpiredCustomFields();
+			}
+			
+			
+		
+		
+		
 		}
 		
-		if(isset($_GET['ID']))
-		{
-						//header("Content-type: text/javascript");
-						echo json_encode($this->getTicketInfo( $_GET['ID'] ));
-		}
+		
 		
 	}
 	
 	
 	public function createTableActiveExpiredCustomFields()
 	{
-		$now = $this->getCurrentTime();
 		$twelveplus = $this->get12Hours();
 
 		$sql = 'SELECT `EVENT_ID`, `START_DATETIME`, `END_DATETIME`, `ACTION_REQUIRED`, `INITIATOR`, `REFERENCE`, `STATUS` FROM TB_ISOC_EVENT WHERE (`START_DATETIME` < "'.$twelveplus.'"
@@ -143,6 +151,26 @@ class Event_Logic extends ValidationUserInput
 		$temp = array();
 		$temp = $this->FromDB->multiFieldChangeToArrayAssociative( $sql );	
 		return $temp;
+	}
+	
+	
+	private function changeDateFormat ( $valueArray )
+	{
+		
+		for ($x=0;x<count($valueArray);$x++)
+		{
+			if (preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (0[1-9]|1[0-2]):(0[1-9]|1[0-2]):(0[1-9]|1[0-2])$/",$valueArray[$x]))
+			{
+				$time = strtotime($valueArray[$x]);
+				2014-01-02 11:42:00
+				$valueArray[$x] = date('Y-m-d ',$time);
+				echo $valueArray[$x];
+			}
+		}
+		
+		
+		
+		
 	}
 	
 	
@@ -171,6 +199,9 @@ class Event_Logic extends ValidationUserInput
 		
 		// clean key Names remove any underscores and personal formatting
 		$keyNames = $this->cleanKeys( $keyNames );
+		
+		// find dates and change format to a familar format that is also javascript compatible
+		
 		
 		$tableStartDeclaration = '
 							<table id="table"
@@ -224,22 +255,6 @@ class Event_Logic extends ValidationUserInput
 		// return the TableHead declaration
 		return $thFields;
 	}
-	
-	private function retrievebegRowExpired( &$anArray )
-	{
-		
-		for($x=0;$x < count($anArray);$x++)
-		{
-	
-			// get ticket number to mark as expired
-			if ( $anArray[$x] == 'EXPIRED' )
-			{
-				return ($x-5);
-			}
-		}
-		
-		return NULL;
-	}	
 	
 	
 	private function createTbodyTrowTdata( &$anArray , $numberOfFields)

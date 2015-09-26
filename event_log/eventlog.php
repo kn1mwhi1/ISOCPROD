@@ -187,7 +187,7 @@ $(document).ready(function(){
 					
 				
 					$(startTimeInput).val('2014-01-02T11:42:13.510');
-					//document.getElementById("startTimeInput").value = "2014-01-02T11:42:13.510";
+					//document.getElementById("startTimeInput").value = "2014-01-02 11:42:00";
 					//$(endTimeInput).datepicker({ defaultDate: +7 });
 					//$(endTimeInput).datepicker({endTime});
 					
@@ -204,12 +204,11 @@ $(document).ready(function(){
 
  
   var temp ='';
-  var selection='CUSTOM';
  function ajaxcall(){
      $.ajax({
 		 type: "POST",
          url: 'eventLogCustomActive.php',
-		 data:{ SELECTION : selection },
+		 data:{ submit : 'CUSTOM' },
          success: function(someData){
 			
 				if ( temp != someData)
