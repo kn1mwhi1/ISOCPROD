@@ -1,19 +1,25 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <!-- Tag to inform IE to be smart -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 <head>
 	<title>Event Log</title>
-	<!-- Load Javascript -->
-	<link rel="stylesheet" href="css/bootstrap.min.css">
-	<link rel="stylesheet" href="css/bootstrap-table.css">
-	<link rel="stylesheet" type="text/css" href="css/alt.css" />
 	
-	<!-- Load CSS -->
-	<script src="script/jquery.js"></script>
-	<script src="script/bootstrap.min.js"></script>
+	
+	<!-- Load CSS --> 
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" /> 
+	<link rel="stylesheet" href="css/bootstrap-table.css">
+	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" /> 
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.css" /> 
+	<link rel="stylesheet" type="text/css" href="css/eventLog.css" /> 
+	
+	
+	<!-- Load Javascript -->
+	<script type="text/javascript" src="script/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="script/bootstrap.min.js"></script>
+	<script type="text/javascript" src="script/moment-with-locales.js"></script>
+	<script type="text/javascript" src="script/bootstrap-datetimepicker.js"></script>
 	<script src="script/bootstrap-table.js"></script>	
-	<script type="text/javascript" src="script/bootstrap.js"></script>	
 	<script type="text/javascript" src="script/getdatetime.js"></script>
 	
 <?php
@@ -27,10 +33,6 @@ $tierTwo = new Event_Logic();
 </head>
 
 <body>
-<div id="EventLog">
-	 <div id="dynamicTable" class="container"></div>
-</div>
-
 
 
 
@@ -40,6 +42,22 @@ $tierTwo = new Event_Logic();
 			<table class="table table-bordered table-hover" id="tab_logic">
 				
 				<thead>
+					<tr>
+					<br />
+					<br />
+					
+					</tr>
+					<tr id="dynamicTableRow" >
+						<div id="dynamicTable" class=""></div>
+					</tr>
+					
+					<tr>
+						<br/>
+						<br/>
+
+					</tr>
+					
+					
 					<tr >
 						<th class="text-center">
 							Initiator
@@ -63,26 +81,50 @@ $tierTwo = new Event_Logic();
 				<tbody>
 				<tr class="table-hover">
 						<td id="initiatorTD"  name="initiatorTD" >
-						    <input class="form-control" style="width:250px" type="text" id="initiatorInput"  name="initiatorInput" />
+						    <input class="form-control" style="width:225px" type="text" id="initiatorInput"  name="initiatorInput" />
 						</td>
 						<td id="referenceTD"  name="referenceTD" >
-						    <select name="reference" id="reference">
-        				        <option value"IM">IM</option>
-    					        <option value"Phone">Phone</option>
-        				        <option value"Email">Email</option>
-								<option value"In-Person">In-Person</option>
+						    <select name="reference" id="reference" class="form-control" style="width:138px">
+        				        <option value="IM">IM</option>
+    					        <option value="PHONE">Phone</option>
+        				        <option value="EMAIL">Email</option>
+								<option value="INPERSON">In-Person</option>
+								<option value="SUPPORT FORM">Support Form</option>
 						    </select>
 						</td>
 
 						<td id="actionRequiredTD" name="actionRequiredTD" >
-						    <textarea style="height:100px;width:300px" id="actionRequiredInput" name="actionRequiredInput" placeholder="Job Name" class="form-control"></textarea>
+						    <textarea style="height:100px;width:275px" id="actionRequiredInput" name="actionRequiredInput" placeholder="Job Name" class="form-control"></textarea>
 						</td>
     				
 						<td id="startTime" name="startTime" >
-						    <input  style="width:200px" type="datetime-local"  id="startTimeInput" name="startTimeInput"  class="form-control"/>	
+						    <!-- <input style="width:200px" type="datetime-local"  id="startTimeInput" name="startTimeInput"  class="form-control"/>  -->
+
+
+							<div class='input-group date' id='datetimepicker1'>
+								<input type='text' class="form-control" name='datetime1' id="datetime1" value="" />
+									<span class="input-group-addon">
+									<span class="glyphicon glyphicon-calendar"></span>
+									</span>
+							</div>
+							  
+							
 						</td>
 						<td id="endTime" name="endTime" class="table-hover">
-						    <input  style="width:200px" type="datetime-local"  id="endTimeInput" name="endTimeInput"  class="form-control"/>
+						    
+							
+					<!--		<input  style="width:200px" type="datetime-local"  id="endTimeInput" name="endTimeInput"  class="form-control"/>   -->
+							
+							<div class='input-group date'  id='datetimepicker2'>
+								<input type='text' class="form-control" name='datetime2' id="datetime2" value="" />
+									<span class="input-group-addon">
+									<span class="glyphicon glyphicon-calendar"></span>
+									</span>
+							</div>								
+		
+									
+									
+									
 							<label class="checkbox-inline"><input type="checkbox" id="noEndDateInput" name="noEndDateInput" value="" class="" >No End Date</label>
 						</td>
 					</tr>
@@ -95,6 +137,11 @@ $tierTwo = new Event_Logic();
 	</div>	
 	<input class="btn btn-primary pull-right" type="submit" name="submit" id='submit' value="Add Event">
 </div>
+
+
+
+		
+
 
 
 
@@ -126,8 +173,23 @@ $tierTwo = new Event_Logic();
 	</div>
 </nav> 
 
+
+
+
 <script>
 
+	$(function () {	
+	$('#datetimepicker1').datetimepicker({
+		showClear: true
+	});
+	
+	});
+	
+	
+
+	$(function () {$('#datetimepicker2').datetimepicker();
+		showClear: true
+	});
 
  
 $(document).ready(function(){
@@ -169,7 +231,7 @@ $(document).ready(function(){
 					var endTime = someData.END_DATETIME;
 					var noEndTime = someData.NO_ENDDATE;
 					var status = someData.STATUS;
-					var reference = someData.REFERENCE;
+					var referenceData = someData.REFERENCE;
 					var initiator = someData.INITIATOR;
 					var actionRequired = someData.ACTION_REQUIRED;
 					var creatorTech = someData.CREATOR_TECH;
@@ -182,14 +244,12 @@ $(document).ready(function(){
 					
 					
 					// place values in inputs
-					$(initiatorInput).val(initiator);
-					$(actionRequiredInput).val(actionRequired);
-					
-				
-					$(startTimeInput).val('2014-01-02T11:42:13.510');
-					//document.getElementById("startTimeInput").value = "2014-01-02 11:42:00";
-					//$(endTimeInput).datepicker({ defaultDate: +7 });
-					//$(endTimeInput).datepicker({endTime});
+					$('#initiatorInput').val(initiator);
+					$('#actionRequiredInput').val(actionRequired);
+					$('#reference').val(referenceData.trim());
+						
+					$('#datetime1').val(convertDate( startTime ));
+					$('#datetime2').val(convertDate( endTime ));
 					
 					
 					$(noEndDateInput).val(noEndTime);
@@ -201,14 +261,14 @@ $(document).ready(function(){
 
 });
 
-
  
+  var selection = 'CUSTOM';
   var temp ='';
  function ajaxcall(){
      $.ajax({
 		 type: "POST",
          url: 'eventLogCustomActive.php',
-		 data:{ submit : 'CUSTOM' },
+		 data:{ submit : selection },
          success: function(someData){
 			
 				if ( temp != someData)
@@ -219,7 +279,32 @@ $(document).ready(function(){
          }
      });
  }
- 
+   
+	// convert a mysql time and date to a customer time and date
+   function convertDate( dateTime )
+   {
+		// Split timestamp into [ Y, M, D, h, m, s ]
+		var t = dateTime.split(/[- :]/);
+
+		// Apply each element to the Date function
+		var timeNow = new Date(t[0], t[1], t[2], t[3], t[4], t[5]);
+		
+		var year = timeNow.getFullYear();
+		var day = timeNow.getDate();
+		var month = timeNow.getMonth(); 
+		var hours   = timeNow.getHours();
+		var minutes = timeNow.getMinutes();
+		var timeString = ( month < 10) ? "0" + month + "/" : month + "/";
+	   
+		timeString += (day < 10 ) ? "0" + day + "/" : day + "/" ;
+		timeString += year + " ";
+		timeString += "" + ((hours > 12) ? hours - 12 : hours);
+		timeString += ((minutes < 10) ? ":0" : ":") + minutes;
+		timeString += (hours >= 12) ? " PM" : " AM";
+		
+		return timeString;
+   }
+
 </script>
 
 

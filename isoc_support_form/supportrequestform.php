@@ -27,7 +27,7 @@ $TierTwo = new LogicIsocSupportForm();
 	<script type="text/javascript" src="script/moment.js"></script>
 	<script type="text/javascript" src="script/sweetalert.min.js"></script>
 	<script type="text/javascript" src="script/bootstrap.js"></script>
-	<script type="text/javascript" src="script/bootstrap-datetimepicker.js"></script>
+	
 	
 
 

@@ -102,28 +102,26 @@ class Event_Logic extends ValidationUserInput
 		}
 		else
 		{
-			switch ($_POST['submit']) 
+			if(isset($_POST['submit']))
 			{
-				case "CUSTOM":
-					$this->createTableActiveExpiredCustomFields();
-					break;
-				case "blue":
-					echo "Your favorite color is blue!";
-					break;
-				case "green":
-					echo "Your favorite color is green!";
-					break;
-				default:
-					$this->createTableActiveExpiredCustomFields();
+			
+				switch ($_POST['submit']) 
+				{
+					case "CUSTOM":
+						$this->createTableActiveExpiredCustomFields();
+						break;
+					case "blue":
+						echo "Your favorite color is blue!";
+						break;
+					case "green":
+						echo "Your favorite color is green!";
+						break;
+					default:
+						$this->createTableActiveExpiredCustomFields();
+				}
 			}
 			
-			
-		
-		
-		
 		}
-		
-		
 		
 	}
 	
@@ -162,7 +160,8 @@ class Event_Logic extends ValidationUserInput
 			if (preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (0[1-9]|1[0-2]):(0[1-9]|1[0-2]):(0[1-9]|1[0-2])$/",$valueArray[$x]))
 			{
 				$time = strtotime($valueArray[$x]);
-				2014-01-02 11:42:00
+				//2014-01-02 11:42:00 <-- from DB format
+				// 2014-01-02T11:42:13.510 <-- what the control expects
 				$valueArray[$x] = date('Y-m-d ',$time);
 				echo $valueArray[$x];
 			}
