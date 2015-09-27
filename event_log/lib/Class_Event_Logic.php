@@ -208,8 +208,6 @@ class Event_Logic extends ValidationUserInput
 							   data-toolbar="#toolbar"
 							   data-show-toggle="true"
 							   data-show-columns="true"
-							   data-query-params="queryParams"
-							   data-response-handler="responseHandler"
 							   data-height="460"
 							   data-search="true"
 							   >';
@@ -226,11 +224,10 @@ class Event_Logic extends ValidationUserInput
 	private function createCssScripts()
 	{
 		$cssAndScripts = '	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-							<link rel="stylesheet" href="css/bootstrap.min.css">
-							<link rel="stylesheet" href="css/bootstrap-table.css">
-							<script src="script/jquery.js"></script>
-							<script src="script/bootstrap.min.js"></script>
-							<script src="script/bootstrap-table.js"></script>';
+						    <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
+							<link type="text/css" rel="stylesheet" href="css/bootstrap-table.css">
+						    <script type="text/javascript" src="script/jquery.js"></script>
+							<script type="text/javascript" src="script/bootstrap-table.js"></script>';
 							
 		return $cssAndScripts;
 		

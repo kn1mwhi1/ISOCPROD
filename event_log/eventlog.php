@@ -8,10 +8,10 @@
 	
 	<!-- Load CSS --> 
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" /> 
-	<link rel="stylesheet" href="css/bootstrap-table.css">
 	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" /> 
 	<link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.css" /> 
-	<link rel="stylesheet" type="text/css" href="css/eventLog.css" /> 
+	<!--<link rel="stylesheet" type="text/css" href="css/bootstrap-table.css">-->
+	<link rel="stylesheet" type="text/css" href="css/eventLog.css" />
 	
 	
 	<!-- Load Javascript -->
@@ -19,8 +19,8 @@
 	<script type="text/javascript" src="script/bootstrap.min.js"></script>
 	<script type="text/javascript" src="script/moment-with-locales.js"></script>
 	<script type="text/javascript" src="script/bootstrap-datetimepicker.js"></script>
-	<script src="script/bootstrap-table.js"></script>	
 	<script type="text/javascript" src="script/getdatetime.js"></script>
+	<!--<script type="text/javascript" src="script/bootstrap-table.js"></script>-->
 	
 <?php
 require_once 'lib/Class_Event_Logic.php';
@@ -36,10 +36,10 @@ $tierTwo = new Event_Logic();
 
 
 
-<div class="container spacing">
+<div class="container" >
     <div class="row clearfix ">
     	<div class="col-md-12 table-responsive">
-			<table class="table table-bordered table-hover" id="tab_logic">
+			<table class="table table-bordered table-hover" id="tab_logic" >
 				
 				<thead>
 					<tr>
@@ -47,7 +47,7 @@ $tierTwo = new Event_Logic();
 					<br />
 					
 					</tr>
-					<tr id="dynamicTableRow" >
+					<tr id="dynamicTableRow " >
 						<div id="dynamicTable" class=""></div>
 					</tr>
 					
@@ -197,21 +197,6 @@ $(document).ready(function(){
  });
  
 
- /*
- 
- $(document).on('click', 'td', function (){
-  
-    var postID = this.id;
-    $.get('eventLogCustomActive.php', { ID:postID }, function(data) {
-       
-      
-       alert(data);
-    });
-    return false; // prevent default
-  
-});
-
- */
  
  $(document).on('click', 'td', function () {
 			var postID = this.id;
@@ -262,6 +247,7 @@ $(document).ready(function(){
 });
 
  
+ 
   var selection = 'CUSTOM';
   var temp ='';
  function ajaxcall(){
@@ -304,7 +290,7 @@ $(document).ready(function(){
 		
 		return timeString;
    }
-
+   
 </script>
 
 
