@@ -8,6 +8,7 @@ $TierTwo = new LoginLogic();
 ?>
 <script type="text/javascript" src="script/bootstrap.js"></script>
 <script type="text/javascript" src="script/jquery.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script type="text/javascript" src="script/sweetalert.min.js"></script>
 <script type="text/javascript" src="script/cookies.js"></script>
 <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
@@ -21,7 +22,7 @@ loadCookies();
 <?php
 try
 {
-	$TierTwo->checkSessionLoginRegister();
+	$TierTwo->checkSessionLogin();
 	$TierTwo->checkPOSTLoginInfo();
 }
 catch (Exception  $e)
@@ -30,7 +31,43 @@ catch (Exception  $e)
 }
 ?>
 
+
+<script>
+// Uses HTML5 features to save local info from username and password to local computer.
+
+            $(function() {
+
+                if (localStorage.chkbx && localStorage.chkbx != '') {
+                    $('#loginremember').attr('checked', 'checked');
+                    $('#username').val(localStorage.usrname);
+                    $('#loginpassword').val(localStorage.pass);
+                } else {
+                    $('#loginremember').removeAttr('checked');
+                    $('#username').val('');
+                    $('#loginpassword').val('');
+                }
+
+                $('#loginremember').click(function() {
+
+                    if ($('#loginremember').is(':checked')) {
+                        // save username and password
+                        localStorage.usrname = $('#username').val();
+                        localStorage.pass = $('#loginpassword').val();
+                        localStorage.chkbx = $('#loginremember').val();
+                    } else {
+                        localStorage.usrname = '';
+                        localStorage.pass = '';
+                        localStorage.chkbx = '';
+                    }
+                });
+            });
+
+ </script>
+
+
 </head>
+<body>
+
 
  <div class="container">    
         <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">                    
@@ -38,9 +75,6 @@ catch (Exception  $e)
                     <div class="panel-heading">
                         <div class="panel-title">Sign In</div>
                         <div style="float:right; font-size: 80%; position: relative; top:-10px">
-						
-						<!--	<a href="login.php?forget=true&id=kn1mwhi1"   >Forgot password?</a>
-							<a href="changepassword.php">Change password</a>  -->
 						
 						</div>
                     </div>     
@@ -54,12 +88,12 @@ catch (Exception  $e)
                                     
                             <div style="margin-bottom: 25px" class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                        <input id="loginusername" type="text" class="form-control <?php $TierTwo->getError('username');?>"  name="username" placeholder="employee id or email" onblur="setCookie('loginusername', document.getElementById('loginusername').value ,365); myFunction( this.value );">                                        
+                                        <input id="username" type="text" class="form-control <?php $TierTwo->getError('username');?>"  name="username" placeholder="employee id or email" >                                        
                                     </div>
                                 
                             <div style="margin-bottom: 25px" class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                        <input id="loginpassword" type="password" class="form-control <?php $TierTwo->getError('password');?>" name="password" placeholder="password" onblur="setCookie('loginpassword', document.getElementById('loginpassword').value ,365);">
+                                        <input id="loginpassword" type="password" class="form-control <?php $TierTwo->getError('password');?>" name="password" placeholder="password" >
                                     </div>
                                     
 
@@ -67,7 +101,7 @@ catch (Exception  $e)
                             <div class="input-group">
                                       <div class="checkbox">
                                         <label>
-                                          <input id="loginremember" type="checkbox" name="remember" value="1" onblur="setCookie('loginremember', this.val ,365);"> Remember me
+                                          <input id="loginremember" type="checkbox" name="remember" > Remember me
                                         </label>
                                       </div>
                                     </div>
@@ -88,10 +122,10 @@ catch (Exception  $e)
                                 <div class="form-group">
                                     <div class="col-md-12 control">
                                         <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%" >
-                                     <!--        Don't have an account! 
+                                     Create an Account for another ISOC Tech (Must be logged in first)! 
                                        <a href="register.php">
                                             Sign Up Here               
-                                        </a>              -->
+                                        </a>            
                                         </div>
                                     </div>
                                 </div>    
@@ -109,7 +143,10 @@ catch (Exception  $e)
  <?php 
 $TierTwo->notifyMessage();
 ?>
-<script type="text/javascript">
 
-</script>
+   
+
+    </body>    
+
+
 </html>

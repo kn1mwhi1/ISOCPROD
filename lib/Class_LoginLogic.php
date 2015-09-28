@@ -562,12 +562,19 @@ class LoginLogic extends ValidationUserInput
 			// If on register.php or login.php don't redirect, otherwise redirect
 			if (!preg_match( '~.*login.php~i' , $current ) )
 			{				
-					if (!preg_match( '~.*register.php~i' , $current ) )
+					/*if (!preg_match( '~.*register.php~i' , $current ) )
 						{	
 							header("location: login.php");
 							//echo "trying to redirect";				
 							exit();
 						}
+						*/
+						
+						header("location: login.php");
+						//echo "trying to redirect";				
+						exit();
+						
+						
 			}
 		}
 		else
@@ -580,7 +587,7 @@ class LoginLogic extends ValidationUserInput
 	
 	
 		// Should be only on login.php and register.php
-	public function checkSessionLoginRegister()
+	public function checkSessionLogin()
 	{		
          // must be on all pages
 		 if(!isset($_SESSION)) 

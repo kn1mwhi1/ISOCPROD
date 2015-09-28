@@ -24,8 +24,19 @@
 	
 	
 <?php
+require_once 'lib/Class_LoginLogic.php'; 
 require_once 'lib/Class_Event_Logic.php';
+$login = new LoginLogic();
 $tierTwo = new Event_Logic();
+
+// Check login first
+$login->checkSession();
+
+
+
+
+
+
 ?>
 	
 <div class="header" >

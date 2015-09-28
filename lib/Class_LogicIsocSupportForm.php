@@ -644,12 +644,36 @@ class LogicIsocSupportForm
 			// prepare headers which informs the mail client that this will be html and the from and to
 			$this->email->setHeaders();
 			
-			// send email
-			$this->email->sendEmail();
-	
-	
-	
-	
+			
+			// Detect if the user requested a CC or not, then send the appropriate email.
+			if ($this->textboxCC == '')
+			{
+				
+				$subject = 'New ISOC Support Request Ticket: '.$this->requestTicketNumber.' -'.$this->eventIdName.'-('.$this->select_dynamic_request_type.')-Perform: '.$this->Urgency;
+				$this->email->sendEmailNoCC( 'ISOperationsCenter@uscellular.com', $this->emailbox, $subject, $message);
+			}
+			else
+			{
+							// set the message
+				$this->email->setMessage( $message );
+				
+				// set the To field of email
+				$this->email->setTo( 'ISOperationsCenter@uscellular.com' );
+				
+				$this->email->setFrom( $this->emailbox );
+				
+				// set the cc email field
+				$this->email->setCCEmail( $this->textboxCC );
+				
+				// set the subject field of email
+				$this->email->setSubject( 'New ISOC Support Request Ticket: '.$this->requestTicketNumber.' -'.$this->eventIdName.'-('.$this->select_dynamic_request_type.')-Perform: '.$this->Urgency );
+				
+				// prepare headers which informs the mail client that this will be html and the from and to
+				$this->email->setHeaders();
+				
+							// send email
+				$this->email->sendEmail();
+			}
 	}
 	
 	
@@ -1170,21 +1194,50 @@ private function hideButtonCancel()
 		{
 			$this->updateCompletionTime();
 			
-			// send email that response is complete
-			$subject = 'Ticket: '.$this->responseData['REQUEST_TICKET_NUMBER'].' has been completed.';
-			$message = $this->requestCompleteEmailSend( $this->createCompleteEmailBody() , $subject );
-			$this->email->sendEmailWithCC( $this->responseData['REQUESTER_EMAIL_ADDRESS'], 'isoperationscenter@uscellular.com', $this->responseData['REQUESTER_CC_ADDRESS'], $subject, $message);
+			// if the request is complete do not send an email.. if its not complete then send an email.
+			if ( $_POST['completeTime'] == "" )
+			{
+				// send email that response is complete
+				$subject = 'Ticket: '.$this->responseData['REQUEST_TICKET_NUMBER'].' has been completed.';
+				$message = $this->requestCompleteEmailSend( $this->createCompleteEmailBody() , $subject );
+				
+				// Detect if the user requested a CC or not, then send the appropriate email.
+				if ($this->responseData['REQUESTER_CC_ADDRESS'] == '')
+				{
+					$this->email->sendEmailNoCC( $this->responseData['REQUESTER_EMAIL_ADDRESS'], 'ISOperationsCenter@uscellular.com' ,  $subject, $message);
+				}
+				else
+				{
+					$this->email->sendEmailWithCC( $this->responseData['REQUESTER_EMAIL_ADDRESS'], 'isoperationscenter@uscellular.com', $this->responseData['REQUESTER_CC_ADDRESS'], $subject, $message);
+				}
+			}
 		}
 		
+		//print_r($_POST);
+		
 		// Checks to see if user has posted before checking any validation
-		if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST['submit'] == 'Cancel Request' ) 
+		if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST['submit'] == 'Cancel Request') 
 		{
 			$this->updateCancel();
 			
-			// send email that response is complete
-			$subject = 'Ticket: '.$this->responseData['REQUEST_TICKET_NUMBER'].' has been canceled.';
-			$message = $this->requestCancelEmailSend( $this->createCancelEmailBody() , $subject );
-			$this->email->sendEmailWithCC( $this->responseData['REQUESTER_EMAIL_ADDRESS'], 'isoperationscenter@uscellular.com', $this->responseData['REQUESTER_CC_ADDRESS'], $subject, $message);
+			// if the request is complete do not send an email.. if its not complete then send an email.
+			if ( $_POST['completeTime'] == "" )
+			{
+				// send email that response is complete
+				$subject = 'Ticket: '.$this->responseData['REQUEST_TICKET_NUMBER'].' has been canceled.';
+				$message = $this->requestCancelEmailSend( $this->createCancelEmailBody() , $subject );
+				
+							// Detect if the user requested a CC or not, then send the appropriate email.
+				if ($this->responseData['REQUESTER_CC_ADDRESS'] == '')
+				{
+					$this->email->sendEmailNoCC( $this->responseData['REQUESTER_EMAIL_ADDRESS'], 'ISOperationsCenter@uscellular.com' ,  $subject, $message);
+				}
+				else
+				{
+					$this->email->sendEmailWithCC( $this->responseData['REQUESTER_EMAIL_ADDRESS'], 'isoperationscenter@uscellular.com', $this->responseData['REQUESTER_CC_ADDRESS'], $subject, $message);
+				}
+			
+			}
 		}
 		
 		
@@ -1459,8 +1512,16 @@ private function hideButtonCancel()
 		}
 		else
 		{
-			// Show pop-up of success
-			$this->popup->addTomessagePopUp( 'OK' , 'Ticket already canceled!' , 'You cannot cancel a ticket that has been completed.', 'error' );
+			if ( $this->responseData['REQUEST_COMPLETION_DATETIME'] == '')
+			{
+				// Show pop-up of success
+				$this->popup->addTomessagePopUp( 'OK' , '?' , 'The ticket is already canceled.', 'error' );
+			}
+			else
+			{
+				// Show pop-up of success
+				$this->popup->addTomessagePopUp( 'OK' , '?' , 'You cannot cancel a ticket that has been completed.', 'error' );
+			}
 		}
 	}
 	
