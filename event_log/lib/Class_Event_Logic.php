@@ -84,7 +84,11 @@ class Event_Logic extends ValidationUserInput
 		// all items have passed validation
 		return true;
 	}
-	
+	// not sure if this will be needed
+	public function addNotifyMessage( $CustomType, $title , $text, $type, $confirmButtonText, $customJavaFunction)
+	{
+        $this->messagePopup->addTomessagePopUp( $CustomType, $title , $text, $type, $confirmButtonText , $customJavaFunction);
+	}
 	
 	// place at the bottom of all php/html pages
 	public function notifyMessage()
@@ -107,14 +111,63 @@ class Event_Logic extends ValidationUserInput
 			
 				switch ($_POST['submit']) 
 				{
-					case "CUSTOM":
-						$this->createTableActiveExpiredCustomFields();
+					case "Current Events":
+								if ($_POST['view'] == 'Normal View')
+								{
+									$this->createTableActiveExpiredCustomFields();
+								}
+								
+								if ($_POST['view'] == 'Detailed View')
+								{
+									$this->createTableActiveExpiredCustomFieldsDetailed();
+								}
 						break;
-					case "blue":
-						echo "Your favorite color is blue!";
+					case "All Events":
+								if ($_POST['view'] == 'Normal View')
+								{
+									$this->createTableAll();
+								}
+								
+								if ($_POST['view'] == 'Detailed View')
+								{
+									$this->createTableAllDetailed();
+								}
 						break;
-					case "green":
-						echo "Your favorite color is green!";
+					case "Completed Events":
+								if ($_POST['view'] == 'Normal View')
+								{
+									$this->createTableCompleted();
+								}
+								
+								if ($_POST['view'] == 'Detailed View')
+								{
+									$this->createTableCompletedDetailed();
+								}
+						break;
+					case "Expired Events":
+								if ($_POST['view'] == 'Normal View')
+								{
+									$this->createTableExpired();
+								}
+								
+								if ($_POST['view'] == 'Detailed View')
+								{
+									$this->createTableExpiredDetailed();
+								}
+						break;
+					case "Pending Events":
+								if ($_POST['view'] == 'Normal View')
+								{
+									$this->createTablePending();
+								}
+								
+								if ($_POST['view'] == 'Detailed View')
+								{
+									$this->createTablePendingDetailed();
+								}
+						break;
+					case "CANCEL":  // Cancel the ticket
+								$this->updateCancel($_POST['ticket']);
 						break;
 					default:
 						$this->createTableActiveExpiredCustomFields();
@@ -123,15 +176,104 @@ class Event_Logic extends ValidationUserInput
 			
 		}
 		
+		
+		
+		
+	}
+	
+	private function updateCancel( $aTicketNumber )
+	{
+		$updateArray = array("STATUS"=>"CANCELED");
+		$whereArray = array("EVENT_ID"=>$aTicketNumber);
+		
+		$this->ToDB->updateRecordOneTable( $updateArray , $whereArray, 'equals', 'TB_ISOC_EVENT' , 'si');
+	}
+	
+	private function createTableAllDetailed()
+	{
+		
+		$sql = 'SELECT * FROM TB_ISOC_EVENT';
+		
+		$this->createTable($sql);
 	}
 	
 	
-	public function createTableActiveExpiredCustomFields()
+	private function createTableAll()
+	{
+		
+		$sql = 'SELECT `EVENT_ID`, `START_DATETIME`, `END_DATETIME`, `ACTION_REQUIRED`, `INITIATOR`, `REFERENCE`, `STATUS` FROM TB_ISOC_EVENT';
+		
+		$this->createTable($sql);
+	}
+	
+	private function createTablePendingDetailed()
+	{
+		
+		$sql = 'SELECT * FROM TB_ISOC_EVENT WHERE `STATUS` = "PENDING" ORDER BY `START_DATETIME`';
+		
+		$this->createTable($sql);
+	}
+	
+	
+	private function createTablePending()
+	{
+		
+		$sql = 'SELECT `EVENT_ID`, `START_DATETIME`, `END_DATETIME`, `ACTION_REQUIRED`, `INITIATOR`, `REFERENCE`, `STATUS` FROM TB_ISOC_EVENT WHERE `STATUS` = "PENDING"';
+		
+		$this->createTable($sql);
+	}
+	
+	private function createTableCompletedDetailed()
+	{
+		
+		$sql = 'SELECT * FROM TB_ISOC_EVENT WHERE `STATUS` = "COMPLETED"';
+		
+		$this->createTable($sql);
+	}
+	
+	
+	private function createTableCompleted()
+	{
+		
+		$sql = 'SELECT `EVENT_ID`, `START_DATETIME`, `END_DATETIME`, `ACTION_REQUIRED`, `INITIATOR`, `REFERENCE`, `STATUS` FROM TB_ISOC_EVENT WHERE `STATUS` = "COMPLETED"';
+		
+		$this->createTable($sql);
+	}
+	
+	private function createTableExpiredDetailed()
+	{
+		
+		$sql = 'SELECT * FROM TB_ISOC_EVENT WHERE `STATUS` = "EXPIRED"';
+		
+		$this->createTable($sql);
+	}
+	
+	
+	private function createTableExpired()
+	{
+		
+		$sql = 'SELECT `EVENT_ID`, `START_DATETIME`, `END_DATETIME`, `ACTION_REQUIRED`, `INITIATOR`, `REFERENCE`, `STATUS` FROM TB_ISOC_EVENT WHERE `STATUS` = "EXPIRED"';
+		
+		$this->createTable($sql);
+	}
+	
+	
+	private function createTableActiveExpiredCustomFields()
 	{
 		$twelveplus = $this->get12Hours();
 
 		$sql = 'SELECT `EVENT_ID`, `START_DATETIME`, `END_DATETIME`, `ACTION_REQUIRED`, `INITIATOR`, `REFERENCE`, `STATUS` FROM TB_ISOC_EVENT WHERE (`START_DATETIME` < "'.$twelveplus.'"
-				AND (`STATUS` = "ACTIVE" OR `STATUS` = "PENDING")) OR `STATUS` = "EXPIRED"';
+				AND (`STATUS` = "ACTIVE" OR `STATUS` = "PENDING")) OR `STATUS` = "EXPIRED" ORDER BY `START_DATETIME` ASC';
+		
+		$this->createTable($sql);
+	}
+	
+	private function createTableActiveExpiredCustomFieldsDetailed()
+	{
+		$twelveplus = $this->get12Hours();
+
+		$sql = 'SELECT * FROM TB_ISOC_EVENT WHERE (`START_DATETIME` < "'.$twelveplus.'"
+				AND (`STATUS` = "ACTIVE" OR `STATUS` = "PENDING")) OR `STATUS` = "EXPIRED" ORDER BY `START_DATETIME` ASC';
 		
 		$this->createTable($sql);
 	}
@@ -154,22 +296,22 @@ class Event_Logic extends ValidationUserInput
 	
 	private function changeDateFormat ( $valueArray )
 	{
+		// copy array values to new array
+		$tempKeys = array();
+		$tempKeys =  $valueArray;
 		
-		for ($x=0;x<count($valueArray);$x++)
+		// clear the key array
+		unset($valueArray);
+		
+		for ($x=0;$x<count($tempKeys);$x++)
 		{
-			if (preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (0[1-9]|1[0-2]):(0[1-9]|1[0-2]):(0[1-9]|1[0-2])$/",$valueArray[$x]))
+			if(preg_match('/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/',$tempKeys[$x]))
 			{
-				$time = strtotime($valueArray[$x]);
-				//2014-01-02 11:42:00 <-- from DB format
-				// 2014-01-02T11:42:13.510 <-- what the control expects
-				$valueArray[$x] = date('Y-m-d ',$time);
-				echo $valueArray[$x];
-			}
+			   $tempKeys[$x] = date('m/d/Y H:i:s', strtotime($tempKeys[$x] ));
+			}			
 		}
 		
-		
-		
-		
+		return $tempKeys;
 	}
 	
 	
@@ -199,8 +341,8 @@ class Event_Logic extends ValidationUserInput
 		// clean key Names remove any underscores and personal formatting
 		$keyNames = $this->cleanKeys( $keyNames );
 		
-		// find dates and change format to a familar format that is also javascript compatible
-		
+		// Format Dates
+		$values = $this->changeDateFormat( $values );
 		
 		$tableStartDeclaration = '
 							<table id="table"
@@ -216,7 +358,6 @@ class Event_Logic extends ValidationUserInput
 		
 		// display dynamicaly created table using html tags
 		echo $this->createCssScripts().$tableStartDeclaration.$this->createTableHead( $keyNames ).$this->createTbodyTrowTdata($values, count($keyNames) ).$tableEndDeclaration;
-		
 		//echo $this->get12Hours();
 		//echo $this->getCurrentTime();
 	}
@@ -226,6 +367,7 @@ class Event_Logic extends ValidationUserInput
 		$cssAndScripts = '	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 						    <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
 							<link type="text/css" rel="stylesheet" href="css/bootstrap-table.css">
+							<link rel="stylesheet" type="text/css" href="css/eventlog.css" />
 						    <script type="text/javascript" src="script/jquery.js"></script>
 							<script type="text/javascript" src="script/bootstrap-table.js"></script>';
 							
@@ -261,14 +403,13 @@ class Event_Logic extends ValidationUserInput
 		$allData = $tbodyStart;
 		$countFields =0;
 		
-		// assumes that STatus is the last field
-		$offset=$numberOfFields-1;
+		// Searches for the first element that contains the value EXPIRED
+		$key = array_search('EXPIRED', $anArray);
+		// uses modules to return the element number for each row
+		$offset = ($key % $numberOfFields);
+
+
 	
-		$switch=false;
-		
-		//$expire = $this->retrievebegRowExpired( $anArray );
-		//echo "EXPIRE: $expire <br />";
-		
 		for($x=0;$x < count($anArray);$x++)
 		{
 			// Adds the beginning of each row for the Table
@@ -278,22 +419,18 @@ class Event_Logic extends ValidationUserInput
 				$id = $anArray[$x];
 				
 				// Logic to mark entire row has the class danger if expire exists.
-				if ($anArray[$x+$offset] == 'EXPIRED' )
+				if ($anArray[$x+$offset] == 'EXPIRED')
 				{
-					$offset = $offset - 1;
-					$switch = true;
-					$allData = $allData.'<tr class="danger" >';
+					$allData = $allData.'<tr class="expired" >';
 				}
 				else
 				{
-					$offset = $numberOfFields-1;
-					$switch = false;
 					$allData = $allData.'<tr>';
 				}
 			}
 			
 			// Adds the Table Data.
-			$allData = $allData.'<td id="'.$id.'" data-value="'.$anArray[$x].'">'.$anArray[$x].'</td>';
+			$allData = $allData.'<td class="clickMe" id="'.$id.'" data-value="'.$anArray[$x].'">'.$anArray[$x].'</td>';
 			
 			// Adds the end of the row tag
 			// accumulator

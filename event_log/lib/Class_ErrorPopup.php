@@ -14,12 +14,14 @@ class ErrorPopup
 		 $this->messagePopUp = array();
 	}
 	
-	public function addTomessagePopUp( $CustomType, $title , $text, $type )
+	public function addTomessagePopUp( $CustomType, $title , $text, $type, $confirmButtonText = '', $customJavaFunction = '')
 	{
-		$this->messagePopUp[0] = $CustomType;		
+		$this->messagePopUp[0] = $CustomType;	// CONFIRM	
 		$this->messagePopUp[1] = $title;	
 		$this->messagePopUp[2] = $text;	
-		$this->messagePopUp[3] = $type;	
+		$this->messagePopUp[3] = $type;	// "warning"
+		$this->messagePopUp[4] = $confirmButtonText;
+		$this->messagePopUp[5] = $customJavaFunction; //  function(){   swal("Deleted!", "Your imaginary file has been deleted.", "success"); }
 	}
 	
 	private function okNotify()
@@ -29,6 +31,15 @@ class ErrorPopup
 				swal({   title: "'.$this->messagePopUp[1].'",   text: "'.$this->messagePopUp[2].'",   type: "'.$this->messagePopUp[3].'",   confirmButtonText: "Ok" }); 
 			</script>';
 			exit;
+	}
+	
+	private function confirmNotify()
+	{
+		echo '
+		<script type="text/javascript"> 
+		swal({   title: "'.$this->messagePopUp[1].'",   text: "'.$this->messagePopUp[2].'",   type: "'.$this->messagePopUp[3].'",   showCancelButton: true,   confirmButtonColor: "#DD6B55",   confirmButtonText: "'.$this->messagePopUp[4].'",   closeOnConfirm: false }, '.$this->messagePopUp[5].');
+		</script>';
+		exit;
 	}
 		
 	
@@ -50,7 +61,7 @@ class ErrorPopup
 					$this->okNotify();
 					return true;
 				break;
-			case "temp1":
+			case "CONFIRM":
 					return $this->validateEmail( $nameOfObject );
 				break;
 			case "temp2":

@@ -5,7 +5,7 @@
 body { 
 font-family: Helevetica;
 font-variant: small-caps;
-padding-bottom:0px;
+padding-bottom:80px;
  }
  
  .btns-sp {
@@ -51,7 +51,7 @@ color:#FFFFFF;
 
 
 .spacing{
-	margin-top: 100px;
+	margin-top: 10px;
 }
 
 textarea {
@@ -59,6 +59,108 @@ textarea {
     height: 1000px;
 }
 
-.container{
-z-index: 100;
+.update{
+	display: none;
+	margin-left: 10px;
 }
+
+.add{
+	margin-left: 10px;
+}
+
+.complete, .activeButton{
+	margin-right: 10px;
+}
+
+
+.clear{
+	/*display: none;*/
+}
+
+#datetimepicker2{
+	width: 200px;
+	
+}
+
+#datetimepicker1{
+	width: 200px;
+	
+}
+
+
+.detailedView{
+	margin-left: 5px;
+}
+
+.highlight{
+	background-color: black;
+	font: white;
+}
+
+.btn:focus, .btn:hover {
+  background-color: black;
+}
+
+thead{
+	    color: #FFFFFF;
+        background: #66C285
+}
+
+.error {
+  border:2px solid red;
+}
+
+@-webkit-keyframes expired {
+    0% {
+        background-color: white;
+        opacity:1;
+    }
+	25% {
+        background-color: Red;
+		color: white;
+    }
+	50% {
+        background-color: Red;
+		color: white;
+    }
+	
+	75% {
+        background-color: Red;
+		color: white;
+    }
+    100% {
+        background-color: Red;
+		color: white;
+    }
+}
+
+.expired {
+    -webkit-animation-name: expired;
+    -webkit-animation-duration: 2000ms;
+    -webkit-animation-iteration-count: 99999999999;
+    -webkit-animation-timing-function: ease-in-out;
+}
+
+.normalView, .detailedView{
+	position: relative;
+    top: 55px;
+	
+}
+
+#dynamicTable{
+	height: 460px;
+	width: auto;	
+}
+
+
+.completeMenu{
+	position: relative;
+    bottom: 10px;
+	width:500px;
+	height: 100px;
+}
+
+.nodisplay{
+	display: none;
+}
+
