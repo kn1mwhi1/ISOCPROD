@@ -1,0 +1,39 @@
+.table-sortable tbody tr {
+    cursor: move;
+}
+
+body { 
+font-family: Helevetica;
+font-variant: small-caps;
+padding-bottom:80px;
+ }
+ 
+ .btns-sp {
+    margin: 1 5px;
+	padding: 6px;
+	
+}
+
+.header {
+        text-align: center;
+        font-family: Helvetica;
+        font-variant: small-caps;
+        color: #FFFFFF;
+        border-radius: 10px;
+        background: #66C285;
+        padding: auto;
+        width: auto;
+        height: auto;
+        margin: auto;
+}
+
+ .btn-green{
+background-color: #66C285;
+color: #FFFFFF;
+outline-color: #66C285;
+
+}
+
+.btn-info{
+color:#FFFFFF;
+}
