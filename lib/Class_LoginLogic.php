@@ -621,11 +621,15 @@ class LoginLogic extends ValidationUserInput
 						}
 			}
 		}
+		
+		/*
 		else
 		{
 			//echo " you are logged in";
 			$this->messagePopup->addTomessagePopUp( 'OK', 'Logged In', $_SESSION['ISOC_TECH_FIRST_NAME'].', you are logged in!' , 'info' );
 		}
+		
+		*/
 	}	
 	
 	// place at the bottom of all php/html pages
@@ -641,9 +645,32 @@ class LoginLogic extends ValidationUserInput
 			session_start();
 		 }
 		 
+		 
+
+		 
 		session_destroy();
-		$this->messagePopup->addTomessagePopUp( 'OK', 'Logged Out', 'You are logged Out!' , 'info' );
+		//$this->messagePopup->addTomessagePopUp( 'OK', 'Logged Out', 'You are logged Out!' , 'info' );
+		
+	// redirect to just login page
+		header("location: login.php");
+
 	}
+	
+	public function getNavBar()
+	{
+		include 'lib/navbar.php';
+	}
+	
+	public function loggedInAs()
+	{
+		if (isset($_SESSION['ISOC_TECH_FIRST_NAME']))
+		{
+			echo '<li><a href="login.php">Login Page</a></li>
+				  <li class="active"><a>Logged in as: '.$_SESSION['ISOC_TECH_FIRST_NAME'].' '.$_SESSION['ISOC_TECH_LAST_NAME'].'</a></li>
+				  <li class=""><a href="login.php?logout=true">Logout</a></li>';
+		}
+	}
+	
 	
 }
 ?>

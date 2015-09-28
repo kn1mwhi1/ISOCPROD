@@ -173,12 +173,7 @@ class Event_Logic extends ValidationUserInput
 						$this->createTableActiveExpiredCustomFields();
 				}
 			}
-			
-		}
-		
-		
-		
-		
+		}	
 	}
 	
 	private function updateCancel( $aTicketNumber )

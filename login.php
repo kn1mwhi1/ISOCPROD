@@ -23,6 +23,7 @@ loadCookies();
 try
 {
 	$TierTwo->checkSessionLogin();
+	$TierTwo->getNavBar();
 	$TierTwo->checkPOSTLoginInfo();
 }
 catch (Exception  $e)
@@ -61,6 +62,12 @@ catch (Exception  $e)
                     }
                 });
             });
+			
+			
+			
+			
+			
+			
 
  </script>
 

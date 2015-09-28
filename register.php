@@ -25,7 +25,42 @@ catch (Exception  $e)
 loadCookies();
 </script>
 
+<script>
+// Uses HTML5 features to save local info from username and password to local computer.
+
+          
+// function to show calendar 2
+
+			
+
+
+
+
+/*			try
+{
+
+			
+                   $('#username').val(localStorage['username']);
+					$('#nameID').val(localStorage.['nameID']);
+					$('#firstname').val(localStorage['firstname']);
+					$('#lastname').val(localStorage['lastname']);
+					$('#passwd').val(localStorage.['passwd']);
+					$('#secretWord').val(localStorage['secretWord']);
+}
+catch (Exception e)
+{
+	alert(e);
+
+}		
+	
+*/
+						
+        
+
+ </script>
+
 </head>
+<body>
 
  <div class="container">    
         <div id="signupbox" style="margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
@@ -48,40 +83,40 @@ loadCookies();
                                 <div class="form-group">
                                     <label for="email" class="col-md-3 control-label">Email</label>
                                     <div class="col-md-9">
-                                        <input type="text" class="form-control <?php $TierTwo->getError('email');?>" name="email" placeholder="Email Address">
+                                        <input type="text" class="form-control <?php $TierTwo->getError('email');?>" id="username" name="email" placeholder="Email Address">
                                     </div>
                                 </div>
 								
 								 <div class="form-group">
                                     <label for="id" class="col-md-3 control-label">Employee ID</label>
                                     <div class="col-md-9">
-                                        <input type="text" class="form-control <?php $TierTwo->getError('id');?>" name="id" placeholder="Employee ID">
+                                        <input type="text" class="form-control <?php $TierTwo->getError('id');?>" id="nameID" name="id" placeholder="Employee ID">
                                     </div>
                                 </div>
                                     
                                 <div class="form-group">
                                     <label for="firstname" class="col-md-3 control-label">First Name</label>
                                     <div class="col-md-9">
-                                        <input type="text" class="form-control <?php $TierTwo->getError('firstname');?>" name="firstname" placeholder="First Name">
+                                        <input type="text" class="form-control <?php $TierTwo->getError('firstname');?>" id="firstname" name="firstname" placeholder="First Name">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="lastname" class="col-md-3 control-label">Last Name</label>
                                     <div class="col-md-9">
-                                        <input type="text" class="form-control <?php $TierTwo->getError('lastname');?>" name="lastname" placeholder="Last Name">
+                                        <input type="text" class="form-control <?php $TierTwo->getError('lastname');?>" id="lastname" name="lastname" placeholder="Last Name">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="passwd" class="col-md-3 control-label">Password</label>
                                     <div class="col-md-9">
-                                        <input type="password" class="form-control <?php $TierTwo->getError('passwd');?>" name="passwd" placeholder="Password">
+                                        <input type="password" class="form-control <?php $TierTwo->getError('passwd');?>" id="passwd" name="passwd" placeholder="Password">
                                     </div>
                                 </div>
 								
 								<div class="form-group">
                                     <label for="secretWord" class="col-md-3 control-label">Secret Word</label>
                                     <div class="col-md-9">
-                                        <input type="text" class="form-control <?php $TierTwo->getError('secretWord');?>" name="secretWord" placeholder="Secret Word"  >
+                                        <input type="text" class="form-control <?php $TierTwo->getError('secretWord');?>" id="secretWord" name="secretWord" placeholder="Secret Word"  >
                                     </div>
                                 </div>
                                     
@@ -100,7 +135,45 @@ loadCookies();
                 
          </div> 
     </div>
+	<script>
+
+
+
+
+	
+	$('#username').val( localStorage['username'] );
+	$('#nameID').val( localStorage['nameID'] );
+	$('#firstname').val( localStorage['firstname'] );
+	$('#lastname').val( localStorage['lastname'] );
+	$('#passwd').val( localStorage['passwd'] );
+	$('#secretWord').val( localStorage['secretWord'] );
+	
+	
+	
+	
+$(document).on('click', '#btn-register', function () {
+
+						localStorage['username'] = $('#username').val();
+						localStorage['nameID'] = $('#nameID').val();
+						localStorage['firstname'] = $('#firstname').val();
+						localStorage['lastname'] = $('#lastname').val();
+						localStorage['passwd'] = $('#passwd').val();
+						localStorage['secretWord'] = $('#secretWord').val();
+						
+						
+						
+						
+});
+       
+
+</script>
+	
+	
  <?php 
 $TierTwo->notifyMessage();
 ?>
+</body>
+
+
+
 </html>

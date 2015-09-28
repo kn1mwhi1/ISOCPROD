@@ -31,24 +31,23 @@ $tierTwo = new Event_Logic();
 
 // Check login first
 $login->checkSession();
-
-
-
-
-
-
 ?>
-	
-<div class="header" >
-	<h1 class="text-center">Event Log</h1>
-</div>
+
 </head>
 
-<body>
+
+<body class="" >
+<?php
+$login->getNavBar();
+?>
+
+<div class="header " >
+	<h1 class="text-center  navbarCustom">Event Log</h1>
+</div>
 
 
 
-<div class="container">
+<div class="container ">
     <div class="row clearfix ">
     	<div class="col-md-12 table-responsive">
 			<table class="table table-bordered table-hover" id="tab_logic" >

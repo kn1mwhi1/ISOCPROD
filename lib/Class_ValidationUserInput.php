@@ -57,7 +57,7 @@ class ValidationUserInput extends BaseDataBase
 	private function validateAllCharaters( $nameOfObject )
 	{
 		
-		if ( $this->check_POST($nameOfObject) && preg_match("/^[a-zA-Z0-9@.]*$/",$_POST[$nameOfObject]) )
+		if ( $this->check_POST($nameOfObject))
 		{
 			// Calls sanitize function and then saves results in the name box variable located in this class.
 			$_POST[$nameOfObject] = $this->sanitize_input($_POST[$nameOfObject]);

@@ -16,6 +16,7 @@ require('lib/Class_LoginLogic.php');
 $Login = new LoginLogic();
 $TierTwo = new LogicIsocSupportForm();
 $Login->checkSession();
+$Login->getNavBar();
 $TierTwo->retrieveTicket();
 $TierTwo->checkPost();
 
@@ -185,10 +186,17 @@ $TierTwo->checkPost();
          url: 'script/gettime.php',
          success: function(data) {
              data = data.split(':');
+			 
+			 try
+			 {
              $('#days').html(data[0]);
 			 $('#hours').html(data[1]);
              $('#minutes').html(data[2]);
              $('#seconds').html(data[3]);
+			 }
+			 catch
+			 {
+			 }
          }
      });
  }
