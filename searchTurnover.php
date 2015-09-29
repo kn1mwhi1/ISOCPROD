@@ -3,7 +3,10 @@
 <head>
 	<title> ISOC SEARCH TURNOVER</title>
 	<link rel="stylesheet" type="text/css" href="css/turnoverStylesheet.css">
-	<link rel="icon" type="image/png" href="http://10.176.105.22/img/tardis.ico">		
+	<link rel="icon" type="image/png" href="img/tardis.ico">	
+
+
+<?php require 'lib/fromDataBaseGetTurnover.php'; ?>	
 </head>
 
 <!-- WRAPPING BODY IN DIV TO HELP PUSH FOOTER TO BOTTOM OF PAGE -->
@@ -15,15 +18,15 @@
 <!-- Navigation Bar -->	
 			<div class="nav">
 				<ul>
-					<li class="create"><a href="http://10.176.105.22/createTurnover.php">Create</a></li>
-					<li class="search"><a class="active" href="http://10.176.105.22/searchTurnover.php">Search</a></li>
-					<li class="edit"><a href="http://10.176.105.22/editTurnover.php">Edit</a></li>
-					<li class="View"><a href="http://10.176.105.22/viewTurnover.php">View</a></li>
+					<li class="create"><a href="createTurnover.php">Create</a></li>
+					<li class="search"><a class="active" href="searchTurnover.php">Search</a></li>
+					<li class="edit"><a href="editTurnover.php">Edit</a></li>
+					<li class="View"><a href="viewTurnover.php">View</a></li>
 				</ul>
 			</div>
 		</div>
 			
-		<?php require 'fromDataBaseGetTurnover.php'; ?>
+		
 
 <!-- This is displaying the last Turnover ID, Shift and Date in a table format and supplying a view button to see the entire Turnover. -->
 
@@ -66,15 +69,15 @@
 		 </div>
 		  
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-		<script src="js/turnover.js"></script>
-		<script src="js/searchTurnover.js"></script>
+		<script src="script/turnover.js"></script>
+		<script src="script/searchTurnover.js"></script>
 	</body>
 	
 <!-- HIDDEN DIV TO PUSH FOOTER TO BOTTOM OF PAGE -->
 		<div class="push">
 			<footer>
 				<p> Created by ISOC &copy;2015</p>
-				<div class="img"><a href="http://10.176.105.22/img/ISOClogo.JPG"><img src="http://10.176.105.22/img/ISOClogo.JPG" alt=""></a></div>
+				<div class="img"><a href="img/ISOClogo.JPG"><img src="img/ISOClogo.JPG" alt=""></a></div>
 			 </footer>
 		</div>
 </div>

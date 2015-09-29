@@ -24,13 +24,25 @@ class ErrorPopup
 		$this->messagePopUp[5] = $customJavaFunction; //  function(){   swal("Deleted!", "Your imaginary file has been deleted.", "success"); }
 	}
 	
+	public function addToDoublemessagePopup( $CustomType, $title , $text, $type, $confirmButtonText = '', $cancelButtonText, $customJavaFunctionConfirm, $customJavaFunctionCanceled )
+	{
+		$this->messagePopUp[0] = $CustomType;	// CONFIRM	
+		$this->messagePopUp[1] = $title;	
+		$this->messagePopUp[2] = $text;	
+		$this->messagePopUp[3] = $type;	// "warning"
+		$this->messagePopUp[4] = $confirmButtonText;
+		$this->messagePopUp[5] = $cancelButtonText; // cancelButtonText
+		$this->messagePopUp[6] = $customJavaFunctionConfirm; // cancelButtonText
+		$this->messagePopUp[7] = $customJavaFunctionCanceled; // cancelButtonText
+	}
+	
 	private function okNotify()
 	{
 			echo '
 			<script type="text/javascript"> 
 				swal({   title: "'.$this->messagePopUp[1].'",   text: "'.$this->messagePopUp[2].'",   type: "'.$this->messagePopUp[3].'",   confirmButtonText: "Ok" }); 
 			</script>';
-			exit;
+		
 	}
 	
 	private function confirmNotify()
@@ -39,7 +51,19 @@ class ErrorPopup
 		<script type="text/javascript"> 
 		swal({   title: "'.$this->messagePopUp[1].'",   text: "'.$this->messagePopUp[2].'",   type: "'.$this->messagePopUp[3].'",   showCancelButton: true,   confirmButtonColor: "#DD6B55",   confirmButtonText: "'.$this->messagePopUp[4].'",   closeOnConfirm: false }, '.$this->messagePopUp[5].');
 		</script>';
-		exit;
+	
+	}
+	
+	private function doubleConfirmNotify()
+	{
+		echo '
+		<script type="text/javascript"> 
+		
+		swal({   title: "'.$this->messagePopUp[1].'",   text: "'.$this->messagePopUp[2].'",   type: "'.$this->messagePopUp[3].'",   showCancelButton: true,
+		confirmButtonColor: "#DD6B55",   confirmButtonText: "'.$this->messagePopUp[4].'",   cancelButtonText: "'.$this->messagePopUp[5].'",   
+		closeOnConfirm: false,   closeOnCancel: false }, function(isConfirm){   if (isConfirm) {     '.$this->messagePopUp[6].'   } 
+		else {     '.$this->messagePopUp[7].'   } });
+		</script>';
 	}
 		
 	
@@ -64,8 +88,8 @@ class ErrorPopup
 			case "CONFIRM":
 					return $this->validateEmail( $nameOfObject );
 				break;
-			case "temp2":
-					return $this->validateMultipleEmails( $nameOfObject );
+			case "DOUBLECONFIRM":
+					return $this->doubleConfirmNotify();
 			case "temp3":
 					return $this->validateIntegers( $nameOfObject );//******************
 			case "temp4":

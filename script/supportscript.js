@@ -412,7 +412,7 @@ document.getElementById('textboxCC').value = getCookie("textboxCC");
 
 document.getElementById('contactMethod').checked  = getCookie("contactMethod");
 
-document.getElementById('main_options').selectedIndex = getCookie("main_options");
+//document.getElementById('main_options').selectedIndex = getCookie("main_options");
 document.getElementById('eventIdName').value = getCookie("eventIdName");
 document.getElementById('environment_opts').value = getCookie("environment_opts");
 document.getElementById('request_type_opts').value = getCookie("request_type_opts");
@@ -450,6 +450,15 @@ function thanksDiv()
 function hideDiv(id)
 {
 	document.getElementById(id).style.display='none';
+}
+
+
+
+function clearValues()
+{
+	$('.form-control').val('');
+	$('#main_options').val('Select an option');
+	showForm();
 }
 
 

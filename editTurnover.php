@@ -1,26 +1,47 @@
-<?php require 'fromDataBaseGetTurnover.php'; require 'fromDataBaseGetTechnicians.php'; ?>
+<?php 
+require 'lib/fromDataBaseGetTurnover.php'; 
+require 'lib/fromDataBaseGetTechnicians.php'; 
+?>
+<?php
+require_once 'lib/Class_LoginLogic.php'; 
+$login = new LoginLogic();
+// Check login first
+$login->checkSession();
+
+?>
+
+<?php
+$login->getNavBar();
+?>
 
 <!DOCTYPE html>
 <html>
 <head>
 	<title>ISOC EDIT TURNOVER</title>
+	
 	<link rel="stylesheet" type="text/css" href="css/turnoverStylesheet.css">
-	<link rel="icon" type="image/png" href="http://10.176.105.22/img/8bmicon.png">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+	<link rel="icon" type="image/png" href="img/8bmicon.png">
 </head>
 
 <!-- WRAPPING BODY IN DIV TO HELP PUSH FOOTER TO BOTTOM OF PAGE -->
+
+
 <div class="wrapper">
+
 	<body>	
+	
+
 		<div id="Header">
 			<h1>ISOC Turnover</h1>
 			
 <!-- Navigation Bar -->	
 			<div class="nav">
 				<ul>
-					<li class="create"><a href="http://10.176.105.22/createTurnover.php">Create</a></li>
-					<li class="search"><a href="http://10.176.105.22/searchTurnover.php">Search</a></li>
-					<li class="edit"><a class="active" href="http://10.176.105.22/editTurnover.php">Edit</a></li>
-					<li class="View"><a href="http://10.176.105.22/viewTurnover.php">View</a></li>
+					<li class="create"><a href="createTurnover.php">Create</a></li>
+					<li class="search"><a href="searchTurnover.php">Search</a></li>
+					<li class="edit"><a class="active" href="editTurnover.php">Edit</a></li>
+					<li class="View"><a href="viewTurnover.php">View</a></li>
 				</ul>
 			</div>
 		</div>
@@ -130,8 +151,8 @@
 </form>
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script src="js/turnover.js"></script>
-<script src="js/editTurnover.js"></script>
+<script src="script/turnover.js"></script>
+<script src="script/editTurnover.js"></script>
 
 
 	</body>
@@ -140,7 +161,7 @@
 		<div class="push">
 			<footer>
 				<p> Created by ISOC &copy;2015</p>
-				<div class="img"><a href="http://10.176.105.22/img/ISOClogo.JPG"><img src="http://10.176.105.22/img/ISOClogo.JPG" alt=""></a></div>
+				<div class="img"><a href="img/ISOClogo.JPG"><img src="img/ISOClogo.JPG" alt=""></a></div>
 			 </footer>
 		</div>
 </div>

@@ -473,10 +473,10 @@ class LogicIsocSupportForm
 	
 	public function check_POST ( $nameOfObject )
 	{
-		if ( empty($_POST[ $nameOfObject ]) || $this->validate_input($nameOfObject ) ) 
+		if ( !isset($_POST[ $nameOfObject ]) || empty($_POST[ $nameOfObject ]) || $this->validate_input($nameOfObject ) ) 
 		{
 			// if emtpy then return true only for the CC textbox
-				if ($_POST['textboxCC'] == "")
+				if ( $nameOfObject == "textboxCC" && (!isset($_POST['$textboxCC']) || $_POST['$textboxCC'] == '') )
 				{
 					return true;
 				}
@@ -512,8 +512,16 @@ class LogicIsocSupportForm
 				// submit requester to DB
 				try
 				{
+					$customJavaFunctionConfirm = 'swal("Ticket Successfully Submitted!", "Your request ticket number is: '.$this->submitEntireRequesterToDB().'\n\nA summary email has been sent to your contact email.", "success");';
+					$customJavaFunctionCanceled = 'swal("Cancelled", "Ticket submission cancelled.", "error");';
+					
+					
 					
 					$this->popup->addTomessagePopUp( 'OK' , 'Ticket Successfully Submitted!' , 'Your request ticket number is: '.$this->submitEntireRequesterToDB().'  \n\nA summary email has been sent to your contact email.', 'success' );
+					/*
+					$this->popup->addToDoublemessagePopup( 'DOUBLECONFIRM', 'Submit a new request' , 'Press OK to submit a new request.',
+					'warning', 'Submit New Request!', 'Cancel', $customJavaFunctionConfirm, $customJavaFunctionCanceled );
+					*/
 					
 					
 					
@@ -535,8 +543,32 @@ class LogicIsocSupportForm
 					echo $e;
 				}
 				
+						
+						if(!isset($_SESSION)) 
+						 {
+							session_start();
+						 }
+						 
+						 $_SESSION['ALERT'] = '<script>swal("Ticket Successfully Submitted!", "Your request ticket number is: '.$this->submitEntireRequesterToDB().'\n\nA summary email has been sent to your contact email.", "success");</script>';
+						 
+
+				
+					   // redirect to blank page to stop the user from refreshing and submitting.
+						header('location: /lib/redirect.php');
+						
+						//$this->popup->notifyMessage();
+					
 			}
 		}
+		
+
+{
+    
+    
+}
+		
+		
+		
 	}
 
 	
@@ -680,7 +712,7 @@ class LogicIsocSupportForm
 	
 	
 	
-	private function requesterEmailSend( $message, $subject ='ISOC Request Form Conformation Email')
+	private function requesterEmailSend( $message, $subject ='ISOC Request Form Confirmation Email')
 	{
 	
 		
@@ -692,7 +724,7 @@ class LogicIsocSupportForm
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>ISOC Request Conformation Email</title>
+<title>ISOC Request Confirmation Email</title>
 
 </head>
 
@@ -868,6 +900,7 @@ class LogicIsocSupportForm
 	//******* Displays values in Textboxes *********************
 	public function getTicketInfo( $someValue )
 	{
+		
 		if (isset($this->responseData['REQUEST_TICKET_NUMBER']) )
 		{
 			switch ($someValue) 
@@ -915,10 +948,24 @@ class LogicIsocSupportForm
 					return $this->hideButtonCancel();
 					break;
 				default:
-					return '';
+					return ;
 			}
 		}
-		return '';
+		
+		if ($someValue == 'status_indicator')
+		{
+			$this->statusIndicator();
+		}
+		
+		// When there is no record hide the Assume Ownership
+		if ($someValue == 'assume_button')
+		{
+			$this->hideButtonCancelComplete();
+		}
+		
+		
+		
+			return;
 	}
 	
 	
@@ -928,6 +975,19 @@ class LogicIsocSupportForm
 		{
 			echo 'hide';	
 		}
+		
+		if (!isset($this->responseData['REQUEST_STATUS']))
+		{
+			echo 'hide';	
+		}
+		
+		if ($_SESSION['ISOC_TECH_EMPLOYEE_ID'] == $this->responseData['ISOC_TECH_EMPLOYEE_ID'])
+		{
+			echo 'hide';	
+		}
+		
+		
+		
 	}
 	
 private function hideButtonCancel()
@@ -958,11 +1018,15 @@ private function hideButtonCancel()
 			{
 				echo'  <div class="led-box"><div class="led-red"><p class="status">Canceled</p></div></div>';
 			}
+			
+			
 		}
 		else
 		{
+		
 			echo '<div class="led-box"><div class="led-blue"><p class="status">Not Loaded</p></div></div>';
 		}
+		
 	}
 	
 	
@@ -978,10 +1042,13 @@ private function hideButtonCancel()
 		
 		// get the request URI  anything with ?$DATA
 		$requestTicketNumber = parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY);
+		$_SESSION['REQUEST_TICKET_NUMBER'] = '';
 
 			// Ticket number in URL AND User must be logged in.
 		if ( is_numeric ($requestTicketNumber) && isset($_SESSION['ISOC_TECH_EMPLOYEE_ID']) )
 		{
+			$_SESSION['REQUEST_TICKET_NUMBER'] = $requestTicketNumber;
+			
 			// load fields into main array with all ticket info
 			$this->loadTicketInfoArray( $requestTicketNumber);
 		
@@ -1011,7 +1078,7 @@ private function hideButtonCancel()
 		return $message;
 	}
 	
-	private function requestEmailWrapper( $body, $subject ='ISOC Request Form Conformation Email')
+	private function requestEmailWrapper( $body, $subject ='ISOC Request Form Confirmation Email')
 	{
 		// create email message
 		$message = '
@@ -1020,7 +1087,7 @@ private function hideButtonCancel()
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>ISOC Request Conformation Email</title>
+<title>ISOC Request Confirmation Email</title>
 
 </head>
 
@@ -1139,7 +1206,7 @@ private function hideButtonCancel()
 					$this->responseData = array_merge($tempTicketInfo, $tempTicketMeta, $tempRequester);
 					$tempCurrentTech = array("ISOC_TECH_FULL_NAME"=>$tempTechID['ISOC_TECH_FIRST_NAME'].' '.$tempTechID['ISOC_TECH_LAST_NAME'], "REQUEST_OVERVIEW"=>$this->createRequestOverview() );
 					$this->responseData = array_merge($this->responseData, $tempCurrentTech);
-					
+					$this->responseData['ISOC_TECH_EMAIL']=$_SESSION['ISOC_TECH_EMAIL'];
 					
 				}
 				else
@@ -1175,8 +1242,11 @@ private function hideButtonCancel()
 				// Send Email to user that a specific Tech is now working their request.
 				$subject = 'Ticket Number: '.$this->responseData['REQUEST_TICKET_NUMBER'].' is now in progress.';
 				$message = $this->requestEmailWrapper( $this->inProgressEmailBody() , $subject);
-				$this->email->sendEmailNoCC( $this->responseData['REQUESTER_EMAIL_ADDRESS'], 'isoperationscenter@uscellular.com', $subject, $message);			
-		    
+				
+				
+				//$this->email->sendEmailNoCC( $this->responseData['REQUESTER_EMAIL_ADDRESS'], 'isoperationscenter@uscellular.com, '.$this->responseData['ISOC_TECH_EMAIL'], $subject, $message);			
+				$this->email->sendEmailWithCC( $this->responseData['REQUESTER_EMAIL_ADDRESS'], 'isoperationscenter@uscellular.com', $this->responseData['ISOC_TECH_EMAIL'], $subject, $message);
+			
 			}
 		}	
 	}
@@ -1280,7 +1350,7 @@ private function hideButtonCancel()
 	
 	
 	
-	private function requestCancelEmailSend( $body, $subject ='ISOC Request Form Conformation Email')
+	private function requestCancelEmailSend( $body, $subject ='ISOC Request Form Confirmation Email')
 	{
 		// create email message
 		$message = '
@@ -1289,7 +1359,7 @@ private function hideButtonCancel()
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>ISOC Request Conformation Email</title>
+<title>ISOC Request Confirmation Email</title>
 
 </head>
 
@@ -1407,7 +1477,7 @@ private function hideButtonCancel()
 	
 	
 	
-	private function requestCompleteEmailSend( $body, $subject ='ISOC Request Form Conformation Email')
+	private function requestCompleteEmailSend( $body, $subject ='ISOC Request Form Confirmation Email')
 	{
 		// create email message
 		$message = '
@@ -1416,7 +1486,7 @@ private function hideButtonCancel()
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>ISOC Request Conformation Email</title>
+<title>ISOC Request Confirmation Email</title>
 
 </head>
 

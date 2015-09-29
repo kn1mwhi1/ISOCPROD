@@ -1,11 +1,11 @@
-<?php require 'fromDataBaseGetTechnicians.php'; ?>
+<?php require 'lib/fromDataBaseGetTechnicians.php'; ?>
 
 <!DOCTYPE html>
 <html>
 <head>
 	<title>ISOC CREATE TURNOVER</title>
 	<link rel="stylesheet" type="text/css" href="css/turnoverStylesheet.css">
-	<link rel="icon" type="image/png" href="http://10.176.105.22/img/8bmicon.png">
+	<link rel="icon" type="image/png" href="img/8bmicon.png">
 </head>
 
 <!-- WRAPPING BODY IN DIV TO HELP PUSH FOOTER TO BOTTOM OF PAGE -->
@@ -18,10 +18,10 @@
 <!-- Navigation Bar -->	
 			<div class="nav">
 				<ul>
-					<li class="create"><a class="active" href="http://10.176.105.22/createTurnover.php">Create</a></li>
-					<li class="search"><a href="http://10.176.105.22/searchTurnover.php">Search</a></li>
-					<li class="edit"><a href="http://10.176.105.22/editTurnover.php">Edit</a></li>
-					<li class="View"><a href="http://10.176.105.22/viewTurnover.php">View</a></li>
+					<li class="create"><a class="active" href="createTurnover.php">Create</a></li>
+					<li class="search"><a href="searchTurnover.php">Search</a></li>
+					<li class="edit"><a href="editTurnover.php">Edit</a></li>
+					<li class="View"><a href="viewTurnover.php">View</a></li>
 				</ul>
 			</div>
 		</div>
@@ -42,7 +42,7 @@
 		<div id="createShiftValidationError"></div>
 		
 		<div id="Date">
-			<?php require 'turnoverVariables.php'; echo "Open Date: $date $time"; ?>
+			<?php require 'lib/turnoverVariables.php'; echo "Open Date: $date $time"; ?>
 		</div>
 
 		
@@ -103,8 +103,8 @@
 	</form>
 	
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script src="js/turnover.js"></script>
-<script src="js/createTurnover.js"></script>
+<script src="script/turnover.js"></script>
+<script src="script/createTurnover.js"></script>
 
 	</body>
 	
@@ -112,7 +112,7 @@
 		<div class="push">
 			<footer>
 				<p> Created by ISOC &copy;2015</p>
-				<div class="img"><a href="http://10.176.105.22/img/ISOClogo.JPG"><img src="http://10.176.105.22/img/ISOClogo.JPG" alt=""></a></div>
+				<div class="img"><a href="img/ISOClogo.JPG"><img src="img/ISOClogo.JPG" alt=""></a></div>
 			 </footer>
 		</div>
 </div>

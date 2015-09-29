@@ -11,6 +11,9 @@ require('lib/Class_LogicIsocSupportForm.php');
 $TierTwo = new LogicIsocSupportForm();
  
 
+
+
+ 
 ?>	
 <script type="text/javascript">
 // JavaScript variables created through PHP
@@ -38,7 +41,23 @@ $TierTwo = new LogicIsocSupportForm();
 	<link rel="stylesheet" type="text/css" href="css/sweetalert.css" />
 	<link rel="stylesheet" type="text/css" href="css/SupportRequestForm.css" /> 
 	
-<?php $TierTwo->checkUserSubmittedData(); ?>
+<?php 
+
+// display alert from user session, if there is one.
+if(!isset($_SESSION)) 
+{
+	session_start();
+}
+
+if (isset($_SESSION['ALERT']) && $_SESSION['ALERT'] != '')
+{
+echo $_SESSION['ALERT'];
+//unset $_SESSION['ALERT'];
+$_SESSION['ALERT'] = '';
+}
+
+// check the user data
+$TierTwo->checkUserSubmittedData(); ?>
 	
 </head>
 
@@ -106,7 +125,7 @@ $TierTwo = new LogicIsocSupportForm();
 				<div class="spacer10" >
 				</div>
 			
-			<select title="Please select a value." class="form-control dropdown_style center input-sm <?php $TierTwo->input_error('options');?>" name="options" id = "main_options" value="" onchange = "showForm()" onblur ="setCookie('main_options',document.getElementById('main_options').selectedIndex,1)">
+			<select title="Please select a value." class="form-control dropdown_style center input-sm <?php $TierTwo->input_error('options');?>" name="options" id = "main_options" value="" onchange = "showForm()">
 			</select>
 		
 		
@@ -257,7 +276,7 @@ $TierTwo = new LogicIsocSupportForm();
 	<!-- FORM SUBMISSION --> 
 	<div class='box'>
 		<input class="btn btn-primary" type="submit" id='createrequest' >
-		<input class="btn btn-primary" type="button" onclick="delAllCookies(); location.reload(true); " value="Reset Form">
+		<input class="btn btn-primary" type="button" onclick="delAllCookies(); clearValues();" value="Reset Form">
 	</div>
 
 </form>
@@ -282,6 +301,8 @@ $TierTwo = new LogicIsocSupportForm();
 <p id="Revision" >Rev. 5.28.2015</p></p>
 </footer>
 <?php
+
+
 if ($TierTwo->popup->notifyMessage()){}
 ?>
 

@@ -1,6 +1,6 @@
 <?php 
-require 'fromDataBaseGetTurnover.php';
-require 'turnoverVariables.php';
+require 'lib/fromDataBaseGetTurnover.php';
+require 'lib/turnoverVariables.php';
 if (empty($turnover_id)) {
 	
 } ?>
@@ -10,7 +10,7 @@ if (empty($turnover_id)) {
 <head>
 	<title>ISOC VIEW TURNOVER</title>
 	<link rel="stylesheet" type="text/css" href="css/turnoverStylesheet.css">
-	<link rel="icon" type="image/png" href="http://10.176.105.22/img/8bmicon.png">
+	<link rel="icon" type="image/png" href="img/8bmicon.png">
 </head>
 
 <!-- WRAPPING BODY IN DIV TO HELP PUSH FOOTER TO BOTTOM OF PAGE -->
@@ -23,10 +23,10 @@ if (empty($turnover_id)) {
 <!-- Navigation Bar -->	
 			<div class="nav">
 				<ul>
-					<li class="create"><a href="http://10.176.105.22/createTurnover.php">Create</a></li>
-					<li class="search"><a href="http://10.176.105.22/searchTurnover.php">Search</a></li>
-					<li class="edit"><a href="http://10.176.105.22/editTurnover.php">Edit</a></li>
-					<li class="View"><a class="active" href="http://10.176.105.22/viewTurnover.php">View</a></li>
+					<li class="create"><a href="createTurnover.php">Create</a></li>
+					<li class="search"><a href="searchTurnover.php">Search</a></li>
+					<li class="edit"><a href="editTurnover.php">Edit</a></li>
+					<li class="View"><a class="active" href="viewTurnover.php">View</a></li>
 				</ul>
 			</div>
 			

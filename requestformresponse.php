@@ -3,20 +3,23 @@
 5/27/2015 - Form created
 -->
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
 <?php
+
+
 require('lib/Class_LogicIsocSupportForm.php');
 require('lib/Class_LoginLogic.php');
+
 
 $Login = new LoginLogic();
 $TierTwo = new LogicIsocSupportForm();
 $Login->checkSession();
-$Login->getNavBar();
+
 $TierTwo->retrieveTicket();
 $TierTwo->checkPost();
 
@@ -26,11 +29,11 @@ $TierTwo->checkPost();
 	<title>I.S. Operations Support Request Form</title>
 	
 	<!--  Load JavaScript --> 
-	<script type="text/javascript" src="script/supportscript.js" async></script> 
+	<script type="text/javascript" src="script/supportscript.js"></script> 
 	<script type="text/javascript" src="script/bootstrap.js"></script>
 	<script type="text/javascript" src="script/sweetalert.min.js"></script>
 	<script type="text/javascript" src="script/bootstrap-datetimepicker.js"></script>
-	<script type="text/javascript" src="script/jquery.js"></script>
+	<script type="text/javascript" src="script/jquery-2.1.1.min.js"></script>
 		
 	<!--  Load CSS -->
 	<link rel="stylesheet" href="css/bootstrap-datetimepicker.css" />
@@ -41,13 +44,15 @@ $TierTwo->checkPost();
 	<link rel="stylesheet" type="text/css" href="css/countDown.css" />
 	<link rel="stylesheet" type="text/css" href="css/ledlights.css" />
 
+	
+	
+
 </head>
 
 
 
 
-<body onLoad=DoTheCookieStuff()>
-
+<body>
 
 
 
@@ -177,39 +182,44 @@ $TierTwo->checkPost();
 	
 </form>
 
-<script>
+
+<!--<span id="hours">0</span>:<span id="minutes">0</span>:<span id="seconds">0</span>-->
+<script type="text/javascript">
+
+//alert('kicking off');
+
+
  $(document).ready(function(){
      setInterval(ajaxcall, 1000);
+	 
  });
+  
+  
  function ajaxcall(){
      $.ajax({
-         url: 'script/gettime.php',
+         url: 'lib/gettime.php',
          success: function(data) {
              data = data.split(':');
 			 
-			 try
-			 {
+		
              $('#days').html(data[0]);
 			 $('#hours').html(data[1]);
              $('#minutes').html(data[2]);
              $('#seconds').html(data[3]);
-			 }
-			 catch
-			 {
-			 }
+		
          }
      });
  }
 
- 
+
  $( function() {
   var $winHeight = $( window ).height()
   $( '.container' ).height( $winHeight );
 });
+
+
  
  </script>
-<!--<span id="hours">0</span>:<span id="minutes">0</span>:<span id="seconds">0</span>-->
-
 
 
 
@@ -220,6 +230,11 @@ $TierTwo->checkPost();
 <p id="Revision" >Rev. 5.27.2015</p></p>
 </footer>
 <?php
+
+
+
+
+
 if ($TierTwo->popup->notifyMessage())
 {		
 }
