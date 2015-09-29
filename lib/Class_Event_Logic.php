@@ -114,6 +114,7 @@ class Event_Logic extends ValidationUserInput
 					case "Current Events":
 								if ($_POST['view'] == 'Normal View')
 								{
+									//print_r($_SESSION);
 									$this->createTableActiveExpiredCustomFields();
 								}
 								
@@ -167,13 +168,52 @@ class Event_Logic extends ValidationUserInput
 								}
 						break;
 					case "CANCEL":  // Cancel the ticket
-								$this->updateCancel($_POST['ticket']);
+								$this->updateCancel($_POST['EVENT_ID']);
+						break;
+					case "COMPLETED":  // Complete the ticket
+								$this->updateComplete($_POST['EVENT_ID'],$_POST['COMPLETION_NOTES'] );
+						break;
+					case "ADD EVENT":  // Complete the ticket
+					print_r($_POST);
+								$this->addEvent($_POST['START_DATETIME'], $_POST['END_DATETIME'], $_POST['NO_ENDDATE'], $_POST['STATUS'], $_POST['REFERENCE'], $_POST['INITIATOR'], $_POST['ACTION_REQUIRED']);
+						break;
+					case "UPDATE EVENT":  // Complete the ticket
+								$this->updateEvent($_POST['EVENT_ID'], $_POST['START_DATETIME'], $_POST['END_DATETIME'], $_POST['NO_ENDDATE'], $_POST['STATUS'], $_POST['REFERENCE'], $_POST['INITIATOR'], $_POST['ACTION_REQUIRED']);
 						break;
 					default:
 						$this->createTableActiveExpiredCustomFields();
 				}
 			}
 		}	
+	}
+	
+
+	
+	private function addEvent( $aTicketNumber, $startDate, $endDate, $noEndDate, $status, $reference, $initiator, $actionRequired )
+	{
+		
+		$anArray = array("START_DATETIME"=>$startDate, "END_DATETIME"=>$endDate, "NO_ENDDATE" =>$noEndDate, "STATUS"=>$status, "REFERENCE"=>$reference, 
+					"INITIATOR"=>$initiator, "ACTION_REQUIRED"=>$actionRequired, "CREATOR_TECH"=>$_SESSION['ISOC_TECH_EMPLOYEE_ID'], "CREATE_DATETIME"=>$this->getCurrentTime());
+		
+		$this->ToDB->insertRecordOneTable( $anArray ,'TB_ISOC_EVENT', $fieldTypes = 'ssbssssis' );
+	}
+	
+	private function updateEvent( $aTicketNumber, $startDate, $endDate, $noEndDate, $status, $reference, $initiator, $actionRequired )
+	{
+		
+		$anArray = array("START_DATETIME"=>$startDate, "END_DATETIME"=>$endDate, "NO_ENDDATE" =>$noEndDate, "STATUS"=>$status, "REFERENCE"=>$reference, 
+					"INITIATOR"=>$initiator, "ACTION_REQUIRED"=>$actionRequired);
+		$whereArray = array("EVENT_ID"=>$aTicketNumber);			
+		
+		$this->ToDB->updateRecordOneTable( $updateArray , $whereArray, 'equals', 'TB_ISOC_EVENT' , 'ssbssssi');
+	}
+	
+	private function updateComplete( $aTicketNumber, $notes)
+	{
+		$updateArray = array("STATUS"=>"COMPLETED","COMPLETION_NOTES"=>$notes, "COMPLETION_TECH"=>$_SESSION['ISOC_TECH_EMPLOYEE_ID']);
+		$whereArray = array("EVENT_ID"=>$aTicketNumber);
+		
+		$this->ToDB->updateRecordOneTable( $updateArray , $whereArray, 'equals', 'TB_ISOC_EVENT' , 'ssii');
 	}
 	
 	private function updateCancel( $aTicketNumber )

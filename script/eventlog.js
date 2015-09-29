@@ -47,10 +47,10 @@ $(function () {$('#datetimepicker2').datetimepicker();
      $.ajax({
 		 type: "POST",
          url: 'lib/eventLogApi.php',
-		 data:{ buttonType : aValue, ticket : ticketID },
+		 data:{ buttonType : aValue, EVENT_ID : ticketID },
          success: function(someData){
 			 
-			 alert('buttonType: ' + buttonType + 'aValue: ' + aValue + 'ticket: ' + ticket + 'ticketID: ' + ticketID );
+			 alert('buttonType: ' + buttonType + 'aValue: ' + aValue + 'ticket: ' + EVENT_ID + 'ticketID: ' + ticketID );
 			 
 			 
 								swal("Change Successful!", "Your change was successful!", "success"); 
@@ -74,9 +74,10 @@ $(function () {$('#datetimepicker2').datetimepicker();
 	// Show edit menu
 	$( ".complete" ).hide();		 
 	$( ".cancel" ).hide();
-	$( ".activeButton" ).hide();
+	//$( ".activeButton" ).hide();
 	$( ".update" ).hide();
    $( ".add" ).show();
+   $('#completeNotes').val("");
  }
  
 
@@ -213,7 +214,11 @@ $(document).on('click', '#noEndDateInput', function () {
 
 
 $(document).on('click', '.update', function () {
-   $( ".update" ).hide();
+  
+
+
+// do button stuffs
+  $( ".update" ).hide();
    $( ".clear" ).hide();
    $( ".add" ).show();
    clearAllValues();
@@ -236,7 +241,7 @@ $(document).on('click', '.cancel', function () {
 							$.ajax({
 									type: "POST",
 									url: 'lib/eventLogApi.php',
-									data:{ submit : 'CANCEL', ticket : ticketID }
+									data:{ submit : 'CANCEL', EVENT_ID : ticketID }
 								  })
 									  .done(function(data) {
 										swal("Canceled!", "The event has been canceled!", "success");
@@ -252,6 +257,91 @@ $(document).on('click', '.cancel', function () {
 
 });
 
+
+
+// Cancel button event
+$(document).on('click', '.complete', function () {
+	// get compeletion notes
+	completeNotes = $('#completeNotes').val();
+
+	swal({   
+	title: "Complete the Event?",   
+	text: "Are you sure you want to complete Event Ticket: " + ticketID + " ?" ,   
+	type: "info",   
+	showCancelButton: true,   
+	closeOnConfirm: false,   
+	showLoaderOnConfirm: true, }, 
+	function(){   
+	setTimeout(function(){ 
+
+							$.ajax({
+									type: "POST",
+									url: 'lib/eventLogApi.php',
+									data:{ submit : 'COMPLETED', EVENT_ID : ticketID, COMPLETION_NOTES : completeNotes }
+								  })
+									  .done(function(data) {
+										swal("Success!", "The event has been successfully completed.", "success");
+									
+									  })
+									  .error(function(data) {
+										swal("Oops", "We couldn't connect to the server!", "error");
+									  });
+								  
+								}, 2000); 
+	});
+
+clearAllValues();
+});
+
+
+// Cancel button event
+$(document).on('click', '.add', function () {
+	
+	
+	
+		//ticketID = someData.EVENT_ID;
+		startTime = $('#datetime1').val();
+		endTime = $('#datetime2').val();
+		noEndTime = $('#noEndDateInput').is(':checked');
+		status = 'PENDING'; 
+		referenceData = $('#reference').val();
+		initiator = $('#initiatorInput').val();
+		actionRequired = $('#actionRequiredInput').val();
+		//completeNotes = $('#completeNotes').val();
+
+
+		
+		
+		swal({   
+	title: "Adding Event",   
+	text: "One moment while the even is being added to the database" ,   
+	type: "info",   
+	showCancelButton: false,   
+	closeOnConfirm: false,   
+	showLoaderOnConfirm: true, }, 
+	function(){   
+	setTimeout(function(){ 
+
+							$.ajax({
+									type: "POST",
+									url: 'lib/eventLogApi.php',
+									data:{ submit : 'ADD EVENT', START_DATETIME : startTime, END_DATETIME : endTime, 
+									NO_ENDDATE : noEndTime, STATUS : status, REFERENCE : referenceData, INITIATOR : initiator, ACTION_REQUIRED : actionRequired }
+								  })
+									  .done(function(data) {
+										swal("Event Added!", "The event has been successfully added.", "success");
+									
+									  })
+									  .error(function(data) {
+										swal("Oops", "We couldn't connect to the server!", "error");
+									  });
+								  
+								}, 2000); 
+	});
+		
+
+clearAllValues();
+});
 
 
 $(document).on('click', '.completedEvents', function () {
@@ -369,8 +459,20 @@ $(document).on('click', '.detailedView', function () {
 						// Show edit menu
 						$( ".complete" ).hide();	
 						
-						$( ".activeButton" ).show();	
+						//$( ".activeButton" ).show();	
 					}
+					
+					if(status == 'ACTIVE')
+					{
+					//	$( ".activeButton" ).hide();
+						
+					}
+					
+					if(status == 'EXPIRED')
+					{
+					//	$( ".activeButton" ).show();
+					}
+				
 					 
 
 					

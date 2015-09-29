@@ -184,15 +184,44 @@ thead{
         color: #FFFFFF;
         border-radius: 10px;
         background: #66C285;
-	margin-bottom: 0px;
-	margin-top: 0px;
+		margin-bottom: 0px;
+		margin-top: 0px;
         width: auto;
         height: auto;
 	
 }
 
 .navbarCustom{
+	
 	padding: 0px;
 	margin-bottom: 0px;
 	margin-top: 0px;
+}
+
+.moveUp40{
+	position: relative;
+	bottom: 40px;
+	
+}
+
+.moveUp35{
+	position: relative;
+	bottom: 35px;
+	
+}
+
+.moveUp25{
+	position: relative;
+	bottom: 25px;
+	
+}
+
+.moveDown10{
+	position: relative;
+	top: 20px;
+	
+}
+
+.h850{
+	height: 850px;
 }

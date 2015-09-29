@@ -47,7 +47,7 @@ $login->getNavBar();
 
 
 
-<div class="container ">
+<div class="container h850 moveUp40 ">
     <div class="row clearfix ">
     	<div class="col-md-12 table-responsive">
 			<table class="table table-bordered table-hover" id="tab_logic" >
@@ -70,7 +70,7 @@ $login->getNavBar();
 					
 					
 					
-					<tr class="nodisplay edit">
+					<tr class="">
 						<th class="text-center">
 							Initiator
 						</th>
@@ -91,7 +91,7 @@ $login->getNavBar();
 				
 				
 				<tbody>
-				<tr class="table-hover edit">
+				<tr class="table-hover">
 				
 						<td id="initiatorTD"  name="initiatorTD" >
 						    <input class="form-control" style="width:210px" type="text" id="initiatorInput"  name="initiatorInput" />
@@ -137,23 +137,20 @@ $login->getNavBar();
 							<label class="checkbox-inline"><input type="checkbox" id="noEndDateInput" name="noEndDateInput" value="" class="" >No End Date</label>
 						</td>
 					</tr>
-					
-					
+
 		
 					
 					
 				</tbody>
 			</table>
-			
-
-			
-			
+				
 		</div>
 	</div>	
 	
 			<div class="nodisplay completeMenu" >	
 			<table class="table table-bordered table-hover completeMenu" >
 				<thead>
+	
 					<tr >
 						<th class="text-center">
 							Completion Notes:
@@ -164,32 +161,28 @@ $login->getNavBar();
 				<tbody>
 				<tr class="table-hover">
 						<td>
-							<textarea id="actionRequiredInput" name="actionRequiredInput" placeholder="Optional Notes" class="form-control" ></textarea>
+							<textarea id="completeNotes" name="completeNotes" placeholder="Optional Notes" class="form-control" ></textarea>
 						</td>
 				</tr>
+		
 				</tbody>
 			</table>
 		</div>	
-	
-	
-	
-	<input class="btn btn-primary pull-right add" type="submit" name="submit" id='submit' value="Add Event">
-	
-	<input class="btn btn-primary pull-right update"  type="submit" name="submit" id='submit' value="Update Event">
-	<input class="btn btn-danger pull-right clear "  type="submit" name="submit" id='submit' value="Clear">
-	<input class="btn btn-primary pull-left activeButton nodisplay"  type="submit" name="submit" id='submit' value="Activate">
-	<input class="btn btn-primary pull-left complete nodisplay"  type="submit" name="submit" id='submit' value="Complete">
-	<input class="btn btn-danger pull-left cancel nodisplay"  type="submit" name="submit" id='submit' value="Cancel">
-</div>
-
-
-
 		
-
-
-
-
-
+		<div>
+					<input class="btn btn-primary pull-right add" type="submit" name="submit" id='submit' value="Add Event">
+					<input class="btn btn-primary pull-right update"  type="submit" name="submit" id='submit' value="Update Event">
+					<input class="btn btn-danger pull-right clear"  type="submit" name="submit" id='submit' value="Clear">
+		</div>
+		<div class="">
+					
+					<!--<input class="btn btn-primary pull-left activeButton nodisplay"  type="submit" name="submit" id='submit' value="Activate"> -->
+					<input class="btn btn-primary pull-left complete nodisplay"  type="submit" name="submit" id='submit' value="COMPLETED">
+					<input class="btn btn-danger pull-left cancel nodisplay"  type="submit" name="submit" id='submit' value="CANCEL">
+		</div>
+	
+	
+</div>
 
 </body>
 
