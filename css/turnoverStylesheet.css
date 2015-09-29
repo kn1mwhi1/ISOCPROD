@@ -1,0 +1,419 @@
+
+
+body {
+	height: 100%;
+}
+
+.wrapper {
+	min-height: 100%;
+	height: 100%;
+	margin: 0 auto -4em;
+}
+
+#Header {
+	text-align: center;
+	font-family: Helvetica, sans-serif;
+	font-variant: small-caps;
+	color: #FFF;
+	border-radius: 10px; 
+	background: #66C285;
+	padding: auto;
+	width: auto;
+	height: auto;
+	margin: auto;
+}
+
+
+/************************************ 
+       Navigation Bar				*			           
+*************************************/
+.nav ul {
+	list-style: none;
+	background-color: #66C285;
+	text-align: center;
+	padding: 0;
+	margin-bottom: 25px;
+	border-radius: 10px;
+	font-weight: bold;
+	letter-spacing: 1px;
+}
+.nav li {
+	width: 120px;
+	border-bottom: none;
+	height: 50px;
+	line-height: 50px;
+	font-size: 1em;
+	border-radius: 15px 15px 0 0;
+	display: inline-block;
+	margin-right: -4px;
+}
+ 
+.nav a {
+	text-decoration: none;
+	color: #fff;
+	display: block;
+	transition: .3s background-color;
+	border-radius: 15px 15px 0 0;
+}
+ 
+.nav a:hover {
+	background-color: #A6C9DB;
+}
+ 
+.nav a.active {
+	background-color: #fff;
+	color: #444;
+	cursor: default;
+}
+
+#Error {
+	text-align: center;
+}
+
+#confMsg {
+	text-align: center;
+	font-family: Helvetica, sans-serif;
+	font-variant: small-caps;
+	width: auto;
+	height: auto;
+	margin: auto;
+}
+  
+#DateShiftContainer {
+	float: left;
+	width: auto;
+	height: auto;
+	max-width: 49%;
+}
+
+#Date {
+	float: left;
+	font-family: Helvetica, sans-serif;
+	font-variant: small-caps;
+	max-width:49%;
+}
+	
+#Shift {
+	clear: left;
+	margin-top: 25px;
+	margin-bottom: 10px;
+	font-family: Helvetica, sans-serif;
+	font-variant: small-caps;
+	font-weight: bold;
+}
+	
+#addTechnicians { 
+	float: right;
+	margin-bottom: 10px;
+	max-width:49%;
+	font-family: Helvetica, sans-serif;
+	font-variant: small-caps;
+}
+
+/* +, Add Item, & Edit buttons only */
+input[onclick] {
+	background-color: #66C285;
+	color: #FFF;
+	box-sizing: border-box;
+	border-radius: 6px;
+}
+
+select[id=selTech] {
+	width: 140px;
+	box-sizing: border-box;
+}
+
+#EventLog {
+	border: 2px solid black;
+	margin: 5px;
+	clear: both;
+	text-align: center;
+	height: 35%;
+}
+
+#addTurnover {
+	font-family: Helvetica, sans-serif;
+	font-variant: small-caps;
+	text-align: center;
+	height: auto;
+	width: auto;
+}
+
+textarea {
+    min-width:80%;
+	max-width: 80%;
+	height: 50px;
+	border-radius: 4px;
+	font-family: Helvetica, sans-serif;
+}
+
+/* CREATE TURNOVER ADDED ITEM ONLY */
+.item {
+    min-width:80%;
+	max-width: 80%;
+	height: 30px;
+	border-radius: 4px;
+	font-family: Helvetica, sans-serif;
+	border-style: inset;
+	text-align: top;
+}
+
+.old_item {
+	width:80%;
+	height: 20px;
+    box-sizing: border-box;
+	border-radius: 4px;
+	font-family: Helvetica, sans-serif;
+	border-style: inset;
+}
+
+#charNum {
+	font-size: 12px;
+	font-family: Helvetica, sans-serif;
+	font-variant: normal;
+	text-align: center;
+	padding-top: 5px;
+	margin-top: 10px;
+}
+
+#TurnoverContainer {
+	float: left;
+	height: auto;
+	width: 100%;
+}
+
+#TurnoverItem {
+	float: left;
+	margin: 5px;
+	height: auto;
+	width: 100%;
+}
+
+table, td, th {
+    border: 2px solid #CCC;
+}
+
+th {
+    background-color: #66C285;
+    color: #FFF;
+	font-family: Helvetica, sans-serif;
+	font-variant: small-caps;
+	font-size: 20px;
+}
+
+td {
+	font-family: Helvetica, sans-serif;
+	font-size: 16px;
+	text-align: center;
+}
+
+th:first-child {
+	min-width: 70px;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+th:nth-child(2) {
+	width: 100%;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+td:first-child {
+	font-variant: small-caps;
+	min-width: 70px;
+	text-align: center;
+}
+
+td:nth-child(2) {
+	width: 100%;
+}
+
+#advancedSearch {
+	max-width: 720px;
+}
+
+#shift2 {
+	font-family: Helvetica, sans-serif;
+	font-variant: small-caps;
+	font-weight: bold;
+}
+
+#selectDate {
+	font-family: Helvetica, sans-serif;
+	font-variant: small-caps;
+	font-weight: bold;
+	line-height: 75px;
+	clear: both;
+}
+
+/* Search Turnover - ADVANCED SEARCH Button Only */
+#advancedSearch input[type=Submit] {
+	margin: 15px;
+	width: 150px;
+	padding: 5px;
+	background-color: #66C285;
+	color: #FFF;
+	border-radius: 6px;
+}
+
+fieldset {
+	max-width: 60%;
+}
+
+/* Search Turnover - VIEW Button Only */
+#searchTable input[type=Submit] {
+	margin: 15px;
+	width: 100px;
+	padding: 5px;
+	background-color: #66C285;
+	color: #FFF;
+	border-radius: 6px;
+}
+
+/* Search Turnover - EDIT Button Only */
+#searchTable input[type=button] {
+	margin: 15px;
+	width: 100px;
+	padding: 5px;
+	background-color: #66C285;
+	color: #FFF;
+	border-radius: 6px;
+}
+
+#Submit {
+	text-align: center;
+	padding: 30px;
+}
+
+/* Create Turnover - SUBMIT Button Only */
+#Submit input[type=submit]{
+	background-color: #66C285;
+	color: #FFF;
+	border-radius: 6px;
+}
+
+
+/************************************ 
+FOOTER
+*************************************/
+footer {
+	background-color: #A6C9DB;
+	text-align: center;
+	border: 2px solid #CCC;
+	margin-top: 80%;
+}
+
+footer img {
+	width: 110px;
+	height: 90px;
+}
+
+.footer, .push {
+	clear: both;
+	height: 4em;
+}
+
+
+/************************************ 
+Dasboard CSS file
+*************************************/
+.header {
+        text-align: center;
+        font-family: Helvetica, sans-serif;
+        font-variant: small-caps;
+        color: #FFF;
+        border-radius: 10px;
+        background: #66C285;
+        padding: auto;
+        width: auto;
+        height: auto;
+        margin: auto;
+}
+
+.isoc_stats {
+	height: 150px;
+	width: 300px;
+	padding: 15px 15px 10px 15px;
+}
+
+.panel panel-default {
+
+}
+
+#nav_container {
+	font-family: Helvetica, sans-serif;
+	font-variant: small-caps;
+	font-size: 20px;
+	text-align: center;
+	padding: 20px;
+	margin: 30px 80px 30px 80px;
+}
+
+.row {
+
+}
+
+.call_tracker_nav {
+
+}
+
+.col-md-6 {
+	margin-top: 10px;
+}
+
+.btn-group {
+	background-color: #80B2CC;
+	color: #FFF;
+	border-radius: 10px;
+	border-color: #80B2CC;
+	outline: medium none;
+	padding: 25px;
+	width: 200px;
+}
+
+.btn-group:hover {
+	background-color: #FFF; 
+	border-color: #CCC;
+	color: #80B2CC;
+	font-weight: bold;
+}
+
+.event_log_nav {
+
+}
+
+.turnover_nav {
+
+}
+
+.request_response_form_nav {
+
+}
+
+
+/************************************ 
+JavaScript Validation Error messages *			           
+*************************************/
+#createShiftValidationError, #createTechnicianValidationError,
+#createItemValidationError,  #searchValidationError, #deleteTechnicianValidation { 
+	font-family: Helvetica, sans-serif;
+	font-weight: bold;
+	color: red;
+	font-style: italic;
+	text-align: center;
+	margin-left: 35%;
+	padding-bottom: 15px;
+	width: 30%;
+}
+
+#noTurnoverFound {
+	text-align: center;
+}
+
+#noTurnoverFound img {
+	padding: 40px;
+}
+
+
+
