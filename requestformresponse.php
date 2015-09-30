@@ -54,6 +54,9 @@ $TierTwo->checkPost();
 
 <body>
 
+<?php
+$Login->getNavBar();
+?>
 
 
 <!-- <h1>Data Center Operations Support Request</h1> -->

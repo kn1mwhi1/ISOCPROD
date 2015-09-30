@@ -24,7 +24,7 @@ $(function () {$('#datetimepicker2').datetimepicker();
 
  // When document has loaded run ajax command every second.
 $(document).ready(function(){
-	alert('test');
+
      setInterval(ajaxcall, 1000);
  });
  

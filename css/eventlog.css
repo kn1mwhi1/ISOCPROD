@@ -1,3 +1,5 @@
+
+
 .table-sortable tbody tr {
     cursor: move;
 }
@@ -16,10 +18,10 @@ font-variant: small-caps;
         color: #FFFFFF;
         border-radius: 10px;
         background: #66C285;
-      /*  padding: auto; */
+     
         width: auto;
         height: auto;
-      /*  margin: auto; */
+   
 	  top: 20px;
 }
 
@@ -68,9 +70,9 @@ textarea {
 }
 
 
-.clear{
-	/*display: none;*/
-}
+
+
+
 
 #datetimepicker2{
 	width: 200px;
@@ -142,8 +144,7 @@ thead{
     to { background-color: #F00; }
 }
 
-
-
+ 
 .normalView, .detailedView{
 	position: relative;
     top: 55px;

@@ -2,6 +2,8 @@
 
 body {
 	height: 100%;
+	font-family: Helevetica;
+font-variant: small-caps;
 }
 
 .wrapper {
@@ -20,11 +22,20 @@ body {
 	padding: auto;
 	width: auto;
 	height: auto;
-	/*margin: auto;*/
+	margin: auto;
 	position: relative;
 	bottom: 20px;
 }
 
+
+.moveup{
+
+	position: relative;
+	bottom: 20px;
+
+
+
+}
 
 /************************************ 
        Navigation Bar				*			           
@@ -85,40 +96,51 @@ body {
 	width: auto;
 	height: auto;
 	margin: auto;
+
 }
-  
+  /*
 #DateShiftContainer {
 	float: left;
 	width: auto;
 	height: auto;
 	max-width: 49%;
+
 }
+*/
 
 #Date {
-	float: left;
 	font-family: Helvetica, sans-serif;
 	font-variant: small-caps;
-	max-width:49%;
+	width: 300px;
+	margin-left: auto;
+	margin-right: auto;
 }
 	
 #Shift {
-	clear: left;
-	margin-top: 25px;
+	margin-left: 6%;
+	margin-top: 4px;
 	margin-bottom: 10px;
 	font-family: Helvetica, sans-serif;
 	font-variant: small-caps;
 	font-weight: bold;
+	width: 200px;
+	height: 25pxpx;
+
 }
 	
 #addTechnicians { 
 	float: right;
 	margin-bottom: 10px;
-	max-width:49%;
+	margin-right: 6%;
+	width: 100px
 	font-family: Helvetica, sans-serif;
 	font-variant: small-caps;
 }
 
-/* +, Add Item, & Edit buttons only */
+
+
+
+/* +, Add Item, & Edit buttons only */   
 input[onclick] {
 	background-color: #66C285;
 	color: #FFF;
@@ -127,17 +149,11 @@ input[onclick] {
 }
 
 select[id=selTech] {
-	width: 140px;
+	width: 180px;
 	box-sizing: border-box;
 }
 
-#EventLog {
-	border: 2px solid black;
-	margin: 5px;
-	clear: both;
-	text-align: center;
-	height: 35%;
-}
+
 
 
 #addTurnover {
@@ -145,18 +161,23 @@ select[id=selTech] {
 	font-variant: small-caps;
 	text-align: center;
 	height: auto;
-	width: auto;
+	width: 1000px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 textarea {
-    min-width:80%;
-	max-width: 80%;
+    min-width:90%;
+	max-width: 90%;
 	height: 50px;
 	border-radius: 4px;
 	font-family: Helvetica, sans-serif;
 }
 
+
+
 /* CREATE TURNOVER ADDED ITEM ONLY */
+
 .item {
     min-width:80%;
 	max-width: 80%;
@@ -183,6 +204,7 @@ textarea {
 	text-align: center;
 	padding-top: 5px;
 	margin-top: 10px;
+	clear: both;
 }
 
 #TurnoverContainer {
@@ -198,10 +220,12 @@ textarea {
 	width: 100%;
 }
 
+
+
 table, td, th {
     border: 2px solid #CCC;
 }
-
+/*
 th {
     background-color: #66C285;
     color: #FFF;
@@ -209,12 +233,16 @@ th {
 	font-variant: small-caps;
 	font-size: 20px;
 }
+*/
 
+/*
 td {
 	font-family: Helvetica, sans-serif;
 	font-size: 16px;
 	text-align: center;
 }
+
+
 
 th:first-child {
 	min-width: 70px;
@@ -228,6 +256,8 @@ th:nth-child(2) {
 	padding-right: 20px;
 }
 
+
+
 td:first-child {
 	font-variant: small-caps;
 	min-width: 70px;
@@ -237,6 +267,8 @@ td:first-child {
 td:nth-child(2) {
 	width: 100%;
 }
+
+*/
 
 #advancedSearch {
 	max-width: 720px;
@@ -256,7 +288,7 @@ td:nth-child(2) {
 	clear: both;
 }
 
-/* Search Turnover - ADVANCED SEARCH Button Only */
+/* Search Turnover - ADVANCED SEARCH Button Only */ 
 #advancedSearch input[type=Submit] {
 	margin: 15px;
 	width: 150px;
@@ -295,7 +327,7 @@ fieldset {
 	padding: 30px;
 }
 
-/* Create Turnover - SUBMIT Button Only */
+/* Create Turnover - SUBMIT Button Only */ 
 #Submit input[type=submit]{
 	background-color: #66C285;
 	color: #FFF;
@@ -305,7 +337,7 @@ fieldset {
 
 /************************************ 
 FOOTER
-*************************************/
+*************************************/ 
 footer {
 	background-color: #A6C9DB;
 	text-align: center;
@@ -326,7 +358,7 @@ footer img {
 
 /************************************ 
 Dasboard CSS file
-*************************************/
+*************************************/ 
 .header {
         text-align: center;
         font-family: Helvetica, sans-serif;
@@ -345,6 +377,7 @@ Dasboard CSS file
 	width: 300px;
 	padding: 15px 15px 10px 15px;
 }
+
 
 .panel panel-default {
 
@@ -371,7 +404,7 @@ Dasboard CSS file
 	margin-top: 10px;
 }
 
-.btn-group {
+.button-group {
 	background-color: #80B2CC;
 	color: #FFF;
 	border-radius: 10px;
@@ -381,7 +414,7 @@ Dasboard CSS file
 	width: 200px;
 }
 
-.btn-group:hover {
+.button-group:hover {
 	background-color: #FFF; 
 	border-color: #CCC;
 	color: #80B2CC;
@@ -404,6 +437,8 @@ Dasboard CSS file
 /************************************ 
 JavaScript Validation Error messages *			           
 *************************************/
+
+
 #createShiftValidationError, #createTechnicianValidationError,
 #createItemValidationError,  #searchValidationError, #deleteTechnicianValidation { 
 	font-family: Helvetica, sans-serif;
@@ -431,14 +466,73 @@ JavaScript Validation Error messages *
 	border-width: medium;
 	border-color: blue;
 	border-radius: 10px;
+
 }
-/*
-#EventLog{
-	width: 600px;
-	height: 460px;
+
+
+.fontSizeVariant{
+	font-size: 12px;
+	font-family: Helevetica;
 	font-variant: small-caps;
-	
 }
-*/
+
+.eventTableSize{
+	width: 850px;
+	height: 460px;
+	position: relative;
+	bottom: 80px;
+}
+
+.eventShiftLog{
+	width: 1740px;
+	height: 465px;
+	margin-left: 4%;
+	margin-right: 4%;
+}
+
+.clearLeft{
+	clear: left;
+}
+
+.clearRight{
+	clear: right;
+}
+
+.clearBoth{
+	clear: both;
+}
+
+.clearNone{
+	clear: none;
+}
+
+.displayInline{
+display:inline-block;
+
+}
+
+
+#eventLogTitle{
+	width: 200px;
+	height: 50px;
+	margin-left: 300px;
+	position: relative;
+	bottom: 10px;
+}
+
+#shiftLogTitle{
+	width: 200px;
+	height: 50px;
+	margin-right: 300px;
+	position: relative;
+	bottom: 10px;
+}
+
+#addItem{
+	margin-top: 10px;
+	margin-bottom: auto;
+
+}
+
 
 

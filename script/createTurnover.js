@@ -45,7 +45,7 @@
 			});
 		// End - reset textarea resize on button click
 			} else {
-				document.getElementById('createItemValidationError').innerHTML = '<p><img src="http://10.176.105.22/img/yodaIcon.png"></p>Enter a blank turnover item you cannot. Yeesssssss.';
+				document.getElementById('createItemValidationError').innerHTML = '<p><img src="img/yodaIcon.png"></p>Enter a blank turnover item you cannot. Yeesssssss.';
 			}
 		}
 		
@@ -64,19 +64,19 @@
 		var techSelect = document.forms["trnOver"]["add_Technician"].value;
 		
 		if(manEntry != "") {
-			document.getElementById('createItemValidationError').innerHTML = '<p><img src="http://10.176.105.22/img/yodaIcon.png"></p>An unsaved turnover item, there is. Delete the text from the turnover field or click add item, you must.';
+			document.getElementById('createItemValidationError').innerHTML = '<p><img src="img/yodaIcon.png"></p>An unsaved turnover item, there is. Delete the text from the turnover field or click add item, you must.';
 			return false;
 		}
 		else if (shiftEntry == "Select Shift") {
-			document.getElementById('createShiftValidationError').innerHTML = '<p><img src="http://10.176.105.22/img/yodaIcon.png"></p>Select a shift, you must. Choose one from the dropdown, you should.';
+			document.getElementById('createShiftValidationError').innerHTML = '<p><img src="img/yodaIcon.png"></p>Select a shift, you must. Choose one from the dropdown, you should.';
 			return false;
 		}
 		else if (techSelect != "Select Technician") {
-			document.getElementById('createTechnicianValidationError').innerHTML = '<p><img src="http://10.176.105.22/img/yodaIcon.png"></p>Added to turnover a selected technician was not. Click "+" to add you must. Hrrrmmm.';
+			document.getElementById('createTechnicianValidationError').innerHTML = '<p><img src="img/yodaIcon.png"></p>Added to turnover a selected technician was not. Click "+" to add you must. Hrrrmmm.';
 			return false;
 		}			
 		else if (techEntry == null) {
-			document.getElementById('createTechnicianValidationError').innerHTML = '<p><img src="http://10.176.105.22/img/yodaIcon.png"></p>Added to turnover a technician was not.  Select at least 1 technician, you must. Yeesssssss.';
+			document.getElementById('createTechnicianValidationError').innerHTML = '<p><img src="img/yodaIcon.png"></p>Added to turnover a technician was not.  Select at least 1 technician, you must. Yeesssssss.';
 			return false;
 		}
 	} 

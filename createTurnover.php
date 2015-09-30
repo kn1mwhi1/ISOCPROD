@@ -63,11 +63,11 @@ $login->getNavBar();
 
 
 				
-	<form name="trnOver" method="POST" id="turnoverForm" action="toDataBaseCreate.php" onsubmit="return validateForm()">
+	<form class="" name="trnOver" method="POST" id="turnoverForm" action="lib/toDataBaseCreate.php" onsubmit="return validateForm()">
 
 <!-- Date/Shift Container -->
-		<div id="Shift">
-			<select id="selShift" name="shift" tabindex="1">
+		<div class="pull-left"id="Shift">
+			<select class="form-control" id="selShift" name="shift" tabindex="1">
 				<option value="Select Shift" selected>Select Shift</option>
 				<option value="1st">1st Shift</option>
 				<option value="2nd">2nd Shift</option>
@@ -75,16 +75,15 @@ $login->getNavBar();
 			</select>			
 		</div>
 		
-<!-- Blank div for displaying validation errors -->			
-		<div id="createShiftValidationError"></div>
-		
-		<div id="Date">
-			<?php require 'lib/turnoverVariables.php'; echo "Open Date: $date $time"; ?>
-		</div>
 
 		
-		<div id="addTechnicians">
-				<select id="selTech" name="add_Technician" tabindex="2"> 
+
+		
+		<div class="" id="addTechnicians">
+		
+		<input class="btn btn-primary pull-right" onclick="techRow(this.form);" type="button" id="selectedTech" name="technicians" value="+" tabindex="3"/>
+		
+				<select class="form-control pull-right" id="selTech" name="add_Technician" tabindex="2"> 
 					<option value="Select Technician">Select Technician</option>
 					<optgroup label="1st Shift">
 			<?php 	for ($c=0; $c < count($firstShiftTechs); $c++) {
@@ -108,12 +107,25 @@ $login->getNavBar();
 			<?php }  ?>
 				</select>
 					
-			<input onclick="techRow(this.form);" type="button" id="selectedTech" name="technicians" value="+" tabindex="3"/>
+			
+			
 		</div>
+	
+		<!-- Blank div for displaying validation errors -->			
+		
+		<div class="" id="createShiftValidationError "></div>
+	
+	
+			<div class ="" id="Date">
+			<?php require 'lib/turnoverVariables.php'; echo "Open Date: $date $time"; ?>
+		</div>
+
 		
 <!-- Blank div for displaying validation errors -->			
-		<div id="createTechnicianValidationError"></div>
-		
+		<div class="" id="createTechnicianValidationError"></div>
+	
+	<!-- moves down the EventLog when Select Techncians are added -->
+	<div class="clearBoth"></div>
 							
 	<!-- Load CSS --> 
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" /> 
@@ -130,22 +142,41 @@ $login->getNavBar();
 	<script type="text/javascript" src="script/moment-with-locales.js"></script>
 	<script type="text/javascript" src="script/bootstrap-datetimepicker.js"></script>
 	<script type="text/javascript" src="script/getdatetime.js"></script>							
-					<div id="EventLog" >
-						<div id="dynamicTable" class=""></div> 	
-					</div>
+
+					
+					
+<!--  **************************  EVENT and SHIFT LOG ****************************************   -->
+	<div class="eventShiftLog container-fluid testBlue">
+	
+		<h1 class="pull-left" id="eventLogTitle">Event Log</h1>
+		<h1 class="pull-right" id="shiftLogTitle">Shift Log</h1>
+	
+		<div class="clearLeft pull-left container-fluid pull-left eventTableSize" >			
+				<div class=" fontSizeVariant" id="dynamicTable"  ></div>
+		</div>
+		
+		
+		<div class="clearRight pull-right container-fluid eventTableSize " >	
+			
+			<div class="fontSizeVariant" id="shiftLog"  >
+		</div>
+		
+	</div>
+<!--  **************************  END of EVENT and SHIFT LOG ****************************************   -->
+		
 <link rel="stylesheet" type="text/css" href="css/turnoverStylesheet.css">
 		
 		
 		
 		<div id="itemContainer">
 		
-			<div id="charNum"></div>
+			<div class="" id="charNum"></div>
 			
-			<div id="addTurnover">
+			<div class="" id="addTurnover">
 					 
-				<textarea placeholder="Please Enter Turnover Item" id="textbox" name="add_turnover" maxlength="500" data-autosize-input='{ "space": 40 }' tabindex="5"></textarea>
+				<textarea class="form-control pull-left" placeholder="Please Enter Turnover Item" id="textbox" name="add_turnover" maxlength="500" data-autosize-input='{ "space": 40 }' tabindex="5"></textarea>
 					
-				<input onclick="addRow(this.form);" type="button" name="turnover" value="Add Item" tabindex="6"/>
+				<input class="btn btn-primary" id="addItem" onclick="addRow(this.form);" type="button" name="turnover" value="Add Item" tabindex="6"/>
 			</div>
 					
 		</div>
@@ -153,8 +184,8 @@ $login->getNavBar();
 <!-- Blank div for displaying validation errors -->					
 		<div id="createItemValidationError"></div>
 		
-		<div id="Submit">
-			<p><input type="submit" name="ok" value="Submit" tabindex="7" ></p>
+		<div class="clearBoth" id="Submit">
+			<p><input class="btn btn-primary " type="submit" name="ok" value="Submit" tabindex="7" ></p>
 		</div>
 	</form>
 	
@@ -164,6 +195,9 @@ $login->getNavBar();
 
 	
 
+	
+	
+	
 	
 
 
