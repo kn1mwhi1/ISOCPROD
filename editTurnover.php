@@ -2,17 +2,7 @@
 require 'lib/fromDataBaseGetTurnover.php'; 
 require 'lib/fromDataBaseGetTechnicians.php'; 
 ?>
-<?php
-require_once 'lib/Class_LoginLogic.php'; 
-$login = new LoginLogic();
-// Check login first
-$login->checkSession();
 
-?>
-
-<?php
-$login->getNavBar();
-?>
 
 <!DOCTYPE html>
 <html>
@@ -21,6 +11,7 @@ $login->getNavBar();
 	
 	<link rel="stylesheet" type="text/css" href="css/turnoverStylesheet.css">
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="css/eventlog.css" />
 	<link rel="icon" type="image/png" href="img/8bmicon.png">
 </head>
 
@@ -31,12 +22,24 @@ $login->getNavBar();
 
 	<body>	
 	
+	<?php
+require_once 'lib/Class_LoginLogic.php'; 
+$login = new LoginLogic();
+// Check login first
+$login->checkSession();
+
+?>
+
+<?php
+$login->getNavBar();
+?>
+	
 
 		<div id="Header">
 			<h1>ISOC Turnover</h1>
 			
 <!-- Navigation Bar -->	
-			<div class="nav">
+			<div class="navigation">
 				<ul>
 					<li class="create"><a href="createTurnover.php">Create</a></li>
 					<li class="search"><a href="searchTurnover.php">Search</a></li>

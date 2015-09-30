@@ -9,20 +9,33 @@ if (empty($turnover_id)) {
 <html>
 <head>
 	<title>ISOC VIEW TURNOVER</title>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
 	<link rel="stylesheet" type="text/css" href="css/turnoverStylesheet.css">
 	<link rel="icon" type="image/png" href="img/8bmicon.png">
 </head>
 
 <!-- WRAPPING BODY IN DIV TO HELP PUSH FOOTER TO BOTTOM OF PAGE -->
 <div class="wrapper">
-	<body>	
+	<body class="">
 
-		<div id="Header">
-			<h1>ISOC Turnover</h1>
+<?php
+require_once 'lib/Class_LoginLogic.php'; 
+$login = new LoginLogic();
+// Check login first
+$login->checkSession();
+
+?>
+
+<?php
+$login->getNavBar();
+?>	
+
+		<div class="" id="Header">
+			<h1 class="">ISOC Turnover</h1>
 			
 <!-- Navigation Bar -->	
-			<div class="nav">
-				<ul>
+			<div class="navigation ">
+				<ul class="">
 					<li class="create"><a href="createTurnover.php">Create</a></li>
 					<li class="search"><a href="searchTurnover.php">Search</a></li>
 					<li class="edit"><a href="editTurnover.php">Edit</a></li>

@@ -34,7 +34,7 @@ $TierTwo = new LoginLogic();
       <ul class="nav navbar-nav  ">
         <li class="active"><a href="dashboard.php">Dashboard</a></li>
         <li><a href="requestformresponse.php">Request Response Form</a></li>
-		<li><a href="turnover.php">Turnover</a></li>
+		<li><a href="createTurnover.php">Turnover</a></li>
         <li><a href="eventlog.php">Event Log</a></li>
 		<li><a href="ShiftLogindex.php">Shift Log</a></li>
       </ul>

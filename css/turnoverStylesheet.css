@@ -20,14 +20,17 @@ body {
 	padding: auto;
 	width: auto;
 	height: auto;
-	margin: auto;
+	/*margin: auto;*/
+	position: relative;
+	bottom: 20px;
 }
 
 
 /************************************ 
        Navigation Bar				*			           
 *************************************/
-.nav ul {
+
+.navigation ul {
 	list-style: none;
 	background-color: #66C285;
 	text-align: center;
@@ -37,7 +40,8 @@ body {
 	font-weight: bold;
 	letter-spacing: 1px;
 }
-.nav li {
+
+.navigation li {
 	width: 120px;
 	border-bottom: none;
 	height: 50px;
@@ -48,7 +52,7 @@ body {
 	margin-right: -4px;
 }
  
-.nav a {
+.navigation a {
 	text-decoration: none;
 	color: #fff;
 	display: block;
@@ -56,15 +60,19 @@ body {
 	border-radius: 15px 15px 0 0;
 }
  
-.nav a:hover {
+.navigation a:hover {
 	background-color: #A6C9DB;
 }
  
-.nav a.active {
+.navigation a.active {
 	background-color: #fff;
 	color: #444;
 	cursor: default;
 }
+
+
+
+
 
 #Error {
 	text-align: center;
@@ -130,6 +138,7 @@ select[id=selTech] {
 	text-align: center;
 	height: 35%;
 }
+
 
 #addTurnover {
 	font-family: Helvetica, sans-serif;
@@ -415,5 +424,21 @@ JavaScript Validation Error messages *
 	padding: 40px;
 }
 
+
+
+.testBlue {
+	border-style: solid;
+	border-width: medium;
+	border-color: blue;
+	border-radius: 10px;
+}
+/*
+#EventLog{
+	width: 600px;
+	height: 460px;
+	font-variant: small-caps;
+	
+}
+*/
 
 

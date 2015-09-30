@@ -1,22 +1,55 @@
 <?php require 'lib/fromDataBaseGetTechnicians.php'; ?>
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <html>
+<!-- Tag to inform IE to be smart -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+
+
 <head>
 	<title>ISOC CREATE TURNOVER</title>
-	<link rel="stylesheet" type="text/css" href="css/turnoverStylesheet.css">
-	<link rel="icon" type="image/png" href="img/8bmicon.png">
+	
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+	    <link rel="stylesheet" type="text/css" href="css/turnoverStylesheet.css">
+	
+	    <link rel="icon" type="image/png" href="img/8bmicon.png">
+		
+		
+
+		
+	
+<?php
+require_once 'lib/Class_LoginLogic.php'; 
+require_once 'lib/Class_Event_Logic.php';
+$login = new LoginLogic();
+$tierTwo = new Event_Logic();
+
+// Check login first
+$login->checkSession();
+?>
 </head>
 
 <!-- WRAPPING BODY IN DIV TO HELP PUSH FOOTER TO BOTTOM OF PAGE -->
 <div class="wrapper">
-	<body>
+<body>
+	
+<?php
+// Check login first
+$login->checkSession();
+?>
 
+<?php
+$login->getNavBar();
+?>
+
+		
 		<div id="Header">
 			<h1>ISOC Turnover</h1>
 		
 <!-- Navigation Bar -->	
-			<div class="nav">
+			<div class="navigation">
 				<ul>
 					<li class="create"><a class="active" href="createTurnover.php">Create</a></li>
 					<li class="search"><a href="searchTurnover.php">Search</a></li>
@@ -25,7 +58,11 @@
 				</ul>
 			</div>
 		</div>
-								
+				
+
+
+
+				
 	<form name="trnOver" method="POST" id="turnoverForm" action="toDataBaseCreate.php" onsubmit="return validateForm()">
 
 <!-- Date/Shift Container -->
@@ -77,9 +114,28 @@
 <!-- Blank div for displaying validation errors -->			
 		<div id="createTechnicianValidationError"></div>
 		
-		<div id="EventLog">
-			<p>The Event Log will go here</p>
-		</div>
+							
+	<!-- Load CSS --> 
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" /> 
+	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" /> 
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.css" />
+	<link rel="stylesheet" type="text/css" href="css/SupportRequestForm.css" /> 
+	<link rel="stylesheet" type="text/css" href="css/sweetalert.css" />	
+	<link rel="stylesheet" type="text/css" href="css/eventlog.css" />
+	
+	
+	<!-- Load Javascript -->
+	<script type="text/javascript" src="script/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="script/bootstrap.min.js"></script>
+	<script type="text/javascript" src="script/moment-with-locales.js"></script>
+	<script type="text/javascript" src="script/bootstrap-datetimepicker.js"></script>
+	<script type="text/javascript" src="script/getdatetime.js"></script>							
+					<div id="EventLog" >
+						<div id="dynamicTable" class=""></div> 	
+					</div>
+<link rel="stylesheet" type="text/css" href="css/turnoverStylesheet.css">
+		
+		
 		
 		<div id="itemContainer">
 		
@@ -102,9 +158,15 @@
 		</div>
 	</form>
 	
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script src="script/turnover.js"></script>
-<script src="script/createTurnover.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script src="script/turnover.js"></script>
+	<script src="script/createTurnover.js"></script>
+
+	
+
+	
+
+
 
 	</body>
 	
@@ -116,4 +178,45 @@
 			 </footer>
 		</div>
 </div>
+
+
+<script type="text/javascript" src="script/jquery-2.1.1.min.js"></script>
+<script>
+ // Global Variables
+ 
+ selection = 'Current Events';
+ viewSelection = 'Normal View';
+ temp ='';
+
+ // When document has loaded run ajax command every second.
+$(document).ready(function(){
+	//alert('test');
+     setInterval(ajaxcall, 1000);
+ });
+ 
+
+
+
+ function ajaxcall(){
+     $.ajax({
+		 type: "POST",
+         url: 'lib/eventLogApi.php',
+		 data:{ submit : selection, view : viewSelection },
+         success: function(someData){
+			
+				if ( temp != someData)
+				{
+					 $('#dynamicTable').html(someData);
+					 temp = someData;
+				 }
+         }
+     });
+ }
+ 
+
+</script>
+
+
+
+
 </html>
