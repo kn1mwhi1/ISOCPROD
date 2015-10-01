@@ -200,6 +200,13 @@ class ValidationUserInput extends BaseDataBase
 		}
 	}
 	
+	public function validateDate($date,$format='m-d-Y H:i:s')
+	{
+		
+		$d = DateTime::createFromFormat($format, $date);
+		return $d && $d->format($format) == $date;
+		
+	}
 	
 	
 	public function validateInformation( $nameOfObject, $aType )
@@ -223,6 +230,9 @@ class ValidationUserInput extends BaseDataBase
 					return $this->validateUSAPhoneNumber( $nameOfObject );
 			case "ALL":
 					return $this->validateAllCharaters( $nameOfObject );//******************
+				break;
+			case "DATE":
+					return $this->validateDate( $nameOfObject );//******************
 				break;
 			default:
 					return $this->validateAllCharaters( $nameOfObject );

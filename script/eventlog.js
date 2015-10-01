@@ -549,5 +549,25 @@ $(document).on('click', '.detailedView', function () {
 
 
 });
+
+
+function validation( aHtmlElementName, typeOfValidation )
+{
+	   
+	   // get value and assign to aHtmlValue
+	   
+	   $.ajax({
+			 type: "POST",
+			 url: "lib/eventLogApi.php",
+			 data: { submit : 'VALIDATION', aHtmlElementName : aHtmlValue , TYPE : typeOfValidation },
+			 success: function(data){
+					
+					var someData = JSON.parse(data);
+					
+					alert(someData.PASS_VALIDATION);
+					
+			 }
+		 });
+}
    
    

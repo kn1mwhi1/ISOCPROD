@@ -186,12 +186,32 @@ class Event_Logic extends ValidationUserInput
 								$_POST['END_DATETIME'] = $this->convertJavaTimeToPHPTime($_POST['END_DATETIME'] );
 								$this->updateEvent($_POST['EVENT_ID'], $_POST['START_DATETIME'], $_POST['END_DATETIME'], $_POST['NO_ENDDATE'],$_POST['REFERENCE'], $_POST['INITIATOR'], $_POST['ACTION_REQUIRED']);
 						break;
+					case "VALIDATION":  // Validation
+	
+								$this->validateHtmlInput( $_POST['OBJECT_NAME'],$_POST['TYPE'] );
+						break;
 					default:
 						$this->createTableActiveExpiredCustomFields();
 				}
 			}
 		}	
 	}
+	
+	
+	private function validateHtmlInput( $nameOfObject, $aType )
+	{
+		$value = $this->validation->validateInformation( $nameOfObject , $aType);
+
+			if ($value === false)
+			{
+				echo json_encode( array("PASS_VALIDATION"=>"false"));
+				exit;
+			}
+		
+		// all items have passed validation
+		echo json_encode( array("PASS_VALIDATION"=>"true"));
+	}
+	
 	
 	private function convertJavaTimeToPHPTime( $aTime )
 	{
