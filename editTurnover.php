@@ -49,7 +49,7 @@ $login->getNavBar();
 			</div>
 		</div>
 
-	<form name="trnOver" method="POST" id="turnoverForm" action="toDataBaseEdit.php" onsubmit="return validateForm()">
+	<form name="trnOver" method="POST" id="turnoverForm" action="/lib/toDataBaseEdit.php" onsubmit="return validateForm()">
 
 		<div id="DateShiftContainer">
 	
@@ -135,6 +135,8 @@ $login->getNavBar();
 					<input type="hidden" name="turnover_item[]" value="<?php echo $t_items[$i]['item_id'];?>">
 			<?php	} ?>
 	
+		<!-- Blank div for displaying validation errors and Text Counter -->
+			<!-- Testing with jQuery instead, commenting out for now <div id="deleteTurnoverValidation"></div>-->
 			<div id="charNum"></div> 
 			 
 				<textarea placeholder="Please Enter Turnover Item" id="textbox" name="add_turnover" maxlength="500" data-autosize-input='{ "space": 40 }' tabindex="5"></textarea>
@@ -153,7 +155,7 @@ $login->getNavBar();
 
 </form>
 
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript" src="script/jquery-2.1.1.min.js"></script>
 <script src="script/turnover.js"></script>
 <script src="script/editTurnover.js"></script>
 

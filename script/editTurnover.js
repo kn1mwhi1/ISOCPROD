@@ -1,3 +1,10 @@
+// Temporary script to fix height of Turnover Items in Edit Turnover
+		
+	$(document).ready(function() {
+		$("textarea").height(50);
+	});
+
+
 // Script to add/remove additional rows of Turnover
 		var rowNum = 0;
 		function addRow(trnOver) {
@@ -44,12 +51,12 @@
 			
 			$.ajax({
 			type: "POST",
-			url: "toDataBaseDelete.php",
+			url: "/lib/toDataBaseDelete.php",
 			data: {oldTech:removeOldTech},
 			
 			});
 // Adding a confirmation message that a Technician was deleted
-			document.getElementById('deleteTechnicianValidation').innerHTML = '<p><img src="http://10.176.105.22/img/cyberman.png"></p>A Technician has been <p>DELETED!</p>';
+			document.getElementById('deleteTechnicianValidation').innerHTML = '<p><img src="/img/cyberman.png"></p>A Technician has been <p>DELETED!</p>';
 		});
 	}
 
@@ -68,42 +75,56 @@
 
 // Script to remove existing rows of Turnover Items
 	function removeoldTurnover () {
-		if (confirm("Are you sure you want to delete this item?")) {
+	//	if (confirm("Are you sure you want to delete this item?")) {
 			$(".oldTurnover").on("click", function(){
-				$(this).remove();
+				var removeOldTurnover = $(this).attr('id');					
+					$.ajax({
+					type: "POST",
+					url: "/lib/toDataBaseDelete.php",
+					data: {oldTurnover:removeOldTurnover}
+					});
+				
+				$(this).replaceWith('<div class="deleteTurnoverValidation"><p><img src="/img/cyberman.png"></p>A Turnover Item has been <p>DELETED!</p><div>');
 				$(".oldTurnover").off("click");
-				var removeOldTurnover = $(this).attr('id');
-										
-				$.ajax({
-				type: "POST",
-				url: "toDataBaseDelete.php",
-				data: {oldTurnover:removeOldTurnover}
-				});
+	// Adding a confirmation message that a Turnover Item was deleted
+			//	document.getElementById('deleteTurnoverValidation').innerHTML = '<p><img src="/img/cyberman.png"></p>A Turnover Item has been <p>DELETED!</p>';
 			});
-		}
+	//	}
 	}
 
-//Script to add text counter to Turnover Item Field (works on tab over)//		
-		$(document).ready(function() {
-			var text_max = 500;
-			$('#charNum').html(text_max + ' /500');
-			$("textarea[name=add_turnover]").keyup(function() {
-				var text_length = $("textarea[name=add_turnover]").val().length;
-				var text_remaining = text_max - text_length;
-				$('#charNum').html(text_remaining + ' /500');
-			});
+// Script to clear Turnover Item deleted confirmation
+	
+	$(document).ready(function() {
+		$("html").mousedown(function() {
+			$(".deleteTurnoverValidation").empty();
 		});
+		
+		$("html").keydown(function() {
+			$(".deleteTurnoverValidation").empty();
+		});
+	});
+	
+//Script to add text counter to Turnover Item Field (works on tab over)//		
+	$(document).ready(function() {
+		var text_max = 500;
+		$('#charNum').html(text_max + ' /500');
+		$("textarea[name=add_turnover]").keyup(function() {
+			var text_length = $("textarea[name=add_turnover]").val().length;
+			var text_remaining = text_max - text_length;
+			$('#charNum').html(text_remaining + ' /500');
+		});
+	});
 	
 //Script to add text counter to Turnover Item Field (works on mouse click)//
 	$(document).ready(function() {
-			var text_max = 500;
-			$('#charNum').html(text_max + ' /500');
-			$("textarea[name=add_turnover]").mouseup(function() {
-				var text_length = $("textarea[name=add_turnover]").val().length;
-				var text_remaining = text_max - text_length;
-				$('#charNum').html(text_remaining + ' /500');
-			});
+		var text_max = 500;
+		$('#charNum').html(text_max + ' /500');
+		$("textarea[name=add_turnover]").mouseup(function() {
+			var text_length = $("textarea[name=add_turnover]").val().length;
+			var text_remaining = text_max - text_length;
+			$('#charNum').html(text_remaining + ' /500');
 		});
+	});
 
 // Script to Validate all required data is populated
 	function validateForm() {

@@ -15,18 +15,18 @@
 		
 		$t_turnover = array_map('array_map_callback', $turnover);
 		
-		// Checks to see if Turnover has already been open for the day and prevents duplicate from being opened.
+	// Checks to see if Turnover has already been open for the day and prevents duplicate from being opened.
 		
-		//$sql = "SELECT * FROM `TB_TURNOVER` WHERE DATE='$date' AND SHIFT='$shift'";
+		$sql = "SELECT * FROM `TB_TURNOVER` WHERE DATE='$date' AND SHIFT='$shift'";
 		
-		//$result = $conn->query($sql);
+		$result = $conn->query($sql);
 		
-		//if ($result->num_rows > 0) {
-		//	echo "Turnover has already been opened for today.";
-		//	die;
-		//}
+		if ($result->num_rows > 0) {
+			echo "<h1>Turnover has already been opened for this $shift shift today.</h1>";
+			die;
+		}
 		
-		//Begin inserting turnover into database
+	//Begin inserting turnover into database
 
 		$query = "BEGIN;";
 		$query .= "INSERT INTO TB_TURNOVER (SHIFT, DATE, TIME) VALUES ('$shift', '$date', '$time');";
@@ -68,8 +68,8 @@
 		
 		
 		$host = $_SERVER['HTTP_HOST'];
-		$uri = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
-		$extra = 'confirmation.php';
-		header("Location: http://$host$uri/$extra");
+	//	$uri = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+		$uri = '/confirmation.php';
+		header("Location: http://$host$uri");
 		
 ?>

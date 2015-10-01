@@ -11,15 +11,17 @@
 <head>
 	<title>ISOC CREATE TURNOVER</title>
 	
-		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" /> 
+		<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" /> 
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.css" />
+		<link rel="stylesheet" type="text/css" href="css/SupportRequestForm.css" /> 
+		<link rel="stylesheet" type="text/css" href="css/sweetalert.css" />	
+		<link rel="stylesheet" type="text/css" href="css/eventlog.css" />
 	    <link rel="stylesheet" type="text/css" href="css/turnoverStylesheet.css">
 	
 	    <link rel="icon" type="image/png" href="img/8bmicon.png">
 		
-		
 
-		
-	
 <?php
 require_once 'lib/Class_LoginLogic.php'; 
 require_once 'lib/Class_Event_Logic.php';
@@ -59,10 +61,6 @@ $login->getNavBar();
 			</div>
 		</div>
 				
-
-
-
-				
 	<form class="" name="trnOver" method="POST" id="turnoverForm" action="lib/toDataBaseCreate.php" onsubmit="return validateForm()">
 
 <!-- Date/Shift Container -->
@@ -74,10 +72,6 @@ $login->getNavBar();
 				<option value="3rd">3rd Shift</option>
 			</select>			
 		</div>
-		
-
-		
-
 		
 		<div class="" id="addTechnicians">
 		
@@ -107,13 +101,11 @@ $login->getNavBar();
 			<?php }  ?>
 				</select>
 					
-			
-			
 		</div>
 	
 		<!-- Blank div for displaying validation errors -->			
 		
-		<div class="" id="createShiftValidationError "></div>
+		<div class="" id="createShiftValidationError"></div>
 	
 	
 			<div class ="" id="Date">
@@ -126,25 +118,8 @@ $login->getNavBar();
 	
 	<!-- moves down the EventLog when Select Techncians are added -->
 	<div class="clearBoth"></div>
-							
-	<!-- Load CSS --> 
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" /> 
-	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" /> 
-	<link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.css" />
-	<link rel="stylesheet" type="text/css" href="css/SupportRequestForm.css" /> 
-	<link rel="stylesheet" type="text/css" href="css/sweetalert.css" />	
-	<link rel="stylesheet" type="text/css" href="css/eventlog.css" />
 	
-	
-	<!-- Load Javascript -->
-	<script type="text/javascript" src="script/jquery-2.1.1.min.js"></script>
-	<script type="text/javascript" src="script/bootstrap.min.js"></script>
-	<script type="text/javascript" src="script/moment-with-locales.js"></script>
-	<script type="text/javascript" src="script/bootstrap-datetimepicker.js"></script>
-	<script type="text/javascript" src="script/getdatetime.js"></script>							
 
-					
-					
 <!--  **************************  EVENT and SHIFT LOG ****************************************   -->
 	<div class="eventShiftLog container-fluid testBlue">
 	
@@ -164,10 +139,7 @@ $login->getNavBar();
 	</div>
 <!--  **************************  END of EVENT and SHIFT LOG ****************************************   -->
 		
-<link rel="stylesheet" type="text/css" href="css/turnoverStylesheet.css">
-		
-		
-		
+
 		<div id="itemContainer">
 		
 			<div class="" id="charNum"></div>
@@ -189,19 +161,14 @@ $login->getNavBar();
 		</div>
 	</form>
 	
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script type="text/javascript" src="script/jquery-2.1.1.min.js"></script>
 	<script src="script/turnover.js"></script>
 	<script src="script/createTurnover.js"></script>
-
+	<script type="text/javascript" src="script/bootstrap.min.js"></script>
+	<script type="text/javascript" src="script/moment-with-locales.js"></script>
+	<script type="text/javascript" src="script/bootstrap-datetimepicker.js"></script>
+	<script type="text/javascript" src="script/getdatetime.js"></script>
 	
-
-	
-	
-	
-	
-
-
-
 	</body>
 	
 <!-- HIDDEN DIV TO PUSH FOOTER TO BOTTOM OF PAGE -->
@@ -212,45 +179,4 @@ $login->getNavBar();
 			 </footer>
 		</div>
 </div>
-
-
-<script type="text/javascript" src="script/jquery-2.1.1.min.js"></script>
-<script>
- // Global Variables
- 
- selection = 'Current Events';
- viewSelection = 'Normal View';
- temp ='';
-
- // When document has loaded run ajax command every second.
-$(document).ready(function(){
-	//alert('test');
-     setInterval(ajaxcall, 1000);
- });
- 
-
-
-
- function ajaxcall(){
-     $.ajax({
-		 type: "POST",
-         url: 'lib/eventLogApi.php',
-		 data:{ submit : selection, view : viewSelection },
-         success: function(someData){
-			
-				if ( temp != someData)
-				{
-					 $('#dynamicTable').html(someData);
-					 temp = someData;
-				 }
-         }
-     });
- }
- 
-
-</script>
-
-
-
-
 </html>
