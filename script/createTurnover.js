@@ -1,3 +1,5 @@
+
+
 //Script to add text counter to Turnover Item Field (works on tab over)//		
 		$(document).ready(function() {
 			var text_max = 500;
@@ -64,19 +66,50 @@
 		var techSelect = document.forms["trnOver"]["add_Technician"].value;
 		
 		if(manEntry != "") {
-			document.getElementById('createItemValidationError').innerHTML = '<p><img src="img/yodaIcon.png"></p>An unsaved turnover item, there is. Delete the text from the turnover field or click add item, you must.';
+			document.getElementById('createItemValidationError').innerHTML = '<p><img src="/img/yodaIcon.png"></p>An unsaved turnover item, there is. Delete the text from the turnover field or click add item, you must.';
 			return false;
 		}
 		else if (shiftEntry == "Select Shift") {
-			document.getElementById('createShiftValidationError').innerHTML = '<p><img src="img/yodaIcon.png"></p>Select a shift, you must. Choose one from the dropdown, you should.';
+			document.getElementById('createShiftValidationError').innerHTML = '<p><img src="/img/yodaIcon.png"></p>Select a shift, you must. Choose one from the dropdown, you should.';
 			return false;
 		}
 		else if (techSelect != "Select Technician") {
-			document.getElementById('createTechnicianValidationError').innerHTML = '<p><img src="img/yodaIcon.png"></p>Added to turnover a selected technician was not. Click "+" to add you must. Hrrrmmm.';
+			document.getElementById('createTechnicianValidationError').innerHTML = '<p><img src="/img/yodaIcon.png"></p>Added to turnover a selected technician was not. Click "+" to add you must. Hrrrmmm.';
 			return false;
 		}			
 		else if (techEntry == null) {
-			document.getElementById('createTechnicianValidationError').innerHTML = '<p><img src="img/yodaIcon.png"></p>Added to turnover a technician was not.  Select at least 1 technician, you must. Yeesssssss.';
+			document.getElementById('createTechnicianValidationError').innerHTML = '<p><img src="/img/yodaIcon.png"></p>Added to turnover a technician was not.  Select at least 1 technician, you must. Yeesssssss.';
 			return false;
 		}
-	} 
+	}
+	
+
+	// Global Variables
+ 
+	 selection = 'Current Events';
+	 viewSelection = 'Normal View';
+	 temp ='';
+
+	 // When document has loaded run ajax command every second.
+	$(document).ready(function(){
+		//alert('test');
+		ajaxcall();
+		setInterval(ajaxcall, 60000);
+	 });
+
+	function ajaxcall(){
+		 $.ajax({
+			 type: "POST",
+			 url: 'lib/eventLogApi.php',
+			 data:{ submit : selection, view : viewSelection },
+			 success: function(someData){
+				
+					if ( temp != someData)
+					{
+						 $('#dynamicTable').html(someData);
+						 temp = someData;
+					 }
+			 }
+		 });
+	}
+

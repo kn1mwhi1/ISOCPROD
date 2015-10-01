@@ -81,7 +81,7 @@ $login->getNavBar();
 			 </form>
 		 </div>
 		  
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script type="text/javascript" src="script/jquery-2.1.1.min.js"></script>
 		<script src="script/turnover.js"></script>
 		<script src="script/searchTurnover.js"></script>
 	</body>

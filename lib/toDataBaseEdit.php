@@ -73,8 +73,8 @@ $conn = mysqli_connect($servername, $username, $password, $dbname);
 		
 		
 		$host = $_SERVER['HTTP_HOST'];
-		$uri = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
-		$extra = 'confirmation.php';
-		header("Location: http://$host$uri/$extra");
+	//	$uri = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+		$uri = '/confirmation.php';
+		header("Location: http://$host$uri");
 		
 ?>
