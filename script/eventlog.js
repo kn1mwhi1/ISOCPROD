@@ -10,17 +10,24 @@ document.write('<script type="text/javascript" src="script/sweetalert.min.js"></
 // function to show calendar
 $(function () {	
 	$('#datetimepicker1').datetimepicker({
-		showClear: true
+		
+		minDate: getDateTime(),
+		format: 'MM/DD/YYYY H:mm:ss'
 	});
 	
 	});
 	
 	
-// function to show calendar 2
-$(function () {$('#datetimepicker2').datetimepicker();
-		showClear: true
-});
-
+	
+	$(function () {	
+	$('#datetimepicker2').datetimepicker({
+		
+		minDate: getDateTime(),
+		format: 'MM/DD/YYYY H:mm:ss'
+	});
+	
+	});
+	
 
  // When document has loaded run ajax command every second.
 $(document).ready(function(){
@@ -82,6 +89,7 @@ $(document).ready(function(){
 	//$( ".activeButton" ).hide();
 	$( ".update" ).hide();
    $( ".add" ).show();
+   $('#noEndDateInput').prop('checked', false);
    $('#completeNotes').val("");
  }
  
@@ -101,6 +109,12 @@ $(document).ready(function(){
 		var year = timeNow.getFullYear();
 		var day = timeNow.getDate();
 		var month = timeNow.getMonth(); 
+		if (month == '00')
+		{
+			month = 12;
+			year = year - 1;
+		}
+		
 		var hours   = timeNow.getHours();
 		var minutes = timeNow.getMinutes();
 		var timeString = ( month < 10) ? "0" + month + "/" : month + "/";
@@ -110,7 +124,7 @@ $(document).ready(function(){
 		timeString += "" + ((hours > 12) ? hours - 12 : hours);
 		timeString += ((minutes < 10) ? ":0" : ":") + minutes;
 		timeString += (hours >= 12) ? " PM" : " AM";
-		
+		alert(dateTime);
 		return timeString;
    }
    
@@ -213,18 +227,6 @@ $(document).on('click', '#noEndDateInput', function () {
 });
 
 
-
-$(document).on('click', '.update', function () {
-  
-
-
-// do button stuffs
-  $( ".update" ).hide();
-   $( ".clear" ).hide();
-   $( ".add" ).show();
-   clearAllValues();
-});
-   
    
 // Cancel button event
 $(document).on('click', '.cancel', function () {
@@ -295,7 +297,7 @@ clearAllValues();
 });
 
 
-// Cancel button event
+// Insert or Add new event
 $(document).on('click', '.add', function () {
 	
 	
@@ -310,12 +312,12 @@ $(document).on('click', '.add', function () {
 		actionRequired = $('#actionRequiredInput').val();
 		//completeNotes = $('#completeNotes').val();
 
-
+			
 		
 		
 		swal({   
 	title: "Adding Event",   
-	text: "One moment while the even is being added to the database" ,   
+	text: "One moment while the eveny is being added to the database" ,   
 	type: "info",   
 	showCancelButton: false,   
 	closeOnConfirm: false,   
@@ -343,6 +345,70 @@ $(document).on('click', '.add', function () {
 
 clearAllValues();
 });
+
+
+// Insert or Add new event
+$(document).on('click', '.update', function () {
+	
+	
+	
+		//EVENT_ID = someData.EVENT_ID;
+		startTime = $('#datetime1').val();
+		endTime = $('#datetime2').val();
+		noEndTime = $('#noEndDateInput').is(':checked');
+		
+		alert('blah' + noEndTime);
+		
+		//status = 'PENDING'; 
+		referenceData = $('#reference').val();
+		initiator = $('#initiatorInput').val();
+		actionRequired = $('#actionRequiredInput').val();
+		//completeNotes = $('#completeNotes').val();
+
+	
+		
+		
+		swal({   
+	title: "Updating Event",   
+	text: "One moment while the event is being updated." ,   
+	type: "info",   
+	showCancelButton: false,   
+	closeOnConfirm: false,   
+	showLoaderOnConfirm: true, }, 
+	function(){   
+	setTimeout(function(){ 
+
+							$.ajax({
+									type: "POST",
+									url: 'lib/eventLogApi.php',
+									data:{ submit : 'UPDATE EVENT', EVENT_ID : ticketID, START_DATETIME : startTime, END_DATETIME : endTime, 
+									NO_ENDDATE : noEndTime, REFERENCE : referenceData, INITIATOR : initiator, ACTION_REQUIRED : actionRequired },
+									 success: function(data){
+					//alert(data);
+
+					
+									 }
+					
+								  })
+									  .done(function(data) {
+										swal("Event Updated!", "The event has been successfully updated.", "success");
+									
+									  })
+									  .error(function(data) {
+										swal("Oops", "We couldn't connect to the server!", "error");
+									  });
+								  
+								}, 2000); 
+	});
+		
+// do button stuffs
+  $( ".update" ).hide();
+   $( ".clear" ).show();
+   $( ".add" ).show();
+  clearAllValues();
+});
+
+
 
 
 $(document).on('click', '.completedEvents', function () {
@@ -410,6 +476,7 @@ $(document).on('click', '.detailedView', function () {
 					
 					
 					ticketID = someData.EVENT_ID;
+					EVENT_ID = someData.EVENT_ID;
 					startTime = someData.START_DATETIME;
 					endTime = someData.END_DATETIME;
 					noEndTime = someData.NO_ENDDATE;

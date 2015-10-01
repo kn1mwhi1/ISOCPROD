@@ -174,11 +174,17 @@ class Event_Logic extends ValidationUserInput
 								$this->updateComplete($_POST['EVENT_ID'],$_POST['COMPLETION_NOTES'] );
 						break;
 					case "ADD EVENT":  // Complete the ticket
-					print_r($_POST);
+
+
+								$_POST['START_DATETIME'] = $this->convertJavaTimeToPHPTime($_POST['START_DATETIME'] );
+								$_POST['END_DATETIME'] = $this->convertJavaTimeToPHPTime($_POST['END_DATETIME'] );
 								$this->addEvent($_POST['START_DATETIME'], $_POST['END_DATETIME'], $_POST['NO_ENDDATE'], $_POST['STATUS'], $_POST['REFERENCE'], $_POST['INITIATOR'], $_POST['ACTION_REQUIRED']);
 						break;
 					case "UPDATE EVENT":  // Complete the ticket
-								$this->updateEvent($_POST['EVENT_ID'], $_POST['START_DATETIME'], $_POST['END_DATETIME'], $_POST['NO_ENDDATE'], $_POST['STATUS'], $_POST['REFERENCE'], $_POST['INITIATOR'], $_POST['ACTION_REQUIRED']);
+								
+								$_POST['START_DATETIME'] = $this->convertJavaTimeToPHPTime($_POST['START_DATETIME'] );
+								$_POST['END_DATETIME'] = $this->convertJavaTimeToPHPTime($_POST['END_DATETIME'] );
+								$this->updateEvent($_POST['EVENT_ID'], $_POST['START_DATETIME'], $_POST['END_DATETIME'], $_POST['NO_ENDDATE'],$_POST['REFERENCE'], $_POST['INITIATOR'], $_POST['ACTION_REQUIRED']);
 						break;
 					default:
 						$this->createTableActiveExpiredCustomFields();
@@ -187,33 +193,61 @@ class Event_Logic extends ValidationUserInput
 		}	
 	}
 	
-
-	
-	private function addEvent( $aTicketNumber, $startDate, $endDate, $noEndDate, $status, $reference, $initiator, $actionRequired )
+	private function convertJavaTimeToPHPTime( $aTime )
 	{
+		return date('Y-m-d H:i:s', strtotime( $aTime ));
+	}
+	
+	private function addEvent( $startDate, $endDate, $noEndDate, $status, $reference, $initiator, $actionRequired )
+	{
+		
+		if ($noEndDate == 'false')
+		{
+			$noEndDate = 'N';
+		}
+		else
+		{
+			$noEndDate = 'Y';
+		}
+		
 		
 		$anArray = array("START_DATETIME"=>$startDate, "END_DATETIME"=>$endDate, "NO_ENDDATE" =>$noEndDate, "STATUS"=>$status, "REFERENCE"=>$reference, 
 					"INITIATOR"=>$initiator, "ACTION_REQUIRED"=>$actionRequired, "CREATOR_TECH"=>$_SESSION['ISOC_TECH_EMPLOYEE_ID'], "CREATE_DATETIME"=>$this->getCurrentTime());
 		
-		$this->ToDB->insertRecordOneTable( $anArray ,'TB_ISOC_EVENT', $fieldTypes = 'ssbssssis' );
+		$this->ToDB->insertRecordOneTable( $anArray ,'TB_ISOC_EVENT', $fieldTypes = 'sssssssis' );
 	}
 	
-	private function updateEvent( $aTicketNumber, $startDate, $endDate, $noEndDate, $status, $reference, $initiator, $actionRequired )
+	private function updateEvent( $aTicketNumber, $startDate, $endDate, $noEndDate, $reference, $initiator, $actionRequired )
 	{
+		if ($noEndDate == 'false')
+		{
+			$noEndDate = 'N';
+		}
+		else
+		{
+			$noEndDate = 'Y';
+		}
 		
-		$anArray = array("START_DATETIME"=>$startDate, "END_DATETIME"=>$endDate, "NO_ENDDATE" =>$noEndDate, "STATUS"=>$status, "REFERENCE"=>$reference, 
+		
+		$updateArray = array("START_DATETIME"=>$startDate, "END_DATETIME"=>$endDate, "NO_ENDDATE" =>$noEndDate, "REFERENCE"=>$reference, 
 					"INITIATOR"=>$initiator, "ACTION_REQUIRED"=>$actionRequired);
 		$whereArray = array("EVENT_ID"=>$aTicketNumber);			
-		
-		$this->ToDB->updateRecordOneTable( $updateArray , $whereArray, 'equals', 'TB_ISOC_EVENT' , 'ssbssssi');
+		$this->ToDB->updateRecordOneTable( $updateArray , $whereArray, 'equals', 'TB_ISOC_EVENT' , 'ssssssi');
+		//$this->returnAjaxError();
+	}
+	
+	private function returnAjaxError()
+	{
+		header('HTTP/1.1 400 Bad Request');
+		echo json_encode(array('error' =>'A Message'));
 	}
 	
 	private function updateComplete( $aTicketNumber, $notes)
 	{
-		$updateArray = array("STATUS"=>"COMPLETED","COMPLETION_NOTES"=>$notes, "COMPLETION_TECH"=>$_SESSION['ISOC_TECH_EMPLOYEE_ID']);
+		$updateArray = array("STATUS"=>"COMPLETED","COMPLETION_NOTES"=>$notes, "COMPLETION_TECH"=>$_SESSION['ISOC_TECH_EMPLOYEE_ID'], "COMPLETION_TIMEDATE"=>$this->getCurrentTime() );
 		$whereArray = array("EVENT_ID"=>$aTicketNumber);
 		
-		$this->ToDB->updateRecordOneTable( $updateArray , $whereArray, 'equals', 'TB_ISOC_EVENT' , 'ssii');
+		$this->ToDB->updateRecordOneTable( $updateArray , $whereArray, 'equals', 'TB_ISOC_EVENT' , 'ssisi');
 	}
 	
 	private function updateCancel( $aTicketNumber )
