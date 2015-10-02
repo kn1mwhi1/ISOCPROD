@@ -592,7 +592,13 @@ function checkIfEmptyAndValidateOnUpdateSend()
 	if ($( "#datetime2" ).val() <= $( "#datetime1" ).val() )
 	{
 		$( "#datetime2" ).addClass( "error" );
-	}	
+	}
+    
+	// ensure that error class is removed when user fixes date.
+	if ($( "#datetime2" ).val() > $( "#datetime1" ).val() )
+	{
+		$( "#datetime2" ).removeClass( "error" );
+	}
 	
 	
 	if ( $( "#initiatorInput" ).hasClass( "error" ) ||
