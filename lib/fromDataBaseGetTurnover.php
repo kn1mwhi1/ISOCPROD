@@ -1,4 +1,8 @@
-<?php  require 'turnoverVariables.php';
+<?php  
+require 'turnoverVariables.php';
+require_once 'lib/Class_LoginLogic.php'; 
+
+$login = new LoginLogic();
 	
 // Checking if user input post variables exist
 	if (isset ($_POST['shift-box']) && !empty ($_POST['shift-box'])) {
@@ -154,27 +158,9 @@
 
 			if (empty($turnover_id) && empty($currentTurnover_id)) {
 				$turnover_id = "";
-				echo '<head>
-						<title>ISOC VIEW TURNOVER</title>
-						<link rel="stylesheet" type="text/css" href="css/turnoverStylesheet.css">
-						<link rel="icon" type="image/png" href="http://10.176.105.22/img/8bmicon.png">
-					</head>
-							
-					<div id="Header">
-						<h1>ISOC Turnover</h1>
-								
-					<!-- Navigation Bar -->	
-						<div class="nav">
-							<ul>
-								<li class="create"><a href="http://10.176.105.22/createTurnover.php">Create</a></li>
-								<li class="search"><a href="http://10.176.105.22/searchTurnover.php">Search</a></li>
-								<li class="edit"><a href="http://10.176.105.22/editTurnover.php">Edit</a></li>
-								<li class="View"><a class="active" href="http://10.176.105.22/viewTurnover.php">View</a></li>
-							</ul>
-						</div>
-						
-					</div>';
-				die ('<div id=noTurnoverFound><h1>Where are we? I\'m not sure this is right.</h1><p><img src="http://10.176.105.22/img/stewartHat.jpg"></p><p><h2>No Turnover exists for the criteria selected. Go back to Search and try again.</h2></p></div>');
+				header("Location: viewTurnoverError.php");
+				exit;
+					
 			}
 		}
 

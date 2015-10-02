@@ -1,9 +1,9 @@
 
 
 body {
-	height: 100%;
+	height: auto;
 	font-family: Helevetica;
-font-variant: small-caps;
+	font-variant: small-caps;
 }
 
 .wrapper {
@@ -73,12 +73,14 @@ font-variant: small-caps;
  
 .navigation a:hover {
 	background-color: #A6C9DB;
+	text-decoration: underline;
 }
  
 .navigation a.active {
 	background-color: #fff;
 	color: #444;
 	cursor: default;
+	text-decoration: underline;
 }
 
 
@@ -271,13 +273,17 @@ td:nth-child(2) {
 */
 
 #advancedSearch {
-	max-width: 720px;
+	width:auto;
 }
 
 #shift2 {
 	font-family: Helvetica, sans-serif;
 	font-variant: small-caps;
 	font-weight: bold;
+	width: 300px;
+	height: 30px;
+	position: relative;
+	right: 40px;
 }
 
 #selectDate {
@@ -449,6 +455,7 @@ JavaScript Validation Error messages *
 	margin-left: 35%;
 	padding-bottom: 15px;
 	width: 30%;
+	margin-top: 5px;
 }
 
 #noTurnoverFound {
@@ -534,5 +541,49 @@ display:inline-block;
 
 }
 
+#selectDate{
+	width: 130px ; 
+	height: 50px;
+	position: relative;
+	bottom: 20px;
 
+}
 
+#selectDateDiv{
+	width:350px; 
+	height: 40px;
+	position: relative;
+	right: 68px;
+}
+
+#advancedDate{
+	width:200px;
+}
+
+.center{
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+#allDiv{
+	width: 500px;
+	height: 400px;
+	
+	border-style: solid;
+	border-width: small;
+	border-color: #F5F5F5;
+	border-radius: 10px;
+	
+}
+
+#searchTable{
+	margin-top:15px;
+}
+
+.greyBorder{
+	border-style: solid;
+	border-width: small;
+	border-color: #F5F5F5;
+	border-radius: 10px;
+}

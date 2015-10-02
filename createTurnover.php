@@ -121,7 +121,7 @@ $login->getNavBar();
 	
 
 <!--  **************************  EVENT and SHIFT LOG ****************************************   -->
-	<div class="eventShiftLog container-fluid testBlue">
+	<div class="eventShiftLog container-fluid greyBorder">
 	
 		<h1 class="pull-left" id="eventLogTitle">Event Log</h1>
 		<h1 class="pull-right" id="shiftLogTitle">Shift Log</h1>

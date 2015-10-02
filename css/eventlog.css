@@ -4,11 +4,11 @@
     cursor: move;
 }
 
-body { 
-font-family: Helevetica;
-font-variant: small-caps;
-
- }
+body {
+	height: auto;
+	font-family: Helevetica;
+	font-variant: small-caps;
+}
 
 
 .header {
@@ -226,3 +226,20 @@ thead{
 .h850{
 	height: 850px;
 }
+
+.center{
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+#serverTimeCentral{
+	font-weight: bold;
+	font-size: 14px;
+	position: relative;
+	top: 25px;
+}
+.block{
+display:block;
+}
+

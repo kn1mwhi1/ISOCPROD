@@ -11,7 +11,7 @@ document.write('<script type="text/javascript" src="script/sweetalert.min.js"></
 $(function () {	
 	$('#datetimepicker1').datetimepicker({
 		
-		minDate: getDateTime(),
+		minDate: getServerDateTime('CURRENT TIME'),
 		format: 'MM/DD/YYYY H:mm:ss'
 	});
 	
@@ -22,7 +22,7 @@ $(function () {
 	$(function () {	
 	$('#datetimepicker2').datetimepicker({
 		
-		minDate: getDateTime(),
+		minDate: getServerDateTime('CURRENT TIME'),
 		format: 'MM/DD/YYYY H:mm:ss'
 	});
 	
@@ -35,7 +35,12 @@ $(document).ready(function(){
      setInterval(ajaxcall, 1000);
  });
  
+ // When document has loaded run ajax command every second.
+$(document).ready(function(){
 
+     setInterval(getServerTimeCentral, 1000);
+ });
+ 
 
 
  function ajaxcall(){
@@ -91,6 +96,12 @@ $(document).ready(function(){
    $( ".add" ).show();
    $('#noEndDateInput').prop('checked', false);
    $('#completeNotes').val("");
+   
+   // remove any error classes
+   $('#initiatorInput').removeClass('error');
+    $('#actionRequiredInput').removeClass('error');
+	 $('#datetime1').removeClass('error');
+	  $('#datetime2').removeClass('error');
  }
  
 
@@ -131,7 +142,7 @@ $(document).ready(function(){
 		return timeString;
    }
    
-   
+  /* 
    function getDateTime()
 {
 	var timeNow = new Date();
@@ -151,6 +162,8 @@ $(document).ready(function(){
 	return timeString;
 }
    
+   */
+   /*
    function getSixtyDays()
 {
 	var timeNow = new Date();
@@ -175,6 +188,9 @@ $(document).ready(function(){
 	
 	return timeString;
 }
+*/
+
+
 
 
 
@@ -197,7 +213,7 @@ $(document).on('click', '#noEndDateInput', function () {
 	if ($('#noEndDateInput').is(':checked')) 
 	{
 		
-		$( "#datetime2" ).val( getSixtyDays() );
+		$( "#datetime2" ).val( getServer60Days('SIXTY DAYS') );
 	    $( "#datetimepicker2" ).hide();
 	}
 	else
@@ -660,5 +676,89 @@ function validation( aHtmlElementName, typeOfValidation )
 			 }
 		 });
 }
+
+
+function getServerDateTime( time )
+{	   
+	   $.ajax({
+			 type: "POST",
+			 url: "lib/eventLogApi.php",
+			 data: { submit : time },
+			 success: function(data){
+					//alert(data);
+					var someData = JSON.parse(data);
+					
+					currentServerTime = someData.SERVER_TIME
+				
+					//alert(currentServerTime);
+					$( "#datetime1" ).val( convertDate(currentServerTime) );
+					$( "#datetime2" ).val( convertDate(currentServerTime) );
+					return currentServerTime;
+					
+					
+			 }
+		 });
+		 
+		 
+		
+}
+
+function getServer60Days( time )
+{
+	   $.ajax({
+			 type: "POST",
+			 url: "lib/eventLogApi.php",
+			 data: { submit : time },
+			 success: function(data){
+					//alert(data);
+					var someData = JSON.parse(data);
+					
+					var ServerTime = someData.SIXTY_SERVER_TIME
+				
+					//alert(currentServerTime);
+					$( "#datetime2" ).val( convertDate(ServerTime) );
+					return currentServerTime;
+					
+					
+			 }
+		 });
+		 
+}
+
+
+function getServerTimeCentral()
+{
+	   $.ajax({
+			 type: "POST",
+			 url: "lib/eventLogApi.php",
+			 data: { submit : 'CURRENT TIME' },
+			 success: function(data){
+					//alert(data);
+					var someData = JSON.parse(data);
+					
+					var currentServerTime = someData.SERVER_TIME
+				
+					//alert(currentServerTime);
+					$('#serverTimeCentral').html(convertDate(currentServerTime) + ' Central Time');
+			 }
+		 });
+		 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
    
    

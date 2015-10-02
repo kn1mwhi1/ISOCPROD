@@ -4,8 +4,11 @@
 	<title> ISOC SEARCH TURNOVER</title>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
 	<link rel="stylesheet" type="text/css" href="css/turnoverStylesheet.css">
-	<link rel="icon" type="image/png" href="img/tardis.ico">	
-
+	<link type="text/css" rel="stylesheet" href="css/bootstrap-table.css">
+	<link rel="icon" type="image/png" href="img/tardis.ico">
+	
+	<script type="text/javascript" src="script/jquery.js"></script>
+	<script type="text/javascript" src="script/bootstrap-table.js"></script>
 
 <?php require 'lib/fromDataBaseGetTurnover.php'; ?>	
 </head>
@@ -31,7 +34,7 @@ $login->getNavBar();
 <!-- Navigation Bar -->	
 			<div class="navigation">
 				<ul>
-					<li class="create"><a href="createTurnover.php">Create</a></li>
+					<li class="create"><a  href="createTurnover.php">Create</a></li>
 					<li class="search"><a class="active" href="searchTurnover.php">Search</a></li>
 					<li class="edit"><a href="editTurnover.php">Edit</a></li>
 					<li class="View"><a href="viewTurnover.php">View</a></li>
@@ -43,44 +46,54 @@ $login->getNavBar();
 
 <!-- This is displaying the last Turnover ID, Shift and Date in a table format and supplying a view button to see the entire Turnover. -->
 
+<div id="allDiv" class="center container ">
 			<form name="currentTurnover" action="viewTurnover.php">
-				<div id="searchTable">
-					<table border="1" style="width:20%">
-						<tr>
-							<th>TURNOVER_ID</th>
-							<th>Shift</th>
-							<th>Date</th>
-						</tr>
-							<td><?php echo $currentTurnover_id; ?></td>
-							<td><?php echo $currentShift; ?></td>
-							<td><?php echo $currentDate; ?></td>
+								
+				<div class="center " id="searchTable" style="width:300px">
+					<table id="table" data-toggle="table" >
+						<thead>
+							<tr>
+								<th>TURNOVER_ID</th>
+								<th>Shift</th>
+								<th>Date</th>
+							</tr>
+						</thead>
+							<tbody>
+								<td><?php echo $currentTurnover_id; ?></td>
+								<td><?php echo $currentShift; ?></td>
+								<td><?php echo $currentDate; ?></td>
+							</tbody>
 					</table>
-					<input type="submit" value="View" tabindex="1">
-					<input type="button" onclick="location.href='editTurnover.php';" value="Edit">
+					<input class="btn btn-primary" type="submit" value="View" tabindex="1">
+					<input class="btn btn-primary" type="button" onclick="location.href='editTurnover.php';" value="Edit">
 				</div>			
 			</form>
 
-		<div id="advancedSearch" >
+		<div class="center " id="advancedSearch" >
 			 <form id="advanSearch" name="advancesearchTurnover" method="POST" action="viewTurnover.php" onsubmit="return validateForm()">
-				 <fieldset>
-					<legend>Advanced Search</legend>
-						<div id="shift2">
+				 <fieldset class="center" >
+					<legend class="" >Advanced Search</legend>
+						<div class="" id="shift2">
 							<input type="checkbox" name="shift-box" value="1st" class="shift" tabindex="9">1st Shift &nbsp &nbsp &nbsp &nbsp
 							<input type="checkbox" name="shift-box" value="2nd" class="shift" tabindex="10">2nd Shift &nbsp &nbsp &nbsp &nbsp
 							<input type="checkbox" name="shift-box" value="3rd" class="shift" tabindex="11">3rd Shift &nbsp &nbsp &nbsp &nbsp
 						</div>
 					
-						<div id="selectDate">
-							Select a Date: <input type="date" id="advancedDate" value="" name="advancedDate" tabindex="12">
+						<div class="" id="selectDateDiv" >
+							<span class="pull-left" id="selectDate" >Select a Date:</span>
+							<input class="form-control pull-left" type="date" id="advancedDate" value="" name="advancedDate" tabindex="12">
 						</div>
 						
 <!-- Blank div for displaying validation errors -->
-						<div id="searchValidationError"></div>
+						
 					</fieldset>
-				<input type="submit" value="Advanced Search" tabindex="13">
+				<input class="btn btn-primary" type="submit" value="Advanced Search" tabindex="13">
 			 </form>
 		 </div>
-		  
+</div>
+
+	<div class="center" id="searchValidationError"></div>	  
+	
 		<script type="text/javascript" src="script/jquery-2.1.1.min.js"></script>
 		<script src="script/turnover.js"></script>
 		<script src="script/searchTurnover.js"></script>

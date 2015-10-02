@@ -1,3 +1,9 @@
+body {
+	height: auto;
+	font-family: Helevetica;
+	font-variant: small-caps;
+}
+
 
 .error {
   border:2px solid red;
@@ -403,7 +409,6 @@ display: inline-block;
 .hide{
 	display: none;
 }
-
 
 
 

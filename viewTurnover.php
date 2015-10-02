@@ -104,7 +104,7 @@ $login->getNavBar();
 		<div class="push">
 			<footer>
 				<p> Created by ISOC &copy;2015</p>
-				<div class="img"><a href="http://10.176.105.22/img/ISOClogo.JPG"><img src="http://10.176.105.22/img/ISOClogo.JPG" alt=""></a></div>
+				<div class="img"><a href="img/ISOClogo.JPG"><img src="ISOClogo.JPG" alt=""></a></div>
 			 </footer>
 		</div>
 </div>

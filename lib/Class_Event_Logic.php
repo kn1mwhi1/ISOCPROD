@@ -167,6 +167,13 @@ class Event_Logic extends ValidationUserInput
 									$this->createTablePendingDetailed();
 								}
 						break;
+					case "CURRENT TIME":  // Cancel the ticket
+								echo json_encode( array("SERVER_TIME"=>$this->getCurrentTime() ));
+						break;
+					case "SIXTY DAYS":  // Cancel the ticket
+								echo json_encode( array("SIXTY_SERVER_TIME"=>$this->get60Days() ));
+						break;
+						
 					case "CANCEL":  // Cancel the ticket
 								$this->updateCancel($_POST['EVENT_ID']);
 						break;
@@ -597,6 +604,19 @@ class Event_Logic extends ValidationUserInput
 	    $dateNow = date('Y-m-d H:i:s', time());
 		$date = new DateTime($dateNow);
 		$date->modify("+12 hours");
+		$date = $date->format("Y-m-d H:i:s");
+		$date = date('Y-m-d H:i:s', strtotime($date ));
+		// convert datetime to date object
+		
+		
+		return $date;
+	}
+	
+		private function get60Days()
+	{
+	    $dateNow = date('Y-m-d H:i:s', time());
+		$date = new DateTime($dateNow);
+		$date->modify("+60 day");
 		$date = $date->format("Y-m-d H:i:s");
 		$date = date('Y-m-d H:i:s', strtotime($date ));
 		// convert datetime to date object

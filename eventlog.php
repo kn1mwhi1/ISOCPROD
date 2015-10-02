@@ -36,11 +36,11 @@ $login->checkSession();
 
 </head>
 
-
-<body class="" >
 <?php
 $login->getNavBar();
 ?>
+<body class="" >
+
 
 <div class="header " >
 	<h1 class="text-center  navbarCustom">Event Log</h1>
@@ -65,7 +65,7 @@ $login->getNavBar();
 						<button type="submit" class="navbar-btn btn-info btn detailedView" name="view" id='view' value="Detailed View">
 						  <i class="glyphicon glyphicon-eye-open"></i> Detailed
 						</button>
-						
+						<div class="center" id="serverTimeCentral"></div>
 						<div id="dynamicTable" class=""></div>
 					</tr>
 					
@@ -82,10 +82,10 @@ $login->getNavBar();
 							Action Required
 						</th> 
 						<th class="text-center">
-							Start Time
+							Start Time (Central Time)
 						</th>
 						<th class="text-center">
-							End Time
+							End Time (Central Time)
 						</th>
 					</tr>
 				</thead>
@@ -192,7 +192,7 @@ $login->getNavBar();
 
 
 <!-- footer navbar-->
-<nav class="navbar navbar-default navbar-fixed-bottom">
+<nav class="navbar navbar-inverse navbar-fixed-bottom">
      <div class="container">
       <p class="navbar-text pull-left">Created: 2015 IS Operations Center
       </p>

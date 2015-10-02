@@ -28,21 +28,25 @@ $TierTwo->checkPost();
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 	<title>I.S. Operations Support Request Form</title>
 	
-	<!--  Load JavaScript --> 
+		<!--  Load JavaScript --> 
 	<script type="text/javascript" src="script/supportscript.js"></script> 
-	<script type="text/javascript" src="script/bootstrap.js"></script>
 	<script type="text/javascript" src="script/sweetalert.min.js"></script>
-	<script type="text/javascript" src="script/bootstrap-datetimepicker.js"></script>
+	<script type="text/javascript" src="script/jquery.js"></script>
 	<script type="text/javascript" src="script/jquery-2.1.1.min.js"></script>
-		
-	<!--  Load CSS -->
-	<link rel="stylesheet" href="css/bootstrap-datetimepicker.css" />
+	<script type="text/javascript" src="script/bootstrap.js"></script>
+	
+		<!--  Load CSS -->
+
 	<link rel="stylesheet" href="css/bootstrap.css" />
 	<link rel="stylesheet" type="text/css" href="css/sweetalert.css" />
 	<link rel="stylesheet" type="text/css" href="css/menubar.css" /> 
 	<link rel="stylesheet" type="text/css" href="css/SupportRequestForm.css" /> 
 	<link rel="stylesheet" type="text/css" href="css/countDown.css" />
 	<link rel="stylesheet" type="text/css" href="css/ledlights.css" />
+	
+
+		
+
 
 	
 	
@@ -50,13 +54,13 @@ $TierTwo->checkPost();
 </head>
 
 
-
-
-<body>
-
 <?php
 $Login->getNavBar();
 ?>
+
+<body>
+
+
 
 
 <!-- <h1>Data Center Operations Support Request</h1> -->
