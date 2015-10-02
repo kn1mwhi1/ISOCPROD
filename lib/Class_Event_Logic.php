@@ -179,15 +179,18 @@ class Event_Logic extends ValidationUserInput
 								$_POST['START_DATETIME'] = $this->convertJavaTimeToPHPTime($_POST['START_DATETIME'] );
 								$_POST['END_DATETIME'] = $this->convertJavaTimeToPHPTime($_POST['END_DATETIME'] );
 								$this->addEvent($_POST['START_DATETIME'], $_POST['END_DATETIME'], $_POST['NO_ENDDATE'], $_POST['STATUS'], $_POST['REFERENCE'], $_POST['INITIATOR'], $_POST['ACTION_REQUIRED']);
+								$this->updateStatusDynamic();
 						break;
 					case "UPDATE EVENT":  // Complete the ticket
 								
 								$_POST['START_DATETIME'] = $this->convertJavaTimeToPHPTime($_POST['START_DATETIME'] );
 								$_POST['END_DATETIME'] = $this->convertJavaTimeToPHPTime($_POST['END_DATETIME'] );
 								$this->updateEvent($_POST['EVENT_ID'], $_POST['START_DATETIME'], $_POST['END_DATETIME'], $_POST['NO_ENDDATE'],$_POST['REFERENCE'], $_POST['INITIATOR'], $_POST['ACTION_REQUIRED']);
+								$this->updateStatusDynamic();
 						break;
 					case "VALIDATION":  // Validation
-	
+										// convert post variables to be compatible with validation class
+										$_POST[$_POST['OBJECT_NAME']] = $_POST['VALUE'];
 								$this->validateHtmlInput( $_POST['OBJECT_NAME'],$_POST['TYPE'] );
 						break;
 					default:
@@ -198,18 +201,39 @@ class Event_Logic extends ValidationUserInput
 	}
 	
 	
+	public function updateStatusDynamic()
+	{
+		$currentTime = $this->getCurrentTime();
+		
+		// Change Pending to ACTIVE by start time
+		$sql = 'UPDATE TB_ISOC_EVENT SET `STATUS` = "ACTIVE" WHERE `STATUS` = "PENDING" AND `START_DATETIME` <= "'.$currentTime.'"';
+		$this->ToDB->saveToDB($sql);
+		
+		// Change Active to Pending by start time
+		$sql = 'UPDATE TB_ISOC_EVENT SET `STATUS` = "PENDING" WHERE `STATUS` = "ACTIVE" AND `START_DATETIME` > "'.$currentTime.'"';
+		$this->ToDB->saveToDB($sql);
+		
+		// Look for end time and change to Expired
+		$sql = 'UPDATE TB_ISOC_EVENT SET `STATUS` = "EXPIRED" WHERE `STATUS` = "ACTIVE" AND `END_DATETIME` <= "'.$currentTime.'"';
+		$this->ToDB->saveToDB($sql);
+		
+		// Change Expired to Active when someone adds more time to end time.
+		$sql = 'UPDATE TB_ISOC_EVENT SET `STATUS` = "ACTIVE" WHERE `STATUS` = "EXPIRED" AND `END_DATETIME` > "'.$currentTime.'"';
+		$this->ToDB->saveToDB($sql);
+	}
+	
 	private function validateHtmlInput( $nameOfObject, $aType )
 	{
 		$value = $this->validation->validateInformation( $nameOfObject , $aType);
 
 			if ($value === false)
 			{
-				echo json_encode( array("PASS_VALIDATION"=>"false"));
+				echo json_encode( array("PASS_VALIDATION"=>"false", "VALUE"=>$_POST[$nameOfObject]) );
 				exit;
 			}
 		
 		// all items have passed validation
-		echo json_encode( array("PASS_VALIDATION"=>"true"));
+		echo json_encode( array("PASS_VALIDATION"=>"true", "VALUE"=>$_POST[$nameOfObject]) );
 	}
 	
 	

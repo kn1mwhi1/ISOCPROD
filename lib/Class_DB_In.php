@@ -12,7 +12,7 @@ class DB_In extends BaseDataBase{
 	
 
 	
-	private function saveToDB( $aQuery )
+	public function saveToDB( $aQuery )
 	{
 		//mysqli_query($link, $query);
 		parent::getDbConnection()->query($aQuery);

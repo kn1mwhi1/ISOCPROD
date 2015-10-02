@@ -62,10 +62,10 @@ $(document).ready(function(){
 		 data:{ buttonType : aValue, EVENT_ID : ticketID },
          success: function(someData){
 			 
-			 alert('buttonType: ' + buttonType + 'aValue: ' + aValue + 'ticket: ' + EVENT_ID + 'ticketID: ' + ticketID );
+			// alert('buttonType: ' + buttonType + 'aValue: ' + aValue + 'ticket: ' + EVENT_ID + 'ticketID: ' + ticketID );
 			 
 			 
-								swal("Change Successful!", "Your change was successful!", "success"); 
+					//			swal("Change Successful!", "Your change was successful!", "success"); 
 			
          }
      });
@@ -77,7 +77,7 @@ $(document).ready(function(){
  {
 	$('#initiatorInput').val("");
 	$('#actionRequiredInput').val("");
-	$('#reference').val("");				
+	$('#reference').val('IM');				
 	$('#datetime1').val("");
 	$('#datetime2').val("");		
 	$('#noEndDateInput').val("");
@@ -105,7 +105,7 @@ $(document).ready(function(){
 
 		// Apply each element to the Date function
 		var timeNow = new Date(t[0], t[1], t[2], t[3], t[4], t[5]);
-		
+		/*
 		var year = timeNow.getFullYear();
 		var day = timeNow.getDate();
 		var month = timeNow.getMonth(); 
@@ -124,7 +124,10 @@ $(document).ready(function(){
 		timeString += "" + ((hours > 12) ? hours - 12 : hours);
 		timeString += ((minutes < 10) ? ":0" : ":") + minutes;
 		timeString += (hours >= 12) ? " PM" : " AM";
-		alert(dateTime);
+		//alert(dateTime);
+		*/
+		timeString = t[1] + '/' + t[2] + '/' + t[0] + ' ' + t[3] + ':' + t[4] + ':' + t[5];
+		
 		return timeString;
    }
    
@@ -302,6 +305,14 @@ $(document).on('click', '.add', function () {
 	
 	
 	
+	if (!checkIfEmptyAndValidateOnUpdateSend() )
+	{
+		return;
+	}
+		
+	
+	
+	
 		//ticketID = someData.EVENT_ID;
 		startTime = $('#datetime1').val();
 		endTime = $('#datetime2').val();
@@ -317,7 +328,7 @@ $(document).on('click', '.add', function () {
 		
 		swal({   
 	title: "Adding Event",   
-	text: "One moment while the eveny is being added to the database" ,   
+	text: "One moment while the event is being added to the database" ,   
 	type: "info",   
 	showCancelButton: false,   
 	closeOnConfirm: false,   
@@ -350,6 +361,11 @@ clearAllValues();
 // Insert or Add new event
 $(document).on('click', '.update', function () {
 	
+	if (!checkIfEmptyAndValidateOnUpdateSend() )
+	{
+		return;
+	}
+	
 	
 	
 		//EVENT_ID = someData.EVENT_ID;
@@ -357,7 +373,7 @@ $(document).on('click', '.update', function () {
 		endTime = $('#datetime2').val();
 		noEndTime = $('#noEndDateInput').is(':checked');
 		
-		alert('blah' + noEndTime);
+		//alert('blah' + noEndTime);
 		
 		//status = 'PENDING'; 
 		referenceData = $('#reference').val();
@@ -550,21 +566,90 @@ $(document).on('click', '.detailedView', function () {
 
 });
 
+function checkIfEmptyAndValidateOnUpdateSend()
+{
+
+
+	if ( $( "#initiatorInput" ).val() == '' )
+	{
+		$( "#initiatorInput" ).addClass( "error" );
+	}
+	
+	if($( "#actionRequiredInput" ).val() == '' )
+	{
+		$( "#actionRequiredInput" ).addClass( "error" );
+	}
+	
+	if ($( "#datetime1" ).val() == '')
+	{
+		$( "#datetime1" ).addClass( "error" );	
+	}
+	if ($( "#datetime2" ).val() == '' )
+	{
+		$( "#datetime2" ).addClass( "error" );
+	}	
+	
+	if ($( "#datetime2" ).val() <= $( "#datetime1" ).val() )
+	{
+		$( "#datetime2" ).addClass( "error" );
+	}	
+	
+	
+	if ( $( "#initiatorInput" ).hasClass( "error" ) ||
+	$( "#actionRequiredInput" ).hasClass( "error" ) ||
+	$( "#datetime1" ).hasClass( "error" ) ||
+	$( "#datetime2" ).hasClass( "error" ) )
+	{
+		swal("Oops", "Please fill out all required fields correctly", "error");
+		return false;
+	}
+	
+	
+	return true;
+}
+
+// Fix the issue where table columns were not updating when the window was resized.
+$( window ).resize(function() {
+  //alert('Resize has cicked off');
+  $('#table').bootstrapTable('resetView', '460');
+});
+
 
 function validation( aHtmlElementName, typeOfValidation )
 {
 	   
 	   // get value and assign to aHtmlValue
+	   var aHtmlValue = $(aHtmlElementName).val();
+	   
+	   
+	   //alert('The value is:' + aHtmlValue + ' The id is ' + aHtmlElementName.id );
+	   
 	   
 	   $.ajax({
 			 type: "POST",
 			 url: "lib/eventLogApi.php",
-			 data: { submit : 'VALIDATION', aHtmlElementName : aHtmlValue , TYPE : typeOfValidation },
+			 data: { submit : 'VALIDATION', OBJECT_NAME : aHtmlElementName.id, VALUE : aHtmlValue , TYPE : typeOfValidation },
 			 success: function(data){
-					
+					//alert(data);
 					var someData = JSON.parse(data);
 					
-					alert(someData.PASS_VALIDATION);
+					var passOrFail = someData.PASS_VALIDATION;
+					var cleanValue = someData.VALUE;
+				
+					
+					if (passOrFail == 'false')
+					{
+						//alert(someData.PASS_VALIDATION);
+						$(aHtmlElementName).addClass('error');
+						$(aHtmlElementName).val(cleanValue);
+					}
+					else
+					{
+						$(aHtmlElementName).removeClass('error');
+						$(aHtmlElementName).val(cleanValue);
+						
+					}
+					
 					
 			 }
 		 });

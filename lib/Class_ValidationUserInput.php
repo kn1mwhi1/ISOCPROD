@@ -200,8 +200,9 @@ class ValidationUserInput extends BaseDataBase
 		}
 	}
 	
-	public function validateDate($date,$format='m-d-Y H:i:s')
+	public function validateDate($nameOfObject,$format='m/d/Y h:i:s')
 	{
+		$date = $_POST[$nameOfObject];
 		
 		$d = DateTime::createFromFormat($format, $date);
 		return $d && $d->format($format) == $date;

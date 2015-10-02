@@ -95,7 +95,7 @@ $login->getNavBar();
 				<tr class="table-hover">
 				
 						<td id="initiatorTD"  name="initiatorTD" >
-						    <input class="form-control" style="width:210px" type="text" id="initiatorInput"  name="initiatorInput" />
+						    <input class="form-control" style="width:210px" type="text" id="initiatorInput"  name="initiatorInput" onblur="validation( this, 'ALL' );" />
 						</td>
 						<td id="referenceTD"  name="referenceTD" >
 						    <select name="reference" id="reference" class="form-control" style="width:125px">
@@ -108,14 +108,14 @@ $login->getNavBar();
 						</td>
 
 						<td id="actionRequiredTD" name="actionRequiredTD" >
-						    <textarea style="height:100px;width:250px" id="actionRequiredInput" name="actionRequiredInput" placeholder="Job Name" class="form-control"></textarea>
+						    <textarea style="height:100px;width:250px" id="actionRequiredInput" name="actionRequiredInput" placeholder="Job Name" class="form-control" onblur="validation( this, 'ALL' );"></textarea>
 						</td>
     				
 					
 					
 						<td id="startTime" name="startTime" >
 							<div class='input-group date' id='datetimepicker1'>
-								<input type='text' class="form-control" name='datetime1' id="datetime1" value="" />
+								<input type='text' class="form-control" name='datetime1' id="datetime1" value="" onblur="validation( this, 'ALL' );"/>
 									<span class="input-group-addon">
 									<span class="glyphicon glyphicon-calendar"></span>
 									</span>
@@ -128,7 +128,7 @@ $login->getNavBar();
 						<td id="endTime" name="endTime" class="table-hover">
 
 							<div class='input-group date'  id='datetimepicker2'>
-								<input type='text' class="form-control" name='datetime2' id="datetime2" value="" />
+								<input type='text' class="form-control" name='datetime2' id="datetime2" value="" onblur="validation( this, 'ALL' );" />
 									<span class="input-group-addon">
 									<span class="glyphicon glyphicon-calendar"></span>
 									</span>
