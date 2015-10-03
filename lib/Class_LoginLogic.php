@@ -80,7 +80,16 @@ class LoginLogic extends ValidationUserInput
 			// update last login time in database
 			$this->updateLastLogin();
 			
-			$url = $_SESSION['actual_link'];
+			
+			if (isset($_SESSION['actual_link']) )
+			{
+				$url = $_SESSION['actual_link'];
+			}
+			else
+			{
+				$url = 'dashboard.php';
+			}
+			
 			
 		session_write_close();
 			
@@ -441,6 +450,16 @@ class LoginLogic extends ValidationUserInput
 	{
 		session_start();
 		
+		
+		  /*   <-- !! not sure why the comment code does'nt work.
+		 if(!isset($_SESSION)) 
+		 {
+			session_start();
+		 }
+		 */
+		
+
+		
 		// Set the session time to 12 hours
 		$this->setSessionTime();
 		
@@ -645,7 +664,7 @@ class LoginLogic extends ValidationUserInput
 			session_start();
 		 }
 		 
-		 
+		 unset($_SESSION);
 
 		 
 		session_destroy();

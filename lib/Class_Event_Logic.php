@@ -229,6 +229,93 @@ class Event_Logic extends ValidationUserInput
 		$this->ToDB->saveToDB($sql);
 	}
 	
+	public function detectNotificationSendEmail()
+	{
+		$result = array();
+		$keys = array();
+		$values = array();
+		
+		
+		$currentTime = $this->getCurrentTime();
+		$plusFifteenMinutes = $this->get15Minutes();
+		$plusForteenMinutes = $this->get14Minutes();
+		
+		$sql = 'SELECT * FROM TB_ISOC_EVENT WHERE `STATUS` = "PENDING" AND `NOTIFICATION_SENT` = "NO" AND `START_DATETIME` BETWEEN "'.$plusFifteenMinutes.'" AND "'.$plusForteenMinutes.'"';
+		$result = $this->FromDB->multiRowAndFieldChangeToArrayAssociative($sql);
+		
+		if (isset($result['KEYS']))
+		{
+			// separate the multidimensional array
+			$keys = $result['KEYS'];
+			$values = $result['VALUES'];
+			
+			if (count($keys) != count($values) )
+			{
+				// some awesome for loop
+			}
+			else
+			{   
+				// send email with info needed and update the row  <-- calls the function to combine and create an associative array.
+				$this->updateNotificationSendEmail( $this->flipKeysValues($keys, $values) );
+			}
+		}
+		
+	}
+	
+	
+	// mainly used to change two numbered arrays one that represents the keys and one that represents the values and converts it to an associative array.
+	private function flipKeysValues ( $keys, $values )
+	{
+		$tempArray = array();
+		$tempKeys = array();
+		$tempValues = array();
+		
+		$tempKeys = $keys;
+		$tempValues = $values;
+		
+		$tempKeys = array_flip($tempKeys);
+		$tempKeys = array_keys($tempKeys);
+		$tempValues = array_values( $tempValues);
+		$tempArray = array_combine( $tempKeys, $tempValues);  // Combine all keys and values into one array
+		
+		return $tempArray;
+	}
+	
+	
+	private function iterateThroughMultipleNotifications($keys, $values )
+	{
+		$numberOfKeys = count($keys);
+		$tempAssociative = array();
+
+		
+		for($x=0; $x>$values; $x + $numberOfKeys)
+		{
+		   	for($i=0; $i>$numberOfKeys; $i++)
+			{
+				$tempAssociative[$key[$i]] = $values[$i];
+			}	
+				$this->updateNotificationSendEmail(tempAssociative);
+				unset($tempAssociative);
+		}
+	}
+	
+	private function updateNotificationSendEmail( $anAssocitiveArray )
+	{
+		
+		// Send email
+		
+		
+		
+		
+		// update row that notification has been sent (to avoid duplicate emails)
+		$updateArray = array("NOTIFICATION_SENT"=>"YES");
+		$whereArray = array("EVENT_ID"=>$anAssocitiveArray['EVENT_ID']);
+		$this->ToDB->updateRecordOneTable( $updateArray , $whereArray, 'equals', 'TB_ISOC_EVENT' ,'si' );
+	}
+	
+	
+	
+	
 	private function validateHtmlInput( $nameOfObject, $aType )
 	{
 		$value = $this->validation->validateInformation( $nameOfObject , $aType);
@@ -249,7 +336,7 @@ class Event_Logic extends ValidationUserInput
 		return date('Y-m-d H:i:s', strtotime( $aTime ));
 	}
 	
-	private function addEvent( $startDate, $endDate, $noEndDate, $status, $reference, $initiator, $actionRequired )
+	private function addEvent( $startDate, $endDate, $noEndDate, $status, $reference, $initiator, $actionRequired, $notification = 'NO' )
 	{
 		
 		if ($noEndDate == 'false')
@@ -263,12 +350,13 @@ class Event_Logic extends ValidationUserInput
 		
 		
 		$anArray = array("START_DATETIME"=>$startDate, "END_DATETIME"=>$endDate, "NO_ENDDATE" =>$noEndDate, "STATUS"=>$status, "REFERENCE"=>$reference, 
-					"INITIATOR"=>$initiator, "ACTION_REQUIRED"=>$actionRequired, "CREATOR_TECH"=>$_SESSION['ISOC_TECH_EMPLOYEE_ID'], "CREATE_DATETIME"=>$this->getCurrentTime());
+					"INITIATOR"=>$initiator, "ACTION_REQUIRED"=>$actionRequired, "CREATOR_TECH"=>$_SESSION['ISOC_TECH_EMPLOYEE_ID'], "CREATE_DATETIME"=>$this->getCurrentTime(), 
+					"NOTIFICATION_SENT"=>$notification);
 		
-		$this->ToDB->insertRecordOneTable( $anArray ,'TB_ISOC_EVENT', $fieldTypes = 'sssssssis' );
+		$this->ToDB->insertRecordOneTable( $anArray ,'TB_ISOC_EVENT', $fieldTypes = 'sssssssiss' );
 	}
 	
-	private function updateEvent( $aTicketNumber, $startDate, $endDate, $noEndDate, $reference, $initiator, $actionRequired )
+	private function updateEvent( $aTicketNumber, $startDate, $endDate, $noEndDate, $reference, $initiator, $actionRequired, $notification = 'NO' )
 	{
 		if ($noEndDate == 'false')
 		{
@@ -281,9 +369,9 @@ class Event_Logic extends ValidationUserInput
 		
 		
 		$updateArray = array("START_DATETIME"=>$startDate, "END_DATETIME"=>$endDate, "NO_ENDDATE" =>$noEndDate, "REFERENCE"=>$reference, 
-					"INITIATOR"=>$initiator, "ACTION_REQUIRED"=>$actionRequired);
+					"INITIATOR"=>$initiator, "ACTION_REQUIRED"=>$actionRequired, "NOTIFICATION_SENT"=>$notification);
 		$whereArray = array("EVENT_ID"=>$aTicketNumber);			
-		$this->ToDB->updateRecordOneTable( $updateArray , $whereArray, 'equals', 'TB_ISOC_EVENT' , 'ssssssi');
+		$this->ToDB->updateRecordOneTable( $updateArray , $whereArray, 'equals', 'TB_ISOC_EVENT' , 'sssssssi');
 		//$this->returnAjaxError();
 	}
 	
@@ -604,6 +692,33 @@ class Event_Logic extends ValidationUserInput
 	    $dateNow = date('Y-m-d H:i:s', time());
 		$date = new DateTime($dateNow);
 		$date->modify("+12 hours");
+		$date = $date->format("Y-m-d H:i:s");
+		$date = date('Y-m-d H:i:s', strtotime($date ));
+		// convert datetime to date object
+		
+		
+		return $date;
+	}
+	
+	
+	private function get15Minutes()
+	{
+	    $dateNow = date('Y-m-d H:i:s', time());
+		$date = new DateTime($dateNow);
+		$date->modify("+15 minutes");
+		$date = $date->format("Y-m-d H:i:s");
+		$date = date('Y-m-d H:i:s', strtotime($date ));
+		// convert datetime to date object
+		
+		
+		return $date;
+	}
+	
+	private function get14Minutes()
+	{
+	    $dateNow = date('Y-m-d H:i:s', time());
+		$date = new DateTime($dateNow);
+		$date->modify("+14 minutes");
 		$date = $date->format("Y-m-d H:i:s");
 		$date = date('Y-m-d H:i:s', strtotime($date ));
 		// convert datetime to date object

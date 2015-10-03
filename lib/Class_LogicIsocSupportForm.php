@@ -512,12 +512,12 @@ class LogicIsocSupportForm
 				// submit requester to DB
 				try
 				{
-					$customJavaFunctionConfirm = 'swal("Ticket Successfully Submitted!", "Your request ticket number is: '.$this->submitEntireRequesterToDB().'\n\nA summary email has been sent to your contact email.", "success");';
-					$customJavaFunctionCanceled = 'swal("Cancelled", "Ticket submission cancelled.", "error");';
+					//$customJavaFunctionConfirm = 'swal("Ticket Successfully Submitted!", "Your request ticket number is: '.$this->submitEntireRequesterToDB().'\n\nA summary email has been sent to your contact email.", "success");';
+					//$customJavaFunctionCanceled = 'swal("Cancelled", "Ticket submission cancelled.", "error");';
 					
 					
-					
-					$this->popup->addTomessagePopUp( 'OK' , 'Ticket Successfully Submitted!' , 'Your request ticket number is: '.$this->submitEntireRequesterToDB().'  \n\nA summary email has been sent to your contact email.', 'success' );
+					$getNewTicketNumber = $this->submitEntireRequesterToDB();
+					$this->popup->addTomessagePopUp( 'OK' , 'Ticket Successfully Submitted!' , 'Your request ticket number is: '.$getNewTicketNumber.'  \n\nA summary email has been sent to your contact email.', 'success' );
 					/*
 					$this->popup->addToDoublemessagePopup( 'DOUBLECONFIRM', 'Submit a new request' , 'Press OK to submit a new request.',
 					'warning', 'Submit New Request!', 'Cancel', $customJavaFunctionConfirm, $customJavaFunctionCanceled );
@@ -549,7 +549,7 @@ class LogicIsocSupportForm
 							session_start();
 						 }
 						 
-						 $_SESSION['ALERT'] = '<script>swal("Ticket Successfully Submitted!", "Your request ticket number is: '.$this->submitEntireRequesterToDB().'\n\nA summary email has been sent to your contact email.", "success");</script>';
+						 $_SESSION['ALERT'] = '<script>swal("Ticket Successfully Submitted!", "Your request ticket number is: '.$getNewTicketNumber.'\n\nA summary email has been sent to your contact email.", "success");</script>';
 						 
 
 				
@@ -981,7 +981,7 @@ class LogicIsocSupportForm
 			echo 'hide';	
 		}
 		
-		if ($_SESSION['ISOC_TECH_EMPLOYEE_ID'] == $this->responseData['ISOC_TECH_EMPLOYEE_ID'])
+		if (isset($_SESSION['ISOC_TECH_EMPLOYEE_ID']) && isset($this->responseData['ISOC_TECH_EMPLOYEE_ID']) && $_SESSION['ISOC_TECH_EMPLOYEE_ID'] == $this->responseData['ISOC_TECH_EMPLOYEE_ID'])
 		{
 			echo 'hide';	
 		}
@@ -1175,6 +1175,8 @@ private function hideButtonCancel()
 				if ( isset($tempTicketInfo['REQUEST_TICKET_NUMBER']) && $tempTicketInfo['REQUEST_TICKET_NUMBER'] != '')
 				{
 					$tempTicketMeta = $this->FromDB->getOneRowWhereEquals( 'TB_SUPPORT_FORM_METADATA' , 'REQUEST_TICKET_NUMBER', $aTicketNumber );
+					
+						
 					$tempRequester = $this->FromDB->getOneRowWhereEquals( 'TB_SUPPORT_FORM_REQUESTER', 'REQUESTER_ID' , $tempTicketInfo['REQUESTER_ID'] );
 					
 					// Checks if a Tech has been assiged, if not assigns the Tech pulling up the ticket (from log in)
@@ -1185,8 +1187,22 @@ private function hideButtonCancel()
 					
 					$tempTechID = $this->FromDB->getOneRowWhereEquals( 'TB_ISOC_TECHS', 'ISOC_TECH_EMPLOYEE_ID' , $tempTicketMeta['ISOC_TECH_ID_ASSIGNED'] );
 					
-				
+				/*** not sure about these changes   There is an issue when there is no ticket that matches with the metadata
+					if (!isset($tempTicketMeta['REQUEST_SUBMISSION_DATETIME']) )
+					{
+						$tempTicketMeta['REQUEST_SUBMISSION_DATETIME'] = $this->getCurrentTime();
+					}
 					
+					if (!isset($tempTicketMeta['REQUEST_ACCEPT_DATETIME']) )
+					{
+						$tempTicketMeta['REQUEST_ACCEPT_DATETIME'] = $this->getCurrentTime();
+					}
+					
+					if (!isset($tempTicketMeta['REQUEST_COMPLETION_DATETIME']) )
+					{
+						$tempTicketMeta['REQUEST_COMPLETION_DATETIME'] = '';
+					}					
+					*/
 
 					// RECORD DATE AND TIMES
 					$_SESSION['REQUEST_SUBMISSION_DATETIME']= $tempTicketMeta['REQUEST_SUBMISSION_DATETIME'];
@@ -1233,6 +1249,8 @@ private function hideButtonCancel()
 			// Update initial accept time and send an email to the requester if it has not been done.
 			if (!isset( $temp['REQUEST_ACCEPT_DATETIME'] ) )
 			{
+			
+				$this->responseData['REQUEST_ACCEPT_DATETIME'] = $_SESSION['REQUEST_ACCEPT_DATETIME']= date( 'H:i:s m/d/Y', strtotime($dateTimeNow) );
 				$updateTemp = array("REQUEST_ACCEPT_DATETIME" => $dateTimeNow, "ISOC_TECH_ID_ASSIGNED" => $_SESSION['ISOC_TECH_EMPLOYEE_ID'] );
 				$whereArray = array("REQUEST_TICKET_NUMBER"=> $aTicketNumber);
 				
@@ -1714,7 +1732,13 @@ private function hideButtonCancel()
 	}
 
 
-
+	private function getCurrentTime()
+	{
+		$date = date('Y-m-d H:i:s', time());
+	
+		
+		return $date;
+	}
 
 
 

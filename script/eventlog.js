@@ -102,6 +102,7 @@ $(document).ready(function(){
     $('#actionRequiredInput').removeClass('error');
 	 $('#datetime1').removeClass('error');
 	  $('#datetime2').removeClass('error');
+	  $( "#datetimepicker2" ).show();
  }
  
 
@@ -573,7 +574,7 @@ $(document).on('click', '.detailedView', function () {
 					//	$( ".activeButton" ).show();
 					}
 				
-					 
+					
 
 					
 			 }

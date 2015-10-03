@@ -13,20 +13,20 @@ ul.countdown li {
 display: inline-block;
 }
 ul.countdown li span {
-font-size: 18px;
+font-size: 16px;
 font-weight: 150;
 line-height: 18px;
 color: white;
 }
 ul.countdown li.seperator {
-font-size: 18px;
+font-size: 16px;
 line-height: 18px;
 vertical-align: top;
 color: white;
 }
 ul.countdown li p {
 color: #a7abb1;
-font-size: 14px;
+font-size: 12px;
 }
 
 .timer{

@@ -42,16 +42,7 @@ body {
 */
 
 
- .btn-green{
-background-color: #66C285;
-color: #FFFFFF;
-outline-color: #66C285;
 
-}
-
-.btn-info{
-color:#FFFFFF;
-}
 
 .other{
 	margin-top: 5px;
@@ -91,14 +82,6 @@ textarea {
 	margin-left: 5px;
 }
 
-.highlight{
-	background-color: black;
-	font: white;
-}
-
-.btn:focus, .btn:hover {
-  background-color: black;
-}
 
 thead{
 	    color: #FFFFFF;
@@ -199,5 +182,80 @@ thead{
 display:block;
 }
 
+.btn:highlight{
+	font: white;
+}
+.btn-green{
+background-color: #66C285;
+color: white;
+}
+ .btn-green:hover,
+ .btn-green:active{
+background: #1e1e1e;
+border-color: #66C285;
+color: #66C285;
 
+ }
 
+.btn:focus, .btn:hover {
+  background-color: #1e1e1e;
+  }
+
+.btn-clear{
+background-color: #bc9b74;
+color: white;
+}
+ .btn-clear:hover,
+ .btn-clear:active{
+background: #1e1e1e;
+border-color: #bc9b74;
+color: #bc9b74;
+ }
+ 
+ .btn-update{
+ background-color: #5993cd;
+ color: white;
+ }
+ .btn-update:hover,
+ .btn-update:active{
+background: #1e1e1e;
+border-color: #5993cd;
+color: #5993cd;
+ }
+ 
+/* twelve hour btn*/ 
+ .btn-bottomnavbtn{
+ background-color:#white;
+ color: #68351a;
+  }
+  
+ .btn-bottomnavbtn:hover,
+ .btn-bottomnavbtn:active{
+background: #1e1e1e;
+border-color:#68351a;
+color: white;
+ }
+ 
+ .btn-toprowbtn{
+background-color:#70818a;
+color:white;
+border-color: #70818a;
+ }
+ .btn-toprowbtn:hover,
+ .btn-toprowbtn:active{
+background: #1e1e1e;
+border-color: #70818a;
+color: #5993cd;
+ }
+ 
+ .btn-everyonebtn{
+background-color:#8a7074;
+color: white;
+border-color: #8a7074;
+ }
+  .btn-everyonebtn:hover,
+ .btn-everyonebtn:active{
+background: #1e1e1e;
+border-color: #8a7074;
+color: #bc4154;
+ }

@@ -117,18 +117,23 @@ $Login->getNavBar();
 				<li> <span class="days"id="days">00</span>
 				<p class="days_ref">days</p>
 				</li>
+				
 				<li class="seperator">.</li>
 				<li> <span class="hours" id="hours">00</span>
 				<p class="hours_ref">hours</p>
 				</li>
+				
 				<li class="seperator">:</li>
 				<li> <span class="minutes" id="minutes">00</span>
 				<p class="minutes_ref">minutes</p>
 				</li>
+				
 				<li class="seperator">:</li>
 				<li> <span class="seconds" id="seconds">00</span>
 				<p class="seconds_ref">seconds</p>
 				</li>
+				
+				
 				</ul>
 		  </div>
 		  
@@ -190,7 +195,7 @@ $Login->getNavBar();
 </form>
 
 
-<!--<span id="hours">0</span>:<span id="minutes">0</span>:<span id="seconds">0</span>-->
+<!--<span id="hours">0</span>:<span id="minutes">0</span>:<span id="seconds">0</span> -->
 <script type="text/javascript">
 
 //alert('kicking off');
@@ -213,7 +218,6 @@ $Login->getNavBar();
 			 $('#hours').html(data[1]);
              $('#minutes').html(data[2]);
              $('#seconds').html(data[3]);
-		
          }
      });
  }

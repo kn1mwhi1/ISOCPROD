@@ -10,11 +10,11 @@ $TierTwo = new LoginLogic();
 <script type="text/javascript" src="script/jquery.js"></script>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script type="text/javascript" src="script/sweetalert.min.js"></script>
-<script type="text/javascript" src="script/cookies.js"></script>
+
 <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
 <link rel="stylesheet" type="text/css" href="css/sweetalert.css" />
-<link rel="stylesheet" type="text/css" href="css/errorCSS.css" />
-<link rel="stylesheet" type="text/css" href="css/customCss.css" />
+
+
 <script>
 loadCookies();
 </script>
