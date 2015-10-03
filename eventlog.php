@@ -95,7 +95,7 @@ $login->getNavBar();
 				<tr class="table-hover">
 				
 						<td id="initiatorTD"  name="initiatorTD" >
-						    <input class="form-control" style="width:210px" type="text" id="initiatorInput"  name="initiatorInput" onblur="validation( this, 'ALL' );" />
+						    <input class="form-control" style="width:210px" type="text" id="initiatorInput"  placeholder="Individual or Team" name="initiatorInput" onblur="validation( this, 'ALL' );" />
 						</td>
 						<td id="referenceTD"  name="referenceTD" >
 						    <select name="reference" id="reference" class="form-control" style="width:125px">
@@ -108,7 +108,7 @@ $login->getNavBar();
 						</td>
 
 						<td id="actionRequiredTD" name="actionRequiredTD" >
-						    <textarea style="height:100px;width:250px" id="actionRequiredInput" name="actionRequiredInput" placeholder="Job Name" class="form-control" onblur="validation( this, 'ALL' );"></textarea>
+						    <textarea style="height:100px;width:250px" id="actionRequiredInput" name="actionRequiredInput" placeholder="Action asked to complete" class="form-control" onblur="validation( this, 'ALL' );"></textarea>
 						</td>
     				
 					

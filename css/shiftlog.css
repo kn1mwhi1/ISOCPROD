@@ -1,5 +1,4 @@
 
-
 .table-sortable tbody tr {
     cursor: move;
 }
@@ -24,6 +23,24 @@ body {
    
 	  top: 20px;
 }
+
+/*
+.header {
+       
+		text-align: center;
+        font-family: Helvetica;
+        font-variant: small-caps;
+        color: #FFFFFF;
+        border-radius: 10px;
+        background: #66C285;
+		margin-bottom: 0px;
+		margin-top: 0px;
+        width: auto;
+        height: auto;
+	
+}
+*/
+
 
  .btn-green{
 background-color: #66C285;
@@ -56,36 +73,21 @@ textarea {
     height: 1000px;
 }
 
-.update{
+.updateCall{
 	display: none;
 	margin-left: 10px;
 }
 
-.add{
+.addCall{
 	margin-left: 10px;
 }
 
-.complete, .activeButton{
-	margin-right: 10px;
-}
-
-
-
-
-
-
-#datetimepicker2{
+#datetimepickerDiv{
 	width: 200px;
 	
 }
 
-#datetimepicker1{
-	width: 200px;
-	
-}
-
-
-.detailedView{
+.everyoneView{
 	margin-left: 5px;
 }
 
@@ -117,35 +119,9 @@ thead{
 		animation: blinkRed 2.0s infinite;
 		color: white;
 }
-@-webkit-keyframes blinkRed {
-    from { background-color: #F00; }
-    50% { background-color: #A00; box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #441313 0 -1px 9px, rgba(255, 0, 0, 0.5) 0 2px 0;}
-    to { background-color: #F00; }
-}
-
-@-moz-keyframes blinkRed {
-    from { background-color: #F00; }
-    50% { background-color: #A00; box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #441313 0 -1px 9px, rgba(255, 0, 0, 0.5) 0 2px 0;}
-    to { background-color: #F00; }
-}
-@-ms-keyframes blinkRed {
-    from { background-color: #F00; }
-    50% { background-color: #A00; box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #441313 0 -1px 9px, rgba(255, 0, 0, 0.5) 0 2px 0;}
-    to { background-color: #F00; }
-}
-@-o-keyframes blinkRed {
-    from { background-color: #F00; }
-    50% { background-color: #A00; box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #441313 0 -1px 9px, rgba(255, 0, 0, 0.5) 0 2px 0;}
-    to { background-color: #F00; }
-}
-@keyframes blinkRed {
-    from { background-color: #F00; }
-    50% { background-color: #A00; box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #441313 0 -1px 9px, rgba(255, 0, 0, 0.5) 0 2px 0;}
-    to { background-color: #F00; }
-}
 
  
-.normalView, .detailedView{
+.selfView, .everyoneView{
 	position: relative;
     top: 55px;
 	z-index:4;
@@ -156,13 +132,6 @@ thead{
 	width: auto;	
 }
 
-
-.completeMenu{
-	position: relative;
-    bottom: 10px;
-	width:500px;
-	height: 100px;
-}
 
 .nodisplay{
 	display: none;
@@ -177,20 +146,7 @@ thead{
 }
 
 
-.header {
-       
-		text-align: center;
-        font-family: Helvetica;
-        font-variant: small-caps;
-        color: #FFFFFF;
-        border-radius: 10px;
-        background: #66C285;
-		margin-bottom: 0px;
-		margin-top: 0px;
-        width: auto;
-        height: auto;
-	
-}
+
 
 .navbarCustom{
 	
@@ -242,4 +198,6 @@ thead{
 .block{
 display:block;
 }
+
+
 

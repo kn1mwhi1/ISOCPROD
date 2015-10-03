@@ -631,6 +631,7 @@ function checkIfEmptyAndValidateOnUpdateSend()
 }
 
 // Fix the issue where table columns were not updating when the window was resized.
+
 $( window ).resize(function() {
   //alert('Resize has cicked off');
   $('#table').bootstrapTable('resetView', '460');
