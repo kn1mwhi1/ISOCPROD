@@ -223,7 +223,9 @@ class Event_Logic extends ValidationUserInput
 			// separate the multidimensional array
 			$keys = $result['KEYS'];
 			$values = $result['VALUES'];
-			
+			// A value will return an array:
+			//   0)EVENT_ID   1) START_DATETIME  2) END_DATETIME  3) NO_ENDDATE  4)STATUS  5)REFERENCE  6)INITIATOR 7)ACTION_REQUIRED 8)CREATOR_TECH 9)CREATE_DATETIME 10)NOTIFICATION_SENT
+			//   11)COMPLETION_NOTES  12)COMPLETION_TECH  13)REQUEST_TICKET
 			//print_r($result['VALUES']);
 			$this->iterateThroughMultipleNotifications($keys, $values, $subject, $notificationMessage, $serverIpName );
 			
@@ -248,8 +250,14 @@ class Event_Logic extends ValidationUserInput
 				// create the row 
 				$tempAssociative[$keys[$i]] = $values[$i+$x];
 			}	
+				
+				
+					// A value will return an array:
+			//   0)EVENT_ID   1) START_DATETIME  2) END_DATETIME  3) NO_ENDDATE  4)STATUS  5)REFERENCE  6)INITIATOR 7)ACTION_REQUIRED 8)CREATOR_TECH 9)CREATE_DATETIME 10)NOTIFICATION_SENT
+			//   11)COMPLETION_NOTES  12)COMPLETION_TECH  13)REQUEST_TICKET
+				
 				// combine data elements to create an array that will represent the info to send an email.
-				$emailArray = array($subject,$notificationMessage,$values[0],$values[1],$values[2],$values[3],$values[4],$values[5],$serverIpName);
+				$emailArray = array($subject,$notificationMessage,$values[0],$values[1],$values[2],$values[7],$values[6],$values[5],$serverIpName);
 				// send to 
 				$this->updateNotificationSendEmail($tempAssociative , $emailArray);
 				unset($tempAssociative);
@@ -259,7 +267,7 @@ class Event_Logic extends ValidationUserInput
 	
 	private function updateNotificationSendEmail( $anAssocitiveArray, $emailArray )
 	{
-		// Send email  // 0->$subject, 1->$notificationMessage, 2->$eventID, 3->$startTime, 4->$endTime, 5->$actionRequired, 6->$initiator,7->$reference, 8->$serverIpName
+		// Send email  // 0->$subject, 1->$notificationMessage,                2->$eventID,   3->$startTime,     4->$endTime, 5->$actionRequired, 6->$initiator,7->$reference, 8->$serverIpName
 		$this->email->eventLogHTMLEmailBody( $emailArray[0], $emailArray[1], $emailArray[2], $emailArray[3], $emailArray[4], $emailArray[5], $emailArray[6], $emailArray[7], $emailArray[8]);
 		
 		// update row that notification has been sent (to avoid duplicate emails)
