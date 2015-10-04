@@ -36,55 +36,6 @@ class Event_Logic extends ValidationUserInput
 	}
 	
 	
-	
-	// custom methods determined by fields on form
-	private function callValidationMethodsLoginForm()
-	{
-		$temp = array();
-		
-		$temp[] = $this->validation->validateInformation( 'username' , 'ALL');
-		$temp[] = $this->validation->validateInformation( 'password' , 'ALL');
-		
-		foreach ($temp as $value)
-		{
-			if ($value === false)
-			{
-				//echo "The Value is:  ".$value;
-				return false;
-			}
-		}
-		// all items have passed validation
-		return true;
-	}
-	
-
-	
-	
-	
-	private function callValidationMethodsRegisterForm()
-	{
-		$temp = array();
-		
-		$temp[] = $this->validation->validateInformation( 'email' , 'ALL');
-		$temp[] = $this->validation->validateInformation( 'id' , 'ALL');
-		$temp[] = $this->validation->validateInformation( 'firstname' , 'LETTER');
-		$temp[] = $this->validation->validateInformation( 'lastname' , 'LETTER');
-		$temp[] = $this->validation->validateInformation( 'passwd' , 'ALL');
-		$temp[] = $this->validation->validateInformation( 'secretWord' , 'ALL');
-		
-		
-		foreach ($temp as $value)
-		{
-			if ($value === false)
-			{
-				//echo "The Value is:  ".$value;
-				return false;
-			}
-		}
-		// all items have passed validation
-		return true;
-	}
-	// not sure if this will be needed
 	public function addNotifyMessage( $CustomType, $title , $text, $type, $confirmButtonText, $customJavaFunction)
 	{
         $this->messagePopup->addTomessagePopUp( $CustomType, $title , $text, $type, $confirmButtonText , $customJavaFunction);
@@ -213,19 +164,19 @@ class Event_Logic extends ValidationUserInput
 		$currentTime = $this->getCurrentTime();
 		
 		// Change Pending to ACTIVE by start time
-		$sql = 'UPDATE TB_ISOC_EVENT SET `STATUS` = "ACTIVE" WHERE `STATUS` = "PENDING" AND `START_DATETIME` <= "'.$currentTime.'"';
+		$sql = 'UPDATE TB_ISOC_EVENT SET `STATUS` = "ACTIVE", `NOTIFICATION_SENT` = "NO" WHERE `STATUS` = "PENDING" AND `START_DATETIME` <= "'.$currentTime.'"';
 		$this->ToDB->saveToDB($sql);
 		
 		// Change Active to Pending by start time
-		$sql = 'UPDATE TB_ISOC_EVENT SET `STATUS` = "PENDING" WHERE `STATUS` = "ACTIVE" AND `START_DATETIME` > "'.$currentTime.'"';
+		$sql = 'UPDATE TB_ISOC_EVENT SET `STATUS` = "PENDING", `NOTIFICATION_SENT` = "NO" WHERE `STATUS` = "ACTIVE" AND `START_DATETIME` > "'.$currentTime.'"';
 		$this->ToDB->saveToDB($sql);
 		
 		// Look for end time and change to Expired
-		$sql = 'UPDATE TB_ISOC_EVENT SET `STATUS` = "EXPIRED" WHERE `STATUS` = "ACTIVE" AND `END_DATETIME` <= "'.$currentTime.'"';
+		$sql = 'UPDATE TB_ISOC_EVENT SET `STATUS` = "EXPIRED", `NOTIFICATION_SENT` = "NO" WHERE `STATUS` = "ACTIVE" AND `END_DATETIME` <= "'.$currentTime.'"';
 		$this->ToDB->saveToDB($sql);
 		
 		// Change Expired to Active when someone adds more time to end time.
-		$sql = 'UPDATE TB_ISOC_EVENT SET `STATUS` = "ACTIVE" WHERE `STATUS` = "EXPIRED" AND `END_DATETIME` > "'.$currentTime.'"';
+		$sql = 'UPDATE TB_ISOC_EVENT SET `STATUS` = "ACTIVE" , `NOTIFICATION_SENT` = "NO" WHERE `STATUS` = "EXPIRED" AND `END_DATETIME` > "'.$currentTime.'"';
 		$this->ToDB->saveToDB($sql);
 		
 		
