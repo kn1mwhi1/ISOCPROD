@@ -7,6 +7,9 @@ require_once 'Class_ErrorPopup.php';
 
 class Event_Logic extends ValidationUserInput
 {
+	//Constant
+	private $SERVERIP = '10.176.105.13';
+	
 	private $FromDB;
 	private $ToDB;
 	private $email;
@@ -185,9 +188,9 @@ class Event_Logic extends ValidationUserInput
 		$currentTime = $this->getCurrentTime();
 		$plusFifteenMinutes = $this->get15Minutes();
 		//$plusForteenMinutes = $this->get14Minutes();
-		$subject = '';
+		$subject = 'An Event is about to start within 15 minutes.';
 		$notificationMessage = 'An Event is about to start in 15 minutes.';
-		$serverIpName = '';
+		$serverIpName = $this->SERVERIP; 
 		$sql = 'SELECT * FROM TB_ISOC_EVENT WHERE `STATUS` = "PENDING" AND `NOTIFICATION_SENT` = "NO" AND `START_DATETIME` BETWEEN "'.$currentTime.'" AND "'.$plusFifteenMinutes.'"';
 		$this->detectNotificationSendEmail($sql, $subject, $notificationMessage, $serverIpName );
 		
@@ -198,7 +201,7 @@ class Event_Logic extends ValidationUserInput
 		//$plusForteenMinutes = $this->get14Minutes();
 		$subject = 'An Event has expired.';
 		$notificationMessage = 'An Event has expired.  Please complete the event or inquire into extending the event.';
-		$serverIpName = '';
+		$serverIpName = $this->SERVERIP; 
 		$sql = 'SELECT * FROM TB_ISOC_EVENT WHERE `STATUS` = "EXPIRED" AND `NOTIFICATION_SENT` = "NO" AND `END_DATETIME` <= "'.$currentTime.'"';
 		$this->detectNotificationSendEmail($sql, $subject, $notificationMessage, $serverIpName );
 	}
