@@ -227,21 +227,39 @@ class Event_Logic extends ValidationUserInput
 		// Change Expired to Active when someone adds more time to end time.
 		$sql = 'UPDATE TB_ISOC_EVENT SET `STATUS` = "ACTIVE" WHERE `STATUS` = "EXPIRED" AND `END_DATETIME` > "'.$currentTime.'"';
 		$this->ToDB->saveToDB($sql);
+		
+		
+		/*
+		// Send Email for any PENDING items (15 to 14 minutes)
+		$currentTime = $this->getCurrentTime();
+		$plusFifteenMinutes = $this->get15Minutes();
+		$plusForteenMinutes = $this->get14Minutes();
+		$subject = '';
+		$notificationMessage = '';
+		$serverIpName = '';
+		$sql = 'SELECT * FROM TB_ISOC_EVENT WHERE `STATUS` = "PENDING" AND `NOTIFICATION_SENT` = "NO" AND `START_DATETIME` BETWEEN "'.$currentTime.'" AND "'.$plusFifteenMinutes.'"';
+		$this->detectNotificationSendEmail($sql, $subject, $notificationMessage, $serverIpName );
+		*/
+		
+		
+		
+		
 	}
 	
-	public function detectNotificationSendEmail()
+	
+	private function detectNotificationSendEmail($sql, $subject, $notificationMessage, $serverIpName )
 	{
 		$result = array();
 		$keys = array();
 		$values = array();
 		
-		
 		$currentTime = $this->getCurrentTime();
 		$plusFifteenMinutes = $this->get15Minutes();
 		$plusForteenMinutes = $this->get14Minutes();
 		
-		$sql = 'SELECT * FROM TB_ISOC_EVENT WHERE `STATUS` = "PENDING" AND `NOTIFICATION_SENT` = "NO" AND `START_DATETIME` BETWEEN "'.$plusFifteenMinutes.'" AND "'.$plusForteenMinutes.'"';
+		
 		$result = $this->FromDB->multiRowAndFieldChangeToArrayAssociative($sql);
+		//print_r($result);
 		
 		if (isset($result['KEYS']))
 		{
@@ -249,15 +267,22 @@ class Event_Logic extends ValidationUserInput
 			$keys = $result['KEYS'];
 			$values = $result['VALUES'];
 			
+			//print_r($result['VALUES']);
+			$this->iterateThroughMultipleNotifications($keys, $values, $subject, $notificationMessage, $serverIpName );
+			
+			
+			/*
 			if (count($keys) != count($values) )
 			{
-				// some awesome for loop
+				
 			}
 			else
 			{   
 				// send email with info needed and update the row  <-- calls the function to combine and create an associative array.
 				$this->updateNotificationSendEmail( $this->flipKeysValues($keys, $values) );
 			}
+			
+			*/
 		}
 		
 	}
@@ -282,31 +307,39 @@ class Event_Logic extends ValidationUserInput
 	}
 	
 	
-	private function iterateThroughMultipleNotifications($keys, $values )
+	private function iterateThroughMultipleNotifications($keys, $values, $subject, $notificationMessage, $serverIpName )
 	{
 		$numberOfKeys = count($keys);
 		$tempAssociative = array();
-
-		
-		for($x=0; $x>$values; $x + $numberOfKeys)
+			 print_r($values);
+		// iterate through each row
+		for($x=0; $x<count($values); $x + $numberOfKeys)
 		{
-		   	for($i=0; $i>$numberOfKeys; $i++)
+		   	echo "$x";
+			
+			for($i=0; $i<$numberOfKeys; $i++)
 			{
-				$tempAssociative[$key[$i]] = $values[$i];
+				
+				// create the row 
+				$tempAssociative[$keys[$i]] = $values[$i];
 			}	
-				$this->updateNotificationSendEmail(tempAssociative);
+				
+				    print_r($tempAssociative);
+				// combine data elements to create an array that will represent the info to send an email.
+				$emailArray = array($subject,$notificationMessage,$values[0],$values[1],$values[2],$values[3],$values[4],$values[5],$serverIpName);
+				// send to 
+				$this->updateNotificationSendEmail($tempAssociative , $emailArray);
 				unset($tempAssociative);
 		}
 	}
 	
-	private function updateNotificationSendEmail( $anAssocitiveArray )
+	
+	private function updateNotificationSendEmail( $anAssocitiveArray, $emailArray )
 	{
-		
-		// Send email
-		
-		
-		
-		
+		// Send email  // 0->$subject, 1->$notificationMessage, 2->$eventID, 3->$startTime, 4->$endTime, 5->$actionRequired, 6->$initiator,7->$reference, 8->$serverIpName
+		$this->email->eventLogHTMLEmailBody( $emailArray[0], $emailArray[1], $emailArray[2], $emailArray[3], $emailArray[4], $emailArray[5], $emailArray[6], $emailArray[7], $emailArray[8]);
+		print_r($emailArray);
+		print_r($anAssocitiveArray);
 		// update row that notification has been sent (to avoid duplicate emails)
 		$updateArray = array("NOTIFICATION_SENT"=>"YES");
 		$whereArray = array("EVENT_ID"=>$anAssocitiveArray['EVENT_ID']);
