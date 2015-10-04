@@ -8,6 +8,8 @@ document.write('<script type="text/javascript" src="script/sweetalert.min.js"></
 
 
 // function to show calendar
+
+// maybe this one:  http://tarruda.github.io/bootstrap-datetimepicker/
 $(function () {	
 	$('#datetimepicker1').datetimepicker({
 		
@@ -16,8 +18,7 @@ $(function () {
 	});
 	
 	});
-	
-	
+
 	
 	$(function () {	
 	$('#datetimepicker2').datetimepicker({

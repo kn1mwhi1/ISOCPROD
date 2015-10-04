@@ -114,12 +114,26 @@ $login->getNavBar();
 					
 					
 						<td id="startTime" name="startTime" >
+							
 							<div class='input-group date' id='datetimepicker1'>
 								<input type='text' class="form-control" name='datetime1' id="datetime1" value="" onblur="validation( this, 'ALL' );"/>
 									<span class="input-group-addon">
 									<span class="glyphicon glyphicon-calendar"></span>
 									</span>
 							</div>
+							
+							<!--
+							<div class="well">
+							  <div id="datetimepicker1" class="input-append date">
+								<input name='datetime1' id="datetime1" data-format="dd/MM/yyyy hh:mm:ss" type="text" onblur="validation( this, 'ALL' );"></input>
+								<span class="add-on">
+								  <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+								  </i>
+								</span>
+							  </div>
+							</div>
+							-->
+							
 							  
 						</td>
 						

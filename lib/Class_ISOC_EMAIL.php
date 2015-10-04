@@ -119,7 +119,7 @@ class ISOC_EMAIL
 	{
 		// Always set content-type when sending HTML email
 		// More headers
-		$headers .= 'From: Event Log <ISOperationsCenter@uscellular.com>' . "\n";
+		$headers = 'From: Event Log <ISOperationsCenter@uscellular.com>' . "\n";
 		$headers .= "MIME-Version: 1.0 \n";
 		$headers .= "Content-Type: text/html; charset=ISO-8859-1 \n";
 		
