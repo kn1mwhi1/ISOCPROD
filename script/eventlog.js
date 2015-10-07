@@ -303,6 +303,10 @@ $(document).on('click', '.complete', function () {
 									url: 'lib/eventLogApi.php',
 									data:{ submit : 'COMPLETED', EVENT_ID : ticketID, COMPLETION_NOTES : completeNotes }
 								  })
+									  
+									  
+									  
+									  
 									  .done(function(data) {
 										swal("Success!", "The event has been successfully completed.", "success");
 									

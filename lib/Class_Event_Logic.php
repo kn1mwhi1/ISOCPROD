@@ -139,6 +139,7 @@ class Event_Logic extends ValidationUserInput
 
 								$_POST['START_DATETIME'] = $this->convertJavaTimeToPHPTime($_POST['START_DATETIME'] );
 								$_POST['END_DATETIME'] = $this->convertJavaTimeToPHPTime($_POST['END_DATETIME'] );
+								$_POST['ACTION_REQUIRED'] = str_replace(array("\\r\\n", "\\r", "\\n"), "<br />", $_POST['ACTION_REQUIRED']);  
 								$this->addEvent($_POST['START_DATETIME'], $_POST['END_DATETIME'], $_POST['NO_ENDDATE'], $_POST['STATUS'], $_POST['REFERENCE'], $_POST['INITIATOR'], $_POST['ACTION_REQUIRED']);
 								$this->updateStatusDynamic();
 						break;
@@ -146,6 +147,7 @@ class Event_Logic extends ValidationUserInput
 								
 								$_POST['START_DATETIME'] = $this->convertJavaTimeToPHPTime($_POST['START_DATETIME'] );
 								$_POST['END_DATETIME'] = $this->convertJavaTimeToPHPTime($_POST['END_DATETIME'] );
+								$_POST['ACTION_REQUIRED'] = str_replace(array("\\r\\n", "\\r", "\\n"), "<br />", $_POST['ACTION_REQUIRED']);
 								$this->updateEvent($_POST['EVENT_ID'], $_POST['START_DATETIME'], $_POST['END_DATETIME'], $_POST['NO_ENDDATE'],$_POST['REFERENCE'], $_POST['INITIATOR'], $_POST['ACTION_REQUIRED']);
 								$this->updateStatusDynamic();
 						break;
@@ -365,9 +367,10 @@ class Event_Logic extends ValidationUserInput
 	
 	private function updateComplete( $aTicketNumber, $notes)
 	{
-		$updateArray = array("STATUS"=>"COMPLETED","COMPLETION_NOTES"=>$notes, "COMPLETION_TECH"=>$_SESSION['ISOC_TECH_EMPLOYEE_ID'], "COMPLETION_TIMEDATE"=>$this->getCurrentTime() );
+		$currentTime = $this->getCurrentTime();
+		$updateArray = array("STATUS"=>"COMPLETED","COMPLETION_NOTES"=>$notes, "COMPLETION_TECH"=>$_SESSION['ISOC_TECH_EMPLOYEE_ID'], "COMPLETION_TIMEDATE"=>$currentTime);
 		$whereArray = array("EVENT_ID"=>$aTicketNumber);
-		
+		print_r($updateArray);
 		$this->ToDB->updateRecordOneTable( $updateArray , $whereArray, 'equals', 'TB_ISOC_EVENT' , 'ssisi');
 	}
 	

@@ -162,12 +162,12 @@ $login->getNavBar();
 	</form>
 	
 	<script type="text/javascript" src="script/jquery-2.1.1.min.js"></script>
-	<script src="script/turnover.js"></script>
-	<script src="script/createTurnover.js"></script>
 	<script type="text/javascript" src="script/bootstrap.min.js"></script>
 	<script type="text/javascript" src="script/moment-with-locales.js"></script>
 	<script type="text/javascript" src="script/bootstrap-datetimepicker.js"></script>
 	<script type="text/javascript" src="script/getdatetime.js"></script>
+	<script src="script/turnover.js"></script>
+	<script src="script/createTurnover.js"></script>
 	
 	</body>
 	

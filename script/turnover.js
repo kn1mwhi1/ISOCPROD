@@ -18,16 +18,16 @@
 	});
 
 // Script to warn user on page reload or close if "Submit" not clicked 
-	//	$(window).on('beforeunload', function(){
-	//		var turnoverExists = $('.item').length;
-	//		if (turnoverExists) {
-	//			return 'Turnover has not been saved. All changes will be lost!';
-	//		}
-	//	});
+//		$(window).on('beforeunload', function(){
+//			var turnoverExists = $('.item').length;
+//			if (turnoverExists > 0) {
+//				return 'Turnover has not been saved. All changes will be lost!';
+//			}
+//		});
 		
-	//	$(document).on("submit", "form", function(event){
-	//	$(window).off('beforeunload');
-	//	});
+//		$(document).on("submit", "form", function(event){
+		//	$(window).off('beforeunload');
+//		});
 		
 // Script to add/remove Technicians
 		var form = document.getElementById("turnoverForm");

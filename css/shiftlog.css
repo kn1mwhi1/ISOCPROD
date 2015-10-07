@@ -237,25 +237,25 @@ color: white;
  }
  
  .btn-toprowbtn{
-background-color:#70818a;
-color:white;
-border-color: #70818a;
+background-color:#1e1e1e;
+color:#5993cd;
+border-color: #5993cd;
  }
  .btn-toprowbtn:hover,
  .btn-toprowbtn:active{
-background: #1e1e1e;
-border-color: #70818a;
-color: #5993cd;
+background: #ececec;
+border-color: #5993cd;
+color: #1e1e1e;
  }
  
  .btn-everyonebtn{
-background-color:#8a7074;
-color: white;
-border-color: #8a7074;
+background-color:#1e1e1e;
+color: #66C285;
+border-color: #66C285;
  }
   .btn-everyonebtn:hover,
  .btn-everyonebtn:active{
-background: #1e1e1e;
-border-color: #8a7074;
-color: #bc4154;
+background: #ececec;
+border-color: #66C285;
+color: #1e1e1e;
  }
