@@ -14,7 +14,7 @@ class ShiftLog_Logic extends ValidationUserInput
 	private $messagePopup;
 	
 	// Constructor
-	function Event_Logic()
+	function ShiftLog_Logic()
 	{
 		$this->instantiateVariables();
 	}
@@ -111,60 +111,16 @@ class ShiftLog_Logic extends ValidationUserInput
 			
 				switch ($_POST['submit']) 
 				{
-					case "Current Events":
-								if ($_POST['view'] == 'Normal View')
+					case "Current Calls":   //Working on
+								if ($_POST['view'] == 'Your View')
 								{
 									//print_r($_SESSION);
-									$this->createTableActiveExpiredCustomFields();
+									$this->getYourCalls12Hours();
 								}
 								
-								if ($_POST['view'] == 'Detailed View')
+								if ($_POST['view'] == 'Everyone View')
 								{
 									$this->createTableActiveExpiredCustomFieldsDetailed();
-								}
-						break;
-					case "All Events":
-								if ($_POST['view'] == 'Normal View')
-								{
-									$this->createTableAll();
-								}
-								
-								if ($_POST['view'] == 'Detailed View')
-								{
-									$this->createTableAllDetailed();
-								}
-						break;
-					case "Completed Events":
-								if ($_POST['view'] == 'Normal View')
-								{
-									$this->createTableCompleted();
-								}
-								
-								if ($_POST['view'] == 'Detailed View')
-								{
-									$this->createTableCompletedDetailed();
-								}
-						break;
-					case "Expired Events":
-								if ($_POST['view'] == 'Normal View')
-								{
-									$this->createTableExpired();
-								}
-								
-								if ($_POST['view'] == 'Detailed View')
-								{
-									$this->createTableExpiredDetailed();
-								}
-						break;
-					case "Pending Events":
-								if ($_POST['view'] == 'Normal View')
-								{
-									$this->createTablePending();
-								}
-								
-								if ($_POST['view'] == 'Detailed View')
-								{
-									$this->createTablePendingDetailed();
 								}
 						break;
 					case "CURRENT TIME":  // Cancel the ticket
@@ -201,32 +157,19 @@ class ShiftLog_Logic extends ValidationUserInput
 								$this->validateHtmlInput( $_POST['OBJECT_NAME'],$_POST['TYPE'] );
 						break;
 					default:
-						$this->createTableActiveExpiredCustomFields();
+						//$this->createTableActiveExpiredCustomFields();
 				}
 			}
 		}	
 	}
 	
 	
-	public function updateStatusDynamic()
+	private function getYourCalls12Hours()
 	{
-		$currentTime = $this->getCurrentTime();
+			
+			$sql = 'SELECT * FROM TB_SHIFTLOG WHERE `USER` = "'.$_SESSION['ISOC_TECH_EMPLOYEE_ID'].'"';
+			$this->createTable($sql);
 		
-		// Change Pending to ACTIVE by start time
-		$sql = 'UPDATE TB_ISOC_EVENT SET `STATUS` = "ACTIVE" WHERE `STATUS` = "PENDING" AND `START_DATETIME` <= "'.$currentTime.'"';
-		$this->ToDB->saveToDB($sql);
-		
-		// Change Active to Pending by start time
-		$sql = 'UPDATE TB_ISOC_EVENT SET `STATUS` = "PENDING" WHERE `STATUS` = "ACTIVE" AND `START_DATETIME` > "'.$currentTime.'"';
-		$this->ToDB->saveToDB($sql);
-		
-		// Look for end time and change to Expired
-		$sql = 'UPDATE TB_ISOC_EVENT SET `STATUS` = "EXPIRED" WHERE `STATUS` = "ACTIVE" AND `END_DATETIME` <= "'.$currentTime.'"';
-		$this->ToDB->saveToDB($sql);
-		
-		// Change Expired to Active when someone adds more time to end time.
-		$sql = 'UPDATE TB_ISOC_EVENT SET `STATUS` = "ACTIVE" WHERE `STATUS` = "EXPIRED" AND `END_DATETIME` > "'.$currentTime.'"';
-		$this->ToDB->saveToDB($sql);
 	}
 	
 	private function validateHtmlInput( $nameOfObject, $aType )
@@ -387,6 +330,11 @@ class ShiftLog_Logic extends ValidationUserInput
 		
 		$this->createTable($sql);
 	}
+	
+	
+	
+	
+	
 	
 	private function createTableActiveExpiredCustomFieldsDetailed()
 	{

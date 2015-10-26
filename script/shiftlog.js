@@ -2,8 +2,8 @@ document.write('<script type="text/javascript" src="script/sweetalert.min.js"></
 
  // Global Variables
  
- selection = 'Current Events';
- viewSelection = 'Normal View';
+ selection = 'Current Calls';
+ viewSelection = 'Your View';
  temp ='';
 
 
@@ -17,16 +17,6 @@ $(function () {
 	
 	});
 	
-	
-	
-	$(function () {	
-	$('#datetimepicker2').datetimepicker({
-		
-		minDate: getServerDateTime('CURRENT TIME'),
-		format: 'MM/DD/YYYY H:mm:ss'
-	});
-	
-	});
 	
 
  // When document has loaded run ajax command every second.

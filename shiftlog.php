@@ -21,6 +21,7 @@
 	<script type="text/javascript" src="script/moment-with-locales.js"></script>
 	<script type="text/javascript" src="script/bootstrap-datetimepicker.js"></script>
 	<script type="text/javascript" src="script/getdatetime.js"></script>
+	
 
 	
 	
@@ -69,7 +70,7 @@ $login->getNavBar();
 						<div class="center" id="serverTimeCentral"></div>
 					
 					
-						<!--div id="dynamicTable" class=""></div--> 
+						<div id="dynamicTable" class="">--> 
 					</tr>
 					
 					<!-- added css style here to ensure buttons work.-->
@@ -190,7 +191,7 @@ $login->getNavBar();
 
 
 <!-- Load eventLog scripts -->
-<script type="text/javascript" src="script/eventlog.js"></script>
+<script type="text/javascript" src="script/shiftlog.js"></script>
  <?php 
 $tierTwo->notifyMessage(); 
 ?>
