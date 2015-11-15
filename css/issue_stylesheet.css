@@ -1,0 +1,27 @@
+#trackingHeader {
+	margin:auto;
+	text-align:center;
+	font-family: Helvetica, Courier, Times New Roman;
+}
+
+#trackingForm {
+	margin:auto;
+	text-align:center;
+}
+
+#trackingSubmitStyle {
+	margin:auto;
+	text-align:center;
+	padding-top: 20px;
+}
+
+.trackingTextStyle {
+	font-family: Helvetica, Courier, Times New Roman;
+	margin-bottom: 2px;
+}
+
+#confirm {
+	font-family: Helvetica, Courier, Times New Roman;
+	margin:auto;
+	text-align:center;
+}

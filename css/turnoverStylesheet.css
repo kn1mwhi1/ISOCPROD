@@ -100,7 +100,7 @@ body {
 	margin: auto;
 
 }
-  /*
+  
 #DateShiftContainer {
 	float: left;
 	width: auto;
@@ -108,7 +108,7 @@ body {
 	max-width: 49%;
 
 }
-*/
+
 
 #Date {
 	font-family: Helvetica, sans-serif;
@@ -439,6 +439,16 @@ Dasboard CSS file
 
 }
 
+/**********************************
+Hide/Show Event Log and Shift Log *						
+***********************************/
+
+#ninjaHide {
+
+display: none;
+
+}
+
 
 /************************************ 
 JavaScript Validation Error messages *			           
@@ -586,4 +596,8 @@ display:inline-block;
 	border-width: small;
 	border-color: #F5F5F5;
 	border-radius: 10px;
+}
+
+.turnOverItems{ 
+	height: 50px;
 }

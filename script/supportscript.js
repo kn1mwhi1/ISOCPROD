@@ -326,13 +326,15 @@ function cleanEmail( value )
 }
 
 // replace any semicolons and spaces with commas
+
+/*
 function cleanCCEmail( value )
 {
 	var value = value.replace(/;+\s*|,,+|\s\s+/g,',');
 	value = value.replace(/[*+?^${}()\s-;&%#!=`~|[\]\\]/g,'');
 	return value;
 }
-
+*/
 
 // replace any semicolons and spaces with commas
 function cleanContactNumber( value )
@@ -407,7 +409,7 @@ function loadCookies()
 document.getElementById('namebox').value = getCookie("namebox");
 document.getElementById('Contact_Number').value = getCookie("Contact_Number");
 document.getElementById('Email').value = getCookie("Email");
-document.getElementById('textboxSubject').value = getCookie("textboxSubject");
+//document.getElementById('textboxSubject').value = getCookie("textboxSubject");
 document.getElementById('textboxCC').value = getCookie("textboxCC");
 
 document.getElementById('contactMethod').checked  = getCookie("contactMethod");

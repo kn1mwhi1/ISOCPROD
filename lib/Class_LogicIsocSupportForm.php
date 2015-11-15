@@ -677,6 +677,13 @@ class LogicIsocSupportForm
 			$this->email->setHeaders();
 			
 			
+			$subject = 'New ISOC Support Request Ticket: '.$this->requestTicketNumber.' -'.$this->eventIdName.'-('.$this->select_dynamic_request_type.')-Perform: '.$this->Urgency;
+			$this->email->sendEmailNoCC( 'ISOperationsCenter@uscellular.com', $this->emailbox, $subject, $message);
+				
+				
+				// Remove this line of code if no issues have been reported for sending email 11/1/2015
+				/*
+			
 			// Detect if the user requested a CC or not, then send the appropriate email.
 			if ($this->textboxCC == '')
 			{
@@ -706,6 +713,8 @@ class LogicIsocSupportForm
 							// send email
 				$this->email->sendEmail();
 			}
+			
+			*/
 	}
 	
 	
@@ -791,11 +800,12 @@ class LogicIsocSupportForm
 ';
 			
 			
-			
+			// Set subject of email for rquester
+			$requesterSubject = 'ISOC Request# '.$this->requestTicketNumber.' -'.$this->eventIdName.'-('.$this->select_dynamic_request_type.')-Perform: '.$this->Urgency.' has been received.';
 			
 			if ($this->textboxCC == '')
 			{
-				$this->email->sendEmailNoCC( $this->emailbox, 'ISOperationsCenter@uscellular.com' , 'ISOC Request# '.$this->requestTicketNumber.' has been received.', $message);
+				$this->email->sendEmailNoCC( $this->emailbox, 'ISOperationsCenter@uscellular.com' , $requesterSubject, $message);
 			}
 			else
 			{
@@ -812,7 +822,7 @@ class LogicIsocSupportForm
 				$this->email->setCCEmail( $this->textboxCC );
 				
 				// set the subject field of email
-				$this->email->setSubject( 'ISOC Request# '.$this->requestTicketNumber.' has been received.' );
+				$this->email->setSubject( $requesterSubject );
 				
 				// prepare headers which informs the mail client that this will be html and the from and to
 				$this->email->setHeaders();
@@ -1055,6 +1065,8 @@ private function hideButtonCancel()
 			// Set the respnce date time and ISOC Tech if its not been set.
 			$this->isocUpdateRequestAcceptAndTech( $requestTicketNumber);
 			
+			
+			
 		}
 	}
 	
@@ -1224,6 +1236,9 @@ private function hideButtonCancel()
 					$this->responseData = array_merge($this->responseData, $tempCurrentTech);
 					$this->responseData['ISOC_TECH_EMAIL']=$_SESSION['ISOC_TECH_EMAIL'];
 					
+					//Print response variable
+					//print_r($this->responseData);
+					
 				}
 				else
 				{
@@ -1258,7 +1273,8 @@ private function hideButtonCancel()
 				
 				
 				// Send Email to user that a specific Tech is now working their request.
-				$subject = 'Ticket Number: '.$this->responseData['REQUEST_TICKET_NUMBER'].' is now in progress.';
+				//$subject = 'Ticket Number: '.$this->responseData['REQUEST_TICKET_NUMBER'].' is now in progress.';
+				$subject = 'ISOC Request# '.$this->responseData['REQUEST_TICKET_NUMBER'].' -'.$this->responseData['PROCESS_DETAILS_DATA'].'-('.$this->responseData['ADDITIONAL_OPTIONS_VALUE'].')-Perform: '.$this->responseData['REQUEST_URGENCY'].' is now in progress.';
 				$message = $this->requestEmailWrapper( $this->inProgressEmailBody() , $subject);
 				
 				
@@ -1286,7 +1302,8 @@ private function hideButtonCancel()
 			if ( $_POST['completeTime'] == "" )
 			{
 				// send email that response is complete
-				$subject = 'Ticket: '.$this->responseData['REQUEST_TICKET_NUMBER'].' has been completed.';
+				$subject = 'ISOC Request# '.$this->responseData['REQUEST_TICKET_NUMBER'].' -'.$this->responseData['PROCESS_DETAILS_DATA'].'-('.$this->responseData['ADDITIONAL_OPTIONS_VALUE'].')-Perform: '.$this->responseData['REQUEST_URGENCY'].' has been completed.';
+				//$subject = 'Ticket: '.$this->responseData['REQUEST_TICKET_NUMBER'].' has been completed.';
 				$message = $this->requestCompleteEmailSend( $this->createCompleteEmailBody() , $subject );
 				
 				// Detect if the user requested a CC or not, then send the appropriate email.

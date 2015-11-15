@@ -88,7 +88,8 @@ class ISOC_EMAIL
 		$headers = 'From: '.$this->getFrom()."\n";
 		//$headers .= 'From: IS Operations <ISOperationsCenter@uscellular.com>' . "\n";
 		$headers .= "Reply-To: ".$this->getFrom()."\n";
-		$headers .= 'Cc: '.$this->getCCEmail().'\''."\n";
+		//$headers .= 'Cc: '.$this->getCCEmail().'\''."\n";
+		$headers .= 'Cc: '.$this->getCCEmail()."\n";
 		$headers .= "MIME-Version: 1.0 \n";
 		$headers .= "Content-Type: text/html; charset=ISO-8859-1 \n";
 		

@@ -87,6 +87,13 @@
 	});
 
 	
+// Script to hide and/or show the Event Log and Shift LOG10E
+
+	$("#hideEventLog").click(function() {
+		$(".eventShiftLog").slideToggle("slow");
+		$(".ninjaHideShow").toggle();
+	});
+	
 	
 					
 			

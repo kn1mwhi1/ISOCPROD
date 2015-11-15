@@ -119,6 +119,7 @@ $login->getNavBar();
 	<!-- moves down the EventLog when Select Techncians are added -->
 	<div class="clearBoth"></div>
 	
+	<div id="hideEventShiftLog"> <img src="/img/ninja.png" id="hideEventLog"> <p class="ninjaHideShow"> Ninja Hide! </p> <p class="ninjaHideShow" id="ninjaHide"> Ninja Show! </p></div>
 
 <!--  **************************  EVENT and SHIFT LOG ****************************************   -->
 	<div class="eventShiftLog container-fluid greyBorder">
@@ -136,6 +137,7 @@ $login->getNavBar();
 			<div class="fontSizeVariant" id="shiftLog"  >
 		</div>
 		
+		</div>
 	</div>
 <!--  **************************  END of EVENT and SHIFT LOG ****************************************   -->
 		
@@ -178,5 +180,5 @@ $login->getNavBar();
 				<div class="img"><a href="img/ISOClogo.JPG"><img src="img/ISOClogo.JPG" alt=""></a></div>
 			 </footer>
 		</div>
-</div>
+
 </html>

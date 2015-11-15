@@ -4,14 +4,23 @@ require 'lib/fromDataBaseGetTechnicians.php';
 ?>
 
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <html>
+<!-- Tag to inform IE to be smart -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 <head>
 	<title>ISOC EDIT TURNOVER</title>
 	
-	<link rel="stylesheet" type="text/css" href="css/turnoverStylesheet.css">
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-	<link rel="stylesheet" type="text/css" href="css/eventlog.css" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" /> 
+		<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" /> 
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.css" />
+		<link rel="stylesheet" type="text/css" href="css/SupportRequestForm.css" /> 
+		<link rel="stylesheet" type="text/css" href="css/sweetalert.css" />	
+		<link rel="stylesheet" type="text/css" href="css/eventlog.css" />
+	    <link rel="stylesheet" type="text/css" href="css/turnoverStylesheet.css">
+		
+		
 	<link rel="icon" type="image/png" href="img/8bmicon.png">
 </head>
 
@@ -33,7 +42,6 @@ $login->checkSession();
 <?php
 $login->getNavBar();
 ?>
-	
 
 		<div id="Header">
 			<h1>ISOC Turnover</h1>
@@ -49,6 +57,30 @@ $login->getNavBar();
 			</div>
 		</div>
 
+	<div id="hideEventShiftLog"> <img src="/img/ninja.png" id="hideEventLog"> <p class="ninjaHideShow"> Ninja Hide! </p> <p class="ninjaHideShow" id="ninjaHide"> Ninja Show! </p></div>
+	
+<!--  **************************  EVENT and SHIFT LOG ****************************************   -->
+	<div class="eventShiftLog container-fluid greyBorder">
+	
+		<h1 class="pull-left" id="eventLogTitle">Event Log</h1>
+		<h1 class="pull-right" id="shiftLogTitle">Shift Log</h1>
+	
+		<div class="clearLeft pull-left container-fluid pull-left eventTableSize" >			
+				<div class=" fontSizeVariant" id="dynamicTable"  ></div>
+		</div>
+		
+		
+		<div class="clearRight pull-right container-fluid eventTableSize " >	
+			
+			<div class="fontSizeVariant" id="shiftLog"  >
+		</div>
+		
+		</div>
+	</div>
+<!--  **************************  END of EVENT and SHIFT LOG ****************************************   -->
+		
+		<div class="clearBoth"></div>
+		
 	<form name="trnOver" method="POST" id="turnoverForm" action="/lib/toDataBaseEdit.php" onsubmit="return validateForm()">
 
 		<div id="DateShiftContainer">
@@ -119,9 +151,7 @@ $login->getNavBar();
 		<div id="createTechnicianValidationError"></div>
 		<div id="deleteTechnicianValidation"></div>
 		
-		<div id="EventLog">
-			<p>The Event Log will go here</p>
-		</div>
+	
 	
 		<div id="itemContainer">
 		<div id="addTurnover">
@@ -155,10 +185,14 @@ $login->getNavBar();
 
 </form>
 
-<script type="text/javascript" src="script/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="script/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="script/bootstrap.min.js"></script>
+	<script type="text/javascript" src="script/moment-with-locales.js"></script>
+	<script type="text/javascript" src="script/bootstrap-datetimepicker.js"></script>
+	<script type="text/javascript" src="script/getdatetime.js"></script>
 <script src="script/turnover.js"></script>
 <script src="script/editTurnover.js"></script>
-
+	
 
 	</body>
 	
@@ -169,5 +203,5 @@ $login->getNavBar();
 				<div class="img"><a href="img/ISOClogo.JPG"><img src="img/ISOClogo.JPG" alt=""></a></div>
 			 </footer>
 		</div>
-</div>
+
 </html>
