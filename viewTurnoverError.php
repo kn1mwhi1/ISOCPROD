@@ -33,6 +33,7 @@ $login->getNavBar();
 		</div>
 						
 		</div>
+<!-- Error displayed when Advanced Search doesn't yield a result e.g. Turnover doesn't exist for that Date/Shift -->
 	<div id="noTurnoverFound">
 		<h1>Where are we? I'm not sure this is right.</h1>
 			<p><img src="img/stewartHat.jpg"></p>

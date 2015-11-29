@@ -1,13 +1,16 @@
 <?php 
-require 'lib/fromDataBaseGetTurnover.php';
-require 'lib/turnoverVariables.php';
-if (empty($turnover_id)) {
-	
-} ?>
+// get data from last Turnover to display on Search Turnover page
+	require 'lib/fromDataBaseGetTurnover.php';
+	require 'lib/turnoverVariables.php';
+// I believe this if statement was added originally to prevent undefined variable errors, though it may not be needed any more. Further testing is required.
+	if (empty($turnover_id)) {
+		
+	} 
+?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
-<html>
+
 <!-- Tag to inform IE to be smart -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 <head>
@@ -51,6 +54,7 @@ $login->getNavBar();
 			
 		</div>
 
+<!-- Ninja icon, used to hide or show div container for Event/Shift Log using JavaScript and CSS -->	
 	<div id="hideEventShiftLog"> <img src="/img/ninja.png" id="hideEventLog"> <p class="ninjaHideShow"> Ninja Hide! </p> <p class="ninjaHideShow" id="ninjaHide"> Ninja Show! </p></div>
 	
 		<!--  **************************  EVENT and SHIFT LOG ****************************************   -->
@@ -75,8 +79,9 @@ $login->getNavBar();
 		
 		<div class="clearBoth"></div>
 			
-		
-		<div id="shift">
+	<!-- View Turnover, using PHP to display the last Turnover opened or a specified Turnover by Shift and Date.  This is done by checking which variables are set and then echo them out to the page -->	
+	
+		<div id="viewShift">
 			<?php 
 			if (!empty($searchShift)) {
 				echo $searchShift.' Shift'; 
@@ -110,8 +115,6 @@ $login->getNavBar();
 
 		</div>
 
-
-		
 		<div id="TurnoverContainer">
 			<div id="TurnoverItemContainer">
 				<div id="TurnoverItem">
@@ -126,7 +129,9 @@ $login->getNavBar();
 				</div>
 			</div>
 		</div>
-		
+
+
+<!-- JavaScript added to end of the page to aid in faster load times -->		
 	<script type="text/javascript" src="script/jquery-2.1.1.min.js"></script>
 	<script src="script/turnover_eventlog.js"></script>	
 	<script src="script/turnover.js"></script>	
@@ -139,7 +144,7 @@ $login->getNavBar();
 		<div class="push">
 			<footer>
 				<p> Created by ISOC &copy;2015</p>
-				<div class="img"><a href="img/ISOClogo.JPG"><img src="ISOClogo.JPG" alt=""></a></div>
+				<div class="img"><a href="img/ISOClogo.JPG"><img src="img/ISOClogo.JPG" alt=""></a></div>
 			 </footer>
 		</div>
 

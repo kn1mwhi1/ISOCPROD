@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
-<html>
+
 <!-- Tag to inform IE to be smart -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 <head>
@@ -13,7 +13,10 @@
 	<script type="text/javascript" src="script/jquery.js"></script>
 	<script type="text/javascript" src="script/bootstrap-table.js"></script>
 
-<?php require 'lib/fromDataBaseGetTurnover.php'; ?>	
+<?php 
+// get data from last Turnover to display on Search Turnover page
+	require 'lib/fromDataBaseGetTurnover.php';
+?>
 </head>
 
 <!-- WRAPPING BODY IN DIV TO HELP PUSH FOOTER TO BOTTOM OF PAGE -->
@@ -44,15 +47,15 @@ $login->getNavBar();
 				</ul>
 			</div>
 		</div>
-			
-		
-
-<!-- This is displaying the last Turnover ID, Shift and Date in a table format and supplying a view button to see the entire Turnover. -->
 
 <div id="allDiv" class="center container ">
+
+<!-- View/Edit Last Turnover -->
 			<form name="currentTurnover" action="viewTurnover.php">
 								
 				<div class="center " id="searchTable" style="width:300px">
+				
+			<!-- Table to display the last Turnover ID, Shift and Date -->
 					<table id="table" data-toggle="table" >
 						<thead>
 							<tr>
@@ -67,11 +70,16 @@ $login->getNavBar();
 								<td><?php echo $currentDate; ?></td>
 							</tbody>
 					</table>
+					
+				<!-- Form action used to redirect browser to view page  -->
 					<input class="btn btn-primary" type="submit" value="View" tabindex="1">
+					
+				<!-- JavaScript location used to redirect browser to Edit page -->
 					<input class="btn btn-primary" type="button" onclick="location.href='editTurnover.php';" value="Edit">
 				</div>			
 			</form>
 
+<!-- Turnover Advanced Search -->
 		<div class="center " id="advancedSearch" >
 			 <form id="advanSearch" name="advancesearchTurnover" method="POST" action="viewTurnover.php" onsubmit="return validateForm()">
 				 <fieldset class="center" >
@@ -86,17 +94,17 @@ $login->getNavBar();
 							<span class="pull-left" id="selectDate" >Select a Date:</span>
 							<input class="form-control pull-left" type="date" id="advancedDate" value="" name="advancedDate" tabindex="12">
 						</div>
-						
-<!-- Blank div for displaying validation errors -->
-						
 					</fieldset>
 				<input class="btn btn-primary" type="submit" value="Advanced Search" tabindex="13">
 			 </form>
 		 </div>
 </div>
 
+<!-- Blank div for displaying validation errors -->
 	<div class="center" id="searchValidationError"></div>	  
-	
+
+
+<!-- JavaScript added to end of the page to aid in faster load times -->	
 		<script type="text/javascript" src="script/jquery-2.1.1.min.js"></script>
 		<script src="script/turnover.js"></script>
 		<script src="script/searchTurnover.js"></script>

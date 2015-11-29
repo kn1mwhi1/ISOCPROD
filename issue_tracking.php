@@ -11,8 +11,9 @@ try {
 
 ?>
 
+<!-- Below Code Only Executes If Request Method Is Post -->
+
 <?php
-//Executes only if the request method is POST.
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $name = $_POST["name"];
@@ -34,6 +35,8 @@ exit;
 }
 
 ?>
+
+<!-- Above Code Only Executes If Request Method Is Post -->
 
 <!DOCTYPE html>
 
@@ -57,6 +60,7 @@ exit;
 	if (isset($_GET["status"]) AND $_GET["status"] == "confirm") { ?>
 		
 		<p id="confirm">Thanks for your reporting your issue. We may reach out to you with further questions.</p>
+		
 	<?php		
 	}
 	

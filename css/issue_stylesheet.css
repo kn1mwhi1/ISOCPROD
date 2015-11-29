@@ -25,3 +25,17 @@
 	margin:auto;
 	text-align:center;
 }
+
+li {
+	font-family: Helvetica, Courier, Times New Roman;
+	margin:auto;
+	text-align:center;	
+}
+
+table, th, td {
+	
+	border: 1px solid black;
+	padding: 5px;
+	margin: auto;
+	
+}
