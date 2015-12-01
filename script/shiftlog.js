@@ -9,10 +9,10 @@ document.write('<script type="text/javascript" src="script/sweetalert.min.js"></
 
 // function to show calendar
 $(function () {	
-	$('#datetimepicker1').datetimepicker({
+	$('#datetime1Input').datetimepicker({
 		
 		minDate: getServerDateTime('CURRENT TIME'),
-		format: 'MM/DD/YYYY H:mm:ss'
+		format: 'MM/DD/YYYY H:mm'
 	});
 	
 	});
@@ -501,7 +501,7 @@ function getServerTimeCentral()
 						// place values in inputs
 						$('#initiatorInput').val(initiator);
 						$('#actionRequiredInput').val(actionRequired);
-						$('#reference').val(referenceData.trim());
+						//$('#reference').val(referenceData.trim());
 							
 						$('#datetime1').val(convertDate( startTime ));
 						$('#datetime2').val(convertDate( endTime ));

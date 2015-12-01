@@ -9,10 +9,10 @@
 	<!-- Load CSS --> 
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" /> 
 	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" /> 
-	<link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.css" />
 	<link rel="stylesheet" type="text/css" href="css/SupportRequestForm.css" /> 
 	<link rel="stylesheet" type="text/css" href="css/sweetalert.css" />	
 	<link rel="stylesheet" type="text/css" href="css/shiftlog.css" />
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.css" />
 	
 	
 	<!-- Load Javascript -->

@@ -588,6 +588,24 @@ $(document).on('click', '.detailedView', function () {
 
 });
 
+
+function changeTimetoSeconds( dateString )
+{
+	//var dateString = '17-09-2013 10:08',
+   var dateParts = dateString.split(' '),
+    timeParts = dateParts[1].split(':'),
+    date;
+
+    dateParts = dateParts[0].split('/');
+
+	
+date = new Date(dateParts[2], dateParts[0], parseInt(dateParts[1], 10) - 1, timeParts[0], timeParts[1]);
+
+return (date.getTime() / 1000) ; //1379426880000
+
+}
+
+
 function checkIfEmptyAndValidateOnUpdateSend()
 {
 
@@ -606,21 +624,30 @@ function checkIfEmptyAndValidateOnUpdateSend()
 	{
 		$( "#datetime1" ).addClass( "error" );	
 	}
+	
+	
 	if ($( "#datetime2" ).val() == '' )
 	{
 		$( "#datetime2" ).addClass( "error" );
 	}	
 	
-	if ($( "#datetime2" ).val() <= $( "#datetime1" ).val() )
-	{
+	
+	
+	if (changeTimetoSeconds( $( "#datetime2" ).val() ) <= changeTimetoSeconds( $( "#datetime1" ).val() ) )
+	{		
+		//alert( changeTimetoSeconds( $( "#datetime2" ).val() ) + " and " + changeTimetoSeconds( $( "#datetime1" ).val() ) );
+		
 		$( "#datetime2" ).addClass( "error" );
 	}
+	
     
 	// ensure that error class is removed when user fixes date.
-	if ($( "#datetime2" ).val() > $( "#datetime1" ).val() )
+	if ( changeTimetoSeconds( $( "#datetime1" ).val() ) < changeTimetoSeconds( $( "#datetime2" ).val() ) )
 	{
 		$( "#datetime2" ).removeClass( "error" );
 	}
+	
+	
 	
 	
 	if ( $( "#initiatorInput" ).hasClass( "error" ) ||

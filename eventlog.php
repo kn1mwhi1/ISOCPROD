@@ -113,7 +113,7 @@ $login->getNavBar();
     				
 					
 					
-						<td id="startTime" name="startTime" >
+						<td id="startTime" name="startTime"  >
 							
 							<div class='input-group date' id='datetimepicker1'>
 								<input type='text' class="form-control" name='datetime1' id="datetime1" value="" onblur="validation( this, 'ALL' );"/>
