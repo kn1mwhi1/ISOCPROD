@@ -5,7 +5,7 @@ document.write('<script type="text/javascript" src="script/sweetalert.min.js"></
  selection = 'Current Calls';
  viewSelection = 'Your View';
  temp ='';
-
+ ID='';
 
 // function to show calendar
 $(function () {	
@@ -66,31 +66,24 @@ $(document).ready(function(){
      });
  }
  
- 
+
  
  function clearAllValues()
  {
+	
+	
+
+	
 	$('#initiatorInput').val("");
 	$('#actionRequiredInput').val("");
 	$('#reference').val('IM');				
 	$('#datetime1').val("");
 
-	 // Show edit menu		 
-	$( ".completeMenu" ).hide();
-	// Show edit menu
-	$( ".complete" ).hide();		 
-	$( ".cancel" ).hide();
-	//$( ".activeButton" ).hide();
-	$( ".updateCall" ).hide();
-   $( ".addCall" ).show();
-   $('#noEndDateInput').prop('checked', false);
-   $('#completeNotes').val("");
-   
-   // remove any error classes
-   $('#initiatorInput').removeClass('error');
-    $('#actionRequiredInput').removeClass('error');
-	 $('#datetime1').removeClass('error');
-	  $('#datetime2').removeClass('error');
+	$( "#datetime1Input" ).val("");
+	$('#method').val('IM');
+	$('#personContacted').val('');
+	$('#notes').val('');
+	$('#ticketNumber').val( '');
  }
  
 
@@ -112,7 +105,7 @@ $(document).ready(function(){
    }
    
 
-   
+ 
 
 
 // ******************  Click Event Handlers *****************************************
@@ -120,136 +113,26 @@ $(document).ready(function(){
    
 $(document).on('click', '.clear', function () {
    $( ".updateCall" ).hide();
+   $( ".delete" ).hide();
    $( ".addCall" ).show();
    clearAllValues();
 });
 
 
 
-// Insert or addCall new event
-$(document).on('click', '.addCall', function () {
-	
-	
-	
-	if (!checkIfEmptyAndValidateOnupdateCallSend() )
-	{
-		return;
-	}
-		
-	
-	
-	
-		//ticketID = someData.EVENT_ID;
-		startTime = $('#datetime1Input').val();
-	
-		referenceData = $('#reference').val();
-		initiator = $('#initiatorInput').val();
-		actionRequired = $('#actionRequiredInput').val();
-
-			
-		
-		
-		swal({   
-	title: "addCalling Event",   
-	text: "One moment while the event is being addCalled to the database" ,   
-	type: "info",   
-	showCancelButton: false,   
-	closeOnConfirm: false,   
-	showLoaderOnConfirm: true, }, 
-	function(){   
-	setTimeout(function(){ 
-
-							$.ajax({
-									type: "POST",
-									url: 'lib/shiftLogApi.php',
-									data:{ submit : 'addCall EVENT', START_DATETIME : startTime, END_DATETIME : endTime, 
-									NO_ENDDATE : noEndTime, STATUS : status, REFERENCE : referenceData, INITIATOR : initiator, ACTION_REQUIRED : actionRequired }
-								  })
-									  .done(function(data) {
-										swal("Event addCalled!", "The event has been successfully addCalled.", "success");
-									
-									  })
-									  .error(function(data) {
-										swal("Oops", "We couldn't connect to the server!", "error");
-									  });
-								  
-								}, 2000); 
-	});
-		
-
-clearAllValues();
-});
-
-
-// Insert or addCall new event
-$(document).on('click', '.updateCall', function () {
-	
-	if (!checkIfEmptyAndValidateOnupdateCallSend() )
-	{
-		return;
-	}
-	
-	
-	
-		//EVENT_ID = someData.EVENT_ID;
-		startTime = $('#datetime1').val();
-		endTime = $('#datetime2').val();
-		noEndTime = $('#noEndDateInput').is(':checked');
-		
-		//alert('blah' + noEndTime);
-		
-		//status = 'PENDING'; 
-		referenceData = $('#reference').val();
-		initiator = $('#initiatorInput').val();
-		actionRequired = $('#actionRequiredInput').val();
-		//completeNotes = $('#completeNotes').val();
-
-	
-		
-		
-		swal({   
-	title: "Updating Event",   
-	text: "One moment while the event is being updateCalld." ,   
-	type: "info",   
-	showCancelButton: false,   
-	closeOnConfirm: false,   
-	showLoaderOnConfirm: true, }, 
-	function(){   
-	setTimeout(function(){ 
-
-							$.ajax({
-									type: "POST",
-									url: 'lib/shiftLogApi.php',
-									data:{ submit : 'updateCall EVENT', EVENT_ID : ticketID, START_DATETIME : startTime, END_DATETIME : endTime, 
-									NO_ENDDATE : noEndTime, REFERENCE : referenceData, INITIATOR : initiator, ACTION_REQUIRED : actionRequired },
-									 success: function(data){
-					//alert(data);
-
-					
-									 }
-					
-								  })
-									  .done(function(data) {
-										swal("Event updateCalld!", "The event has been successfully updateCalld.", "success");
-									
-									  })
-									  .error(function(data) {
-										swal("Oops", "We couldn't connect to the server!", "error");
-									  });
-								  
-								}, 2000); 
-	});
-		
-// do button stuffs
-  $( ".updateCall" ).hide();
-   $( ".clear" ).show();
-   $( ".addCall" ).show();
-  clearAllValues();
+ $(document).on('click', '.allDays', function () {
+	selection = 'ALL DAYS';
+		$('.allDays').addClass('highlight');
+		$('.sevenDays').removeClass('highlight');
+		$('.twelveHours').removeClass('highlight');
+		$('.oneDay').removeClass('highlight');
+		$('.fifteenDays').removeClass('highlight');
+		clearAllValues();
 });
 
  $(document).on('click', '.allCalls', function () {
 	selection = 'All Events';
-		$('.allCalls').addCallClass('highlight');
+		$('.allCalls').addClass('highlight');
 		$('.sevenDays').removeClass('highlight');
 		$('.twelveHours').removeClass('highlight');
 		$('.oneDay').removeClass('highlight');
@@ -260,7 +143,7 @@ $(document).on('click', '.updateCall', function () {
 
  $(document).on('click', '.thirtyDays', function () {
 	selection = 'All Events';
-		$('.thirtyDays').addCallClass('highlight');
+		$('.thirtyDays').addClass('highlight');
 		$('.sevenDays').removeClass('highlight');
 		$('.twelveHours').removeClass('highlight');
 		$('.oneDay').removeClass('highlight');
@@ -271,7 +154,7 @@ $(document).on('click', '.updateCall', function () {
 
  $(document).on('click', '.fifteenDays', function () {
 	selection = 'Current Events';
-		$('.fifteenDays').addCallClass('highlight');
+		$('.fifteenDays').addClass('highlight');
 		$('.sevenDays').removeClass('highlight');
 		$('.twelveHours').removeClass('highlight');
 		$('.oneDay').removeClass('highlight');
@@ -282,7 +165,7 @@ $(document).on('click', '.updateCall', function () {
 
 $(document).on('click', '.sevenDays', function () {
 	selection = 'Completed Events';
-		$('.sevenDays').addCallClass('highlight');
+		$('.sevenDays').addClass('highlight');
 		$('.fifteenDays').removeClass('highlight');
 		$('.twelveHours').removeClass('highlight');
 		$('.oneDay').removeClass('highlight');
@@ -291,8 +174,8 @@ $(document).on('click', '.sevenDays', function () {
 });
 
 $(document).on('click', '.oneDay', function () {
-	selection = 'Expired Events';
-		$('.oneDay').addCallClass('highlight');
+	selection = '1 DAY';
+		$('.oneDay').addClass('highlight');
 		$('.fifteenDays').removeClass('highlight');
 		$('.twelveHours').removeClass('highlight');
 		$('.sevenDays').removeClass('highlight');
@@ -303,13 +186,13 @@ $(document).on('click', '.oneDay', function () {
 
 
 $(document).on('click', '.twelveHours', function () {
-	selection = 'Pending Events';
-		$('.twelveHours').addCallClass('highlight');
+		$('.twelveHours').addClass('highlight');
 		$('.fifteenDays').removeClass('highlight');
 		$('.oneDay').removeClass('highlight');
 		$('.sevenDays').removeClass('highlight');
 		$('.thirtyDays').removeClass('highlight');
 		clearAllValues();
+		selection = 'Current Calls';
 });
 
 
@@ -317,17 +200,19 @@ $(document).on('click', '.twelveHours', function () {
 
 // *****  selfView and everyoneView button
 $(document).on('click', '.selfView', function () {
-	viewSelection = 'Normal View';
-	$('.selfView').addCallClass('highlight');
+
+	$('.selfView').addClass('highlight');
 	$('.everyoneView').removeClass('highlight');
 	clearAllValues();
+	viewSelection = 'Your View';
 });
 
 $(document).on('click', '.everyoneView', function () {
-	viewSelection = 'Detailed View';
-	$('.everyoneView').addCallClass('highlight');
+	
+	$('.everyoneView').addClass('highlight');
 	$('.selfView').removeClass('highlight');
 	clearAllValues();
+	viewSelection = 'Everyone View';
 });
 
 
@@ -337,17 +222,17 @@ function checkIfEmptyAndValidateOnupdateCallSend()
 {
 	if ( $( "#personContacted" ).val() == '' )
 	{
-		$( "#personContacted" ).addCallClass( "error" );
+		$( "#personContacted" ).addClass( "error" );
 	}
 	
 	if($( "#notes" ).val() == '' )
 	{
-		$( "#notes" ).addCallClass( "error" );
+		$( "#notes" ).addClass( "error" );
 	}
 	
 	if ($( "#datetime1Input" ).val() == '')
 	{
-		$( "#datetime1Input" ).addCallClass( "error" );	
+		$( "#datetime1Input" ).addClass( "error" );	
 	}
 
 	if ( $( "#personContacted" ).hasClass( "error" ) ||
@@ -392,7 +277,7 @@ function validation( aHtmlElementName, typeOfValidation )
 					if (passOrFail == 'false')
 					{
 						//alert(someData.PASS_VALIDATION);
-						$(aHtmlElementName).addCallClass('error');
+						$(aHtmlElementName).addClass('error');
 						$(aHtmlElementName).val(cleanValue);
 					}
 					else
@@ -432,6 +317,8 @@ function getServerDateTime( time )
 
 
 
+
+// Retrieve Central Time , so it can be displayed
 function getServerTimeCentral()
 {
 	   $.ajax({
@@ -450,109 +337,179 @@ function getServerTimeCentral()
 		 });
 }
 
-// When user clicks on table loads ticket info into textboxes
+
+
+
+// When user clicks on table loads ticket info into controls
  $(document).on('click', '.clickMe', function () {
 			var postID = this.id;
 			//alert(postID);
 
-
-
+// Ajax function that passes the ID to the shiftlogAPI which will return several variables.
 	   $.ajax({
 			 type: "POST",
 			 url: "lib/shiftLogApi.php",
 			 data: { ID : postID },
 			 success: function(data){
-					//alert(data);
+					
 					var someData = JSON.parse(data);
 					
-					
-					ticketID = someData.EVENT_ID;
-					EVENT_ID = someData.EVENT_ID;
-					startTime = someData.START_DATETIME;
-					endTime = someData.END_DATETIME;
-					noEndTime = someData.NO_ENDDATE;
-					status = someData.STATUS;
-					referenceData = someData.REFERENCE;
-					initiator = someData.INITIATOR;
-					actionRequired = someData.ACTION_REQUIRED;
-					creatorTech = someData.CREATOR_TECH;
-					createTime = someData.CREATE_DATETIME;
-					completeNotes = someData.COMPLETION_NOTES;
-					completionTech = someData.COMPLETION_TECH;
-					requestTicket = someData.REQUEST_TICKET;
-					
-
-					if (status == 'COMPLETED' || status == 'CANCELED')
-					{
-						$( ".completeMenu" ).hide();
-						// Show edit menu
-						$( ".complete" ).hide();		 
-						$( ".cancel" ).hide();
-						//clearAllValues();
-					}
-					else
-					{
-						$( ".completeMenu" ).show();
-						// Show edit menu
-						$( ".complete" ).show();		 
-						$( ".cancel" ).show();
-						
-						
-						// place values in inputs
-						$('#initiatorInput').val(initiator);
-						$('#actionRequiredInput').val(actionRequired);
-						//$('#reference').val(referenceData.trim());
-							
-						$('#datetime1').val(convertDate( startTime ));
-						$('#datetime2').val(convertDate( endTime ));
-						$('#noEndDateInput').val(noEndTime);
-						$( ".addCall" ).hide();
-						$( ".updateCall" ).show();
-					
-					}
-					
-					
-					if(status == 'PENDING')
-					{
-					    $( ".completeMenu" ).hide();
-						// Show edit menu
-						$( ".complete" ).hide();	
-						
-						//$( ".activeButton" ).show();	
-					}
-					
-					if(status == 'ACTIVE')
-					{
-					//	$( ".activeButton" ).hide();
-						
-					}
-					
-					if(status == 'EXPIRED')
-					{
-					//	$( ".activeButton" ).show();
-					}
+					// Variables that represent the row that was  clicked on in Table
+					ID = someData.ID;
+					DATE_TIME = someData.DATE_TIME;
+					METHOD = someData.METHOD;
+					PERSON_CONTACTED = someData.PERSON_CONTACTED;
+					NOTES = someData.NOTES;
+					TICKET = someData.TICKET;
+					USER = someData.USER;
 				
-					 
-
+					//alert(ID);
 					
+					// Clear old info in controls
+					clearAllValues();
+					
+					// populate values from database to controls
+					$( "#datetime1Input" ).val( DATE_TIME );
+					$('#method').val( METHOD);
+					$('#personContacted').val( PERSON_CONTACTED);
+					$('#notes').val( NOTES);
+					$('#ticketNumber').val( TICKET);
 			 }
 		 });
 
+		 
+			$( ".updateCall" ).show();
+			 $( ".delete" ).show();
+});
 
+
+// Insert or addCall new event
+$(document).on('click', '.addCall', function () {
+	/*
+	if (!checkIfEmptyAndValidateOnupdateCallSend() )
+	{
+		return;
+	}
+	*/
+	
+		input_DATE_TIME = $( "#datetime1Input" ).val();
+		input_METHOD = $('#method').val( );
+		input_PERSON_CONTACTED = $('#personContacted').val();
+		input_NOTES = $('#notes').val();
+		input_TICKET = $('#ticketNumber').val();
+				
+							$.ajax({
+									type: "POST",
+									url: 'lib/shiftLogApi.php',
+									data:{ submit : 'Add Call', DATE_TIME : input_DATE_TIME, METHOD : input_METHOD, PERSON_CONTACTED : input_PERSON_CONTACTED, NOTES : input_PERSON_CONTACTED, TICKET : input_TICKET}
+								  });
+		
+clearAllValues();
 });
 
 
 
+// Update to Database from controls
+$(document).on('click', '.updateCall', function () {
+	/*
+	if (!checkIfEmptyAndValidateOnupdateCallSend() )
+	{
+		return;
+	}
+	*/
+		input_Primary_Key = ID;
+		input_DATE_TIME = $( "#datetime1Input" ).val();
+		input_METHOD = $('#method').val( );
+		input_PERSON_CONTACTED = $('#personContacted').val();
+		input_NOTES = $('#notes').val();
+		input_TICKET = $('#ticketNumber').val();  // Reference ticket number
+
+
+							$.ajax({
+									type: "POST",
+									url: 'lib/shiftLogApi.php',
+									data:{ submit : 'Update Call', TICKET_NUMBER : input_Primary_Key, DATE_TIME : input_DATE_TIME, 
+									METHOD : input_METHOD, PERSON_CONTACTED : input_PERSON_CONTACTED, NOTES : input_NOTES, TICKET : input_TICKET },
+									 success: function(data){
+					//alert(data);
+
+					
+									 }
+					
+								  });
+
+// do button stuffs
+  $( ".updateCall" ).hide();
+   $( ".clear" ).show();
+   $( ".addCall" ).show();
+  clearAllValues();
+});
+
+
+// Delete a row
+$(document).on('click', '.delete', function () {
+	/*
+	if (!checkIfEmptyAndValidateOnupdateCallSend() )
+	{
+		return;
+	}
+	*/		
+		
+	swal({   
+	title: "Delete Entry?",   
+	text: "Are you sure you want to delete the entry?" ,   
+	type: "info",   
+	showCancelButton: true,   
+	closeOnConfirm: false,   
+	showLoaderOnConfirm: true, }, 
+	function(){   
+	setTimeout(function(){ 
+
+							$.ajax({
+									type: "POST",
+									url: 'lib/shiftLogApi.php',
+									data:{ submit : 'Delete', PRIMARY_KEY : ID }
+								  })
+									  .done(function(data) {
+										swal("Call Deleted!", "The call has been successfully Deleted.", "success");
+									
+									  })
+									  .error(function(data) {
+										swal("Oops", "We couldn't connect to the server!", "error");
+									  });
+								  
+								}, 1000); 
+	});
+		
+  
+clearAllValues();
+	$('.delete').hide();
+	$('.updateCall').hide();
+});
 
 
 
-
-
-
-
-
-
-
-
+function getDateTime()
+{
+	var timeNow = new Date();
+    var year = timeNow.getFullYear();
+    var day = timeNow.getDate();
+    var month = timeNow.getMonth() + 1; 
+    var hours   = timeNow.getHours();
+    var minutes = timeNow.getMinutes();
+    var timeString = ( month < 10) ? "0" + month + "/" : month + "/";
    
+    timeString += (day < 10 ) ? "0" + day + "/" : day + "/" ;
+    timeString += year + " ";
+    timeString += "" + ((hours > 12) ? hours - 12 : hours);
+    timeString += ((minutes < 10) ? ":0" : ":") + minutes;
+    timeString += (hours >= 12) ? " PM" : " AM";
+	
+	return timeString;
+}
    
+  $(document).on('click', '.spanIcon', function () {
+	
+	$('#datetime1Input').val( getDateTime() );
+
+});

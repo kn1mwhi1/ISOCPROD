@@ -101,7 +101,7 @@ class ShiftLog_Logic extends ValidationUserInput
 	{
 		if(isset($_POST['ID']) && is_numeric($_POST['ID']))
 		{
-			// Retreive Ticket Information.
+			// Retrieve Ticket Information.
 			echo json_encode($this->getTicketInfo( $_POST['ID'] ));
 		}
 		else
@@ -120,36 +120,51 @@ class ShiftLog_Logic extends ValidationUserInput
 								
 								if ($_POST['view'] == 'Everyone View')
 								{
-									$this->createTableActiveExpiredCustomFieldsDetailed();
+									$this->getEveryOnesCalls12Hours();
 								}
 						break;
-					case "CURRENT TIME":  // Cancel the ticket
+					case "CURRENT TIME":  // Get Current Time
 								echo json_encode( array("SERVER_TIME"=>$this->getCurrentTime() ));
 						break;
-					case "SIXTY DAYS":  // Cancel the ticket
-								echo json_encode( array("SIXTY_SERVER_TIME"=>$this->get60Days() ));
+					case "1 DAY":  // 1 Day
+								if ($_POST['view'] == 'Your View')
+								{
+									//print_r($_SESSION);
+									$this->getYourCalls1DAY();
+								}
+								
+								if ($_POST['view'] == 'Everyone View')
+								{
+									$this->getEveryOnesCalls1DAY();
+								}
 						break;
-						
-					case "CANCEL":  // Cancel the ticket
-								$this->updateCancel($_POST['EVENT_ID']);
+					case "ALL DAYS":  // ALL
+								if ($_POST['view'] == 'Your View')
+								{
+									//print_r($_SESSION);
+									$this->getYourCallsAllDAYS();
+								}
+								
+								if ($_POST['view'] == 'Everyone View')
+								{
+									$this->getEveryOnesCallsAllDAYS();
+								}
+						break;
+					case "Delete":  // Delete the call
+								$this->removeCall($_POST['PRIMARY_KEY']);
 						break;
 					case "COMPLETED":  // Complete the ticket
-								$this->updateComplete($_POST['EVENT_ID'],$_POST['COMPLETION_NOTES'] );
+								$this->updateComplete($_POST['ID'],$_POST['COMPLETION_NOTES'] );
 						break;
-					case "ADD EVENT":  // Complete the ticket
-
-
-								$_POST['START_DATETIME'] = $this->convertJavaTimeToPHPTime($_POST['START_DATETIME'] );
-								$_POST['END_DATETIME'] = $this->convertJavaTimeToPHPTime($_POST['END_DATETIME'] );
-								$this->addEvent($_POST['START_DATETIME'], $_POST['END_DATETIME'], $_POST['NO_ENDDATE'], $_POST['STATUS'], $_POST['REFERENCE'], $_POST['INITIATOR'], $_POST['ACTION_REQUIRED']);
-								$this->updateStatusDynamic();
+					case "Add Call":  // Add Call to database
+								$_POST['DATE_TIME'] = $this->convertJavaTimeToPHPTime($_POST['DATE_TIME'] );
+								$this->addCall($_POST['DATE_TIME'], $_POST['METHOD'], $_POST['PERSON_CONTACTED'], $_POST['NOTES'], $_POST['TICKET'] );
 						break;
-					case "UPDATE EVENT":  // Complete the ticket
+					case "Update Call":  // Update Call to Database - Any Change
 								
-								$_POST['START_DATETIME'] = $this->convertJavaTimeToPHPTime($_POST['START_DATETIME'] );
-								$_POST['END_DATETIME'] = $this->convertJavaTimeToPHPTime($_POST['END_DATETIME'] );
-								$this->updateEvent($_POST['EVENT_ID'], $_POST['START_DATETIME'], $_POST['END_DATETIME'], $_POST['NO_ENDDATE'],$_POST['REFERENCE'], $_POST['INITIATOR'], $_POST['ACTION_REQUIRED']);
-								$this->updateStatusDynamic();
+								$_POST['DATE_TIME'] = $this->convertJavaTimeToPHPTime($_POST['DATE_TIME'] );
+								$this->updateCall($_POST['TICKET_NUMBER'], $_POST['DATE_TIME'], $_POST['METHOD'], $_POST['PERSON_CONTACTED'], $_POST['NOTES'], $_POST['TICKET']);
+							
 						break;
 					case "VALIDATION":  // Validation
 										// convert post variables to be compatible with validation class
@@ -163,14 +178,57 @@ class ShiftLog_Logic extends ValidationUserInput
 		}	
 	}
 	
+	private function removeCall( $id )
+	{
+		$sql = 'DELETE FROM TB_SHIFTLOG WHERE `ID` = "'.$id.'"';
+		$this->createTable($sql);
+	}
 	
 	private function getYourCalls12Hours()
 	{
-			
-			$sql = 'SELECT * FROM TB_SHIFTLOG WHERE `USER` = "'.$_SESSION['ISOC_TECH_EMPLOYEE_ID'].'"';
-			$this->createTable($sql);
-		
+			$twelveMinus = $this->getMinus12Hours();
+			$sql = 'SELECT * FROM TB_SHIFTLOG WHERE `USER` = "'.$_SESSION['ISOC_TECH_EMPLOYEE_ID'].'" AND `DATE_TIME` > "'.$twelveMinus.'" ORDER BY `DATE_TIME` DESC';
+			$this->createTable($sql);	
 	}
+	
+	private function getEveryOnesCalls12Hours()
+	{
+			$twelveMinus = $this->getMinus12Hours();
+			$sql = 'SELECT * FROM `TB_SHIFTLOG` WHERE `DATE_TIME` > "'.$twelveMinus.'" ORDER BY `DATE_TIME` DESC';
+			$this->createTable($sql);
+	}
+	
+	private function getYourCalls1DAY()
+	{
+			$twentyFourMinus = $this->getMinus24Hours();
+			$sql = 'SELECT * FROM TB_SHIFTLOG WHERE `USER` = "'.$_SESSION['ISOC_TECH_EMPLOYEE_ID'].'" AND `DATE_TIME` > "'.$twentyFourMinus.'" ORDER BY `DATE_TIME` DESC';
+			$this->createTable($sql);	
+	}
+	
+	private function getEveryOnesCalls1DAY()
+	{
+			$twentyFourMinus = $this->getMinus24Hours();
+			$sql = 'SELECT * FROM `TB_SHIFTLOG` WHERE `DATE_TIME` > "'.$twentyFourMinus.'" ORDER BY `DATE_TIME` DESC';
+			$this->createTable($sql);
+	}
+	
+	
+	// All Calls Functions
+	private function getYourCallsAllDAYS()
+	{
+			$twentyFourMinus = $this->getMinus24Hours();
+			$sql = 'SELECT * FROM TB_SHIFTLOG WHERE `USER` = "'.$_SESSION['ISOC_TECH_EMPLOYEE_ID'].'" ORDER BY `DATE_TIME` DESC';
+			$this->createTable($sql);	
+	}
+	
+	private function getEveryOnesCallsAllDAYS()
+	{
+			$twentyFourMinus = $this->getMinus24Hours();
+			$sql = 'SELECT * FROM `TB_SHIFTLOG` ORDER BY `DATE_TIME` DESC';
+			$this->createTable($sql);
+	}
+	
+	
 	
 	private function validateHtmlInput( $nameOfObject, $aType )
 	{
@@ -192,42 +250,20 @@ class ShiftLog_Logic extends ValidationUserInput
 		return date('Y-m-d H:i:s', strtotime( $aTime ));
 	}
 	
-	private function addEvent( $startDate, $endDate, $noEndDate, $status, $reference, $initiator, $actionRequired )
+	// Add Call to database
+	private function addCall( $dateTime, $method, $person_contacted, $notes, $ticket )
 	{
 		
-		if ($noEndDate == 'false')
-		{
-			$noEndDate = 'N';
-		}
-		else
-		{
-			$noEndDate = 'Y';
-		}
-		
-		
-		$anArray = array("START_DATETIME"=>$startDate, "END_DATETIME"=>$endDate, "NO_ENDDATE" =>$noEndDate, "STATUS"=>$status, "REFERENCE"=>$reference, 
-					"INITIATOR"=>$initiator, "ACTION_REQUIRED"=>$actionRequired, "CREATOR_TECH"=>$_SESSION['ISOC_TECH_EMPLOYEE_ID'], "CREATE_DATETIME"=>$this->getCurrentTime());
-		
-		$this->ToDB->insertRecordOneTable( $anArray ,'TB_ISOC_EVENT', $fieldTypes = 'sssssssis' );
+		$anArray = array("DATE_TIME"=>$dateTime, "METHOD"=>$method, "PERSON_CONTACTED" =>$person_contacted, "NOTES"=>$notes, "TICKET"=>$ticket, "USER"=>$_SESSION['ISOC_TECH_EMPLOYEE_ID']);
+		$this->ToDB->insertRecordOneTable( $anArray ,'TB_SHIFTLOG', $fieldTypes = 'ssssss' );
 	}
 	
-	private function updateEvent( $aTicketNumber, $startDate, $endDate, $noEndDate, $reference, $initiator, $actionRequired )
+	private function updateCall( $aTicketNumber, $dateTime, $method, $person_contacted, $notes, $ticket )
 	{
-		if ($noEndDate == 'false')
-		{
-			$noEndDate = 'N';
-		}
-		else
-		{
-			$noEndDate = 'Y';
-		}
 		
-		
-		$updateArray = array("START_DATETIME"=>$startDate, "END_DATETIME"=>$endDate, "NO_ENDDATE" =>$noEndDate, "REFERENCE"=>$reference, 
-					"INITIATOR"=>$initiator, "ACTION_REQUIRED"=>$actionRequired);
-		$whereArray = array("EVENT_ID"=>$aTicketNumber);			
-		$this->ToDB->updateRecordOneTable( $updateArray , $whereArray, 'equals', 'TB_ISOC_EVENT' , 'ssssssi');
-		//$this->returnAjaxError();
+		$updateArray = array("DATE_TIME"=>$dateTime, "METHOD"=>$method, "PERSON_CONTACTED" =>$person_contacted, "NOTES"=>$notes, "TICKET"=>$ticket, "USER"=>$_SESSION['ISOC_TECH_EMPLOYEE_ID']);
+		$whereArray = array("ID"=>$aTicketNumber);			
+		$this->ToDB->updateRecordOneTable( $updateArray , $whereArray, 'equals', 'TB_SHIFTLOG' , 'sssssii');
 	}
 	
 	private function returnAjaxError()
@@ -239,23 +275,23 @@ class ShiftLog_Logic extends ValidationUserInput
 	private function updateComplete( $aTicketNumber, $notes)
 	{
 		$updateArray = array("STATUS"=>"COMPLETED","COMPLETION_NOTES"=>$notes, "COMPLETION_TECH"=>$_SESSION['ISOC_TECH_EMPLOYEE_ID'], "COMPLETION_TIMEDATE"=>$this->getCurrentTime() );
-		$whereArray = array("EVENT_ID"=>$aTicketNumber);
+		$whereArray = array("ID"=>$aTicketNumber);
 		
-		$this->ToDB->updateRecordOneTable( $updateArray , $whereArray, 'equals', 'TB_ISOC_EVENT' , 'ssisi');
+		$this->ToDB->updateRecordOneTable( $updateArray , $whereArray, 'equals', 'TB_SHIFTLOG' , 'ssisi');
 	}
 	
 	private function updateCancel( $aTicketNumber )
 	{
 		$updateArray = array("STATUS"=>"CANCELED");
-		$whereArray = array("EVENT_ID"=>$aTicketNumber);
+		$whereArray = array("ID"=>$aTicketNumber);
 		
-		$this->ToDB->updateRecordOneTable( $updateArray , $whereArray, 'equals', 'TB_ISOC_EVENT' , 'si');
+		$this->ToDB->updateRecordOneTable( $updateArray , $whereArray, 'equals', 'TB_SHIFTLOG' , 'si');
 	}
 	
 	private function createTableAllDetailed()
 	{
 		
-		$sql = 'SELECT * FROM TB_ISOC_EVENT';
+		$sql = 'SELECT * FROM TB_SHIFTLOG';
 		
 		$this->createTable($sql);
 	}
@@ -264,7 +300,7 @@ class ShiftLog_Logic extends ValidationUserInput
 	private function createTableAll()
 	{
 		
-		$sql = 'SELECT `EVENT_ID`, `START_DATETIME`, `END_DATETIME`, `ACTION_REQUIRED`, `INITIATOR`, `REFERENCE`, `STATUS` FROM TB_ISOC_EVENT';
+		$sql = 'SELECT `ID`, `START_DATETIME`, `END_DATETIME`, `ACTION_REQUIRED`, `INITIATOR`, `REFERENCE`, `STATUS` FROM TB_SHIFTLOG';
 		
 		$this->createTable($sql);
 	}
@@ -272,7 +308,7 @@ class ShiftLog_Logic extends ValidationUserInput
 	private function createTablePendingDetailed()
 	{
 		
-		$sql = 'SELECT * FROM TB_ISOC_EVENT WHERE `STATUS` = "PENDING" ORDER BY `START_DATETIME`';
+		$sql = 'SELECT * FROM TB_SHIFTLOG WHERE `STATUS` = "PENDING" ORDER BY `START_DATETIME`';
 		
 		$this->createTable($sql);
 	}
@@ -281,7 +317,7 @@ class ShiftLog_Logic extends ValidationUserInput
 	private function createTablePending()
 	{
 		
-		$sql = 'SELECT `EVENT_ID`, `START_DATETIME`, `END_DATETIME`, `ACTION_REQUIRED`, `INITIATOR`, `REFERENCE`, `STATUS` FROM TB_ISOC_EVENT WHERE `STATUS` = "PENDING"';
+		$sql = 'SELECT `ID`, `START_DATETIME`, `END_DATETIME`, `ACTION_REQUIRED`, `INITIATOR`, `REFERENCE`, `STATUS` FROM TB_SHIFTLOG WHERE `STATUS` = "PENDING"';
 		
 		$this->createTable($sql);
 	}
@@ -289,7 +325,7 @@ class ShiftLog_Logic extends ValidationUserInput
 	private function createTableCompletedDetailed()
 	{
 		
-		$sql = 'SELECT * FROM TB_ISOC_EVENT WHERE `STATUS` = "COMPLETED"';
+		$sql = 'SELECT * FROM TB_SHIFTLOG WHERE `STATUS` = "COMPLETED"';
 		
 		$this->createTable($sql);
 	}
@@ -298,7 +334,7 @@ class ShiftLog_Logic extends ValidationUserInput
 	private function createTableCompleted()
 	{
 		
-		$sql = 'SELECT `EVENT_ID`, `START_DATETIME`, `END_DATETIME`, `ACTION_REQUIRED`, `INITIATOR`, `REFERENCE`, `STATUS` FROM TB_ISOC_EVENT WHERE `STATUS` = "COMPLETED"';
+		$sql = 'SELECT `ID`, `START_DATETIME`, `END_DATETIME`, `ACTION_REQUIRED`, `INITIATOR`, `REFERENCE`, `STATUS` FROM TB_SHIFTLOG WHERE `STATUS` = "COMPLETED"';
 		
 		$this->createTable($sql);
 	}
@@ -306,7 +342,7 @@ class ShiftLog_Logic extends ValidationUserInput
 	private function createTableExpiredDetailed()
 	{
 		
-		$sql = 'SELECT * FROM TB_ISOC_EVENT WHERE `STATUS` = "EXPIRED"';
+		$sql = 'SELECT * FROM TB_SHIFTLOG WHERE `STATUS` = "EXPIRED"';
 		
 		$this->createTable($sql);
 	}
@@ -315,7 +351,7 @@ class ShiftLog_Logic extends ValidationUserInput
 	private function createTableExpired()
 	{
 		
-		$sql = 'SELECT `EVENT_ID`, `START_DATETIME`, `END_DATETIME`, `ACTION_REQUIRED`, `INITIATOR`, `REFERENCE`, `STATUS` FROM TB_ISOC_EVENT WHERE `STATUS` = "EXPIRED"';
+		$sql = 'SELECT `ID`, `START_DATETIME`, `END_DATETIME`, `ACTION_REQUIRED`, `INITIATOR`, `REFERENCE`, `STATUS` FROM TB_SHIFTLOG WHERE `STATUS` = "EXPIRED"';
 		
 		$this->createTable($sql);
 	}
@@ -325,7 +361,7 @@ class ShiftLog_Logic extends ValidationUserInput
 	{
 		$twelveplus = $this->get12Hours();
 
-		$sql = 'SELECT `EVENT_ID`, `START_DATETIME`, `END_DATETIME`, `ACTION_REQUIRED`, `INITIATOR`, `REFERENCE`, `STATUS` FROM TB_ISOC_EVENT WHERE (`START_DATETIME` < "'.$twelveplus.'"
+		$sql = 'SELECT `ID`, `START_DATETIME`, `END_DATETIME`, `ACTION_REQUIRED`, `INITIATOR`, `REFERENCE`, `STATUS` FROM TB_SHIFTLOG WHERE (`START_DATETIME` < "'.$twelveplus.'"
 				AND (`STATUS` = "ACTIVE" OR `STATUS` = "PENDING")) OR `STATUS` = "EXPIRED" ORDER BY `START_DATETIME` ASC';
 		
 		$this->createTable($sql);
@@ -340,7 +376,7 @@ class ShiftLog_Logic extends ValidationUserInput
 	{
 		$twelveplus = $this->get12Hours();
 
-		$sql = 'SELECT * FROM TB_ISOC_EVENT WHERE (`START_DATETIME` < "'.$twelveplus.'"
+		$sql = 'SELECT * FROM TB_SHIFTLOG WHERE (`START_DATETIME` < "'.$twelveplus.'"
 				AND (`STATUS` = "ACTIVE" OR `STATUS` = "PENDING")) OR `STATUS` = "EXPIRED" ORDER BY `START_DATETIME` ASC';
 		
 		$this->createTable($sql);
@@ -348,13 +384,13 @@ class ShiftLog_Logic extends ValidationUserInput
 	
 	public function createTableALLFields()
 	{
-		$sql = "SELECT * FROM TB_ISOC_EVENT";
+		$sql = "SELECT * FROM TB_SHIFTLOG";
 		$this->createTable($sql);
 	}
 	
 	public function getTicketInfo( $ticketNumber )
 	{
-		$sql = 'SELECT * FROM TB_ISOC_EVENT WHERE EVENT_ID = "'.$ticketNumber.'"';
+		$sql = 'SELECT * FROM TB_SHIFTLOG WHERE ID = "'.$ticketNumber.'"';
 		
 		$temp = array();
 		$temp = $this->FromDB->multiFieldChangeToArrayAssociative( $sql );	
@@ -517,7 +553,7 @@ class ShiftLog_Logic extends ValidationUserInput
 	}
 	
 	// Replace Underscores and..
-	// Replace EVENT_ID with ID.
+	// Replace ID with ID.
 	private function cleanKeys( $keyArray )
 	{
 		// copy array values to new array
@@ -552,6 +588,32 @@ class ShiftLog_Logic extends ValidationUserInput
 	    $dateNow = date('Y-m-d H:i:s', time());
 		$date = new DateTime($dateNow);
 		$date->modify("+12 hours");
+		$date = $date->format("Y-m-d H:i:s");
+		$date = date('Y-m-d H:i:s', strtotime($date ));
+		// convert datetime to date object
+		
+		
+		return $date;
+	}
+	
+	private function getMinus12Hours()
+	{
+	    $dateNow = date('Y-m-d H:i:s', time());
+		$date = new DateTime($dateNow);
+		$date->modify("-12 hours");
+		$date = $date->format("Y-m-d H:i:s");
+		$date = date('Y-m-d H:i:s', strtotime($date ));
+		// convert datetime to date object
+		
+		
+		return $date;
+	}
+	
+	private function getMinus24Hours()
+	{
+	    $dateNow = date('Y-m-d H:i:s', time());
+		$date = new DateTime($dateNow);
+		$date->modify("-24 hours");
 		$date = $date->format("Y-m-d H:i:s");
 		$date = date('Y-m-d H:i:s', strtotime($date ));
 		// convert datetime to date object

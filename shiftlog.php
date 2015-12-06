@@ -9,7 +9,7 @@
 	<!-- Load CSS --> 
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" /> 
 	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" /> 
-	<link rel="stylesheet" type="text/css" href="css/SupportRequestForm.css" /> 
+	
 	<link rel="stylesheet" type="text/css" href="css/sweetalert.css" />	
 	<link rel="stylesheet" type="text/css" href="css/shiftlog.css" />
 	<link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.css" />
@@ -70,7 +70,7 @@ $login->getNavBar();
 						<div class="center" id="serverTimeCentral"></div>
 					
 					
-						<div id="dynamicTable" class="">--> 
+						<div id="dynamicTable" class="">
 					</tr>
 					
 					<!-- added css style here to ensure buttons work.-->
@@ -100,16 +100,22 @@ $login->getNavBar();
 				<tr class="table-hover">
 							<td id="datetimepickerTD"  name="datetimepickerTD" >
 								<div class='input-group date' id='datetimepickerDiv'>
-									<input type='text' class="form-control" name='datetime1Input' id="datetime1Input" value="" onblur="validation( this, 'ALL' );"/>
+									<input type='text' class="form-control" name='datetime1Input' id="datetime1Input" value="" tabindex="1" onblur="validation( this, 'ALL' );"/>
 										<span class="input-group-addon">
-										<span class="glyphicon glyphicon-calendar"></span>
+										<span class="glyphicon glyphicon-calendar spanIcon" ></span>
 										</span>
+								</div>
+								
+								<div class="input-group center">
+											<button type="submit" class="navbar-btn btn-everyonebtn btn enterDate spanIcon" name="submit" id='submit' value="Current Date" onclick="" >
+												<i class="glyphicon glyphicon-calendar"></i> Current Date Time
+											</button>
 								</div>
 							</td>
 						  
 					
 						<td id="methodTD"  name="methodTD" >
-						    <select name="method" id="method" class="form-control" style="width:125px">
+						    <select name="method" id="method" class="form-control" style="width:125px" tabindex="2">
         				        <option value="IM">IM</option>
     					        <option value="PHONE">Phone</option>
         				        <option value="EMAIL">Email</option>
@@ -122,18 +128,18 @@ $login->getNavBar();
 						
 						
 						<td id="personContactedTD" name="personContactedTD" >
-						    <input class="form-control" style="width:210px" type="text" id="personContacted"  placeholder="First and Last Name" name="personContacted" onblur="validation( this, 'ALL' );" />
+						    <input class="form-control" style="width:210px" type="text" id="personContacted"  placeholder="First and Last Name" name="personContacted" tabindex="3" onblur="validation( this, 'ALL' );" />
 						</td>
     				
 					
 					
 						<td id="notesTD" name="notesTD" >
-							  <textarea style="height:100px;width:250px" id="notes" name="notes" placeholder="Notes" class="form-control" onblur="validation( this, 'ALL' );"></textarea>
+							  <textarea style="height:100px;width:250px" id="notes" name="notes" placeholder="Notes" class="form-control" tabindex="4" onblur="validation( this, 'ALL' );"></textarea>
 						</td>
 						
 						
 						<td id="ticketNumberTD" name="ticketNumberTD" class="table-hover">
-							 <input class="form-control" style="width:210px" type="text" id="ticketNumber"  name="ticketNumber" placeholder="Any ticket Number(if applicable)" onblur="validation( this, 'ALL' );" />
+							 <input class="form-control" style="width:210px" type="text" id="ticketNumber"  name="ticketNumber" tabindex="5" placeholder="Any ticket Number(if applicable)" onblur="validation( this, 'ALL' );" />
 						</td>
 					</tr>
 				</tbody>
@@ -145,10 +151,10 @@ $login->getNavBar();
 
 		
 		<div>
-					<input class="btn btn-green pull-right addCall highlight" type="submit" name="submit" id='submit' value="Add Call">
-					<!--remove the number 1 from update call when updating java Matt! -->
-					<input class="btn btn-update pull-right updateCall1 highlight"  type="submit" name="submit" id='submit' value="Update Call">
+					<input class="btn btn-green pull-right addCall highlight" type="submit" name="submit" id='submit' tabindex="5" value="Add Call">
+					<input class="btn btn-update pull-right updateCall highlight"  type="submit" name="submit" id='submit' value="Update Call">
 					<input class="btn btn-clear  pull-right clear highlight"  type="submit" name="submit" id='submit' value="Clear">
+					<input class="btn btn-clear  pull-left delete highlight"  type="submit" name="submit" id='submit' value="Delete">
 		</div>
 
 	
@@ -170,14 +176,19 @@ $login->getNavBar();
 	  
        <div  class="btn-toolbar pull-right"> 
 	   
-			<!-- Current Events Button -->
-			<button type="submit" class="navbar-btn btn-bottomnavbtn btn twelveHours highlight" name="submit" id='submit' value="Twelve Hours">
+			<!-- 12 Hours Button -->
+			<button type="submit" class="navbar-btn btn-bottomnavbtn btn twelveHours highlight" name="submit" id='submit' value="Current Calls">
 			  <i class="glyphicon glyphicon-search"></i> 12 Hours
 			</button>
 			
-			<!-- expiredEvents Button -->
+			<!-- 1 Day Button -->
 			<button type="submit" class="navbar-btn btn-bottomnavbtn btn oneDay" name="submit" id='submit' value="One Day">
 			  <i class="glyphicon glyphicon-search"></i> 1 Day
+			</button>
+			
+			<!-- All Button -->
+			<button type="submit" class="navbar-btn btn-bottomnavbtn btn allDays" name="submit" id='submit' value="All Days">
+			  <i class="glyphicon glyphicon-search"></i> All
 			</button>
 			
 			

@@ -225,7 +225,7 @@ $login->getNavBar();
 	</body>
 	
 <!-- HIDDEN DIV TO PUSH FOOTER TO BOTTOM OF PAGE -->
-		<div class="push">
+		<div class="footer">
 			<footer>
 				<p> Created by ISOC &copy;2015</p>
 				<div class="img"><a href="img/ISOClogo.JPG"><img src="img/ISOClogo.JPG" alt=""></a></div>

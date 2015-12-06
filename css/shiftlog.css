@@ -69,6 +69,10 @@ textarea {
 	margin-left: 10px;
 }
 
+.delete{
+	display: none;
+}
+
 .addCall{
 	margin-left: 10px;
 }
