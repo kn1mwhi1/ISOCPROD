@@ -33,8 +33,6 @@ $login->checkSession();
 ?>
 </head>
 
-<!-- WRAPPING BODY IN DIV TO HELP PUSH FOOTER TO BOTTOM OF PAGE -->
-<div class="wrapper">
 <body>
 	
 <?php

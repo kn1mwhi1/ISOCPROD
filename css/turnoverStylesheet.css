@@ -1,6 +1,6 @@
 body {
 	height: auto;
-	font-family: Helevetica;
+	font-family: Helvetica, Courier, Times New Roman;
 	font-variant: small-caps;
 }
 
@@ -12,7 +12,7 @@ body {
 
 #Header {
 	text-align: center;
-	font-family: Helvetica, sans-serif;
+	font-family: Helvetica, Courier, Times New Roman;
 	font-variant: small-caps;
 	color: #FFF;
 	border-radius: 10px; 
@@ -131,6 +131,14 @@ body {
 	width: 220px;
 	font-family: Helvetica, sans-serif;
 	font-variant: small-caps;
+}
+
+/***************************************************
+* Existing Turnover Items textarea in Edit Turnover *
+****************************************************/
+
+#textbox {
+	height: 50px;
 }
 
 /* +, Add Item, & Edit buttons only */   
@@ -543,11 +551,5 @@ display:inline-block;
 }
 
 
-/***************************************************
-* Existing Turnover Items textarea in Edit Turnover *
-****************************************************/
 
-#textbox {
-	height: 50px;
-}
 

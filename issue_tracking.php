@@ -79,6 +79,7 @@ exit;
 <p class="trackingTextStyle">Bug/Problem/Issue:</p> <textarea name="issue" id="trackingIssue" maxlength="750" tabindex="4"></textarea>
 
 <p class="trackingTextStyle">Steps To Recreate The Issue:</p> <textarea name="recreate" id="trackingRecreate"maxlength="1500" tabindex="5"></textarea>
+</div>
 
 <div id="trackingSubmitStyle">
 <input type="submit" value="Send" id="trackingSubmit" tabindex="6">
@@ -86,7 +87,14 @@ exit;
 
 </form>
 
+<footer>
+	<p> Created by ISOC &copy;2015</p>
+	<div class="img"><a href="img/ISOClogo.JPG"><img src="img/ISOClogo.JPG" alt=""></a></div>
+ </footer>
+
 </body>
+
+
 
 	<?php } ?>
 
