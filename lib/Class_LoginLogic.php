@@ -66,10 +66,12 @@ class LoginLogic extends ValidationUserInput
 		$temp = array();
 		
 		$username = $_POST['username'];
-		$password = $_POST['password'];
+		$password = hash('sha256', $_POST['password']);
 		
 		$sql = "SELECT * FROM TB_ISOC_TECHS WHERE ISOC_TECH_EMPLOYEE_ID = '".$username."' OR ISOC_TECH_EMAIL = '".$username."' AND ISOC_TECH_PASSWORD = '".$password."'";
+		//$sql = "UPDATE TB_ISOC_TECHS SET `ISOC_TECH_PASSWORD` = '".$password."' WHERE ISOC_TECH_EMPLOYEE_ID = '".$username."'" ;
 		$temp = $this->FromDB->multiFieldChangeToArrayAssociative( $sql );		
+		//echo $temp['ISOC_TECH_PASSWORD'];
 		
 	
 		if ($temp['ISOC_TECH_PASSWORD'] === $password )
@@ -90,6 +92,8 @@ class LoginLogic extends ValidationUserInput
 				$url = 'dashboard.php';
 			}
 			
+			
+			echo "You have successfully logged in.";
 			
 		session_write_close();
 			
@@ -131,7 +135,7 @@ class LoginLogic extends ValidationUserInput
 		// all items have passed validation
 		return true;
 	}
-	
+	// Register new login.
 	private function checkLoginPasswordRegister()
 	{
 		$email = $_POST['email'];
@@ -141,71 +145,34 @@ class LoginLogic extends ValidationUserInput
 		$passwd = $_POST['passwd'];
 		$secretWord = $_POST['secretWord'];
 		$dateTimeNow = date('Y-m-d H:i:s');
-		$anArray = array("ISOC_TECH_EMPLOYEE_ID"=>"$id", "ISOC_TECH_PASSWORD"=>"$passwd", "ISOC_TECH_FIRST_NAME"=>"$firstname", "ISOC_TECH_LAST_NAME"=>"$lastname",
+		$anArray = array("ISOC_TECH_EMPLOYEE_ID"=>"$id", "ISOC_TECH_PASSWORD"=>hash('sha256', $_POST['passwd']), "ISOC_TECH_FIRST_NAME"=>"$firstname", "ISOC_TECH_LAST_NAME"=>"$lastname",
 						 "ISOC_TECH_EMAIL"=>"$email", "ISOC_TECH_SECRET_WORD"=>"$secretWord", "ISOC_TECH_LAST_LOGIN"=>"$dateTimeNow");
 		
 		
-		// Insert New User
-		$this->ToDB->insertRecordOneTable( $anArray ,'TB_ISOC_TECHS', 'issssss' );
-		
-		
-		$sql = "SELECT * FROM TB_ISOC_TECHS WHERE ISOC_TECH_EMPLOYEE_ID = '".$id."' OR ISOC_TECH_EMAIL = '".$email."' AND ISOC_TECH_PASSWORD = '".$passwd."'";
+		$sql = "SELECT * FROM TB_ISOC_TECHS WHERE ISOC_TECH_EMPLOYEE_ID = '".$id."' OR ISOC_TECH_EMAIL = '".$email."' AND ISOC_TECH_PASSWORD = '".hash('sha256', $_POST['passwd'])."'";
 		$temp = $this->FromDB->multiFieldChangeToArrayAssociative( $sql );		
 		
-	
-		if ($temp['ISOC_TECH_PASSWORD'] === $passwd && !isset($_SESSION['ISOC_TECH_EMPLOYEE_ID']))
+	//   && !isset($_SESSION['ISOC_TECH_EMPLOYEE_ID'])
+		if ($temp['ISOC_TECH_EMAIL'] != $email ||  $temp['ISOC_TECH_EMPLOYEE_ID'] != $id )
 		{
-			// Start a new session
-			$this->startSession($temp);
-			
-			// update last login time in database
-			$this->updateLastLogin();
-			
-			
-			$url ='';
-			if (isset($_SESSION['actual_link']) )
-			{
-				$url = $_SESSION['actual_link'];
-			}
-			
-			//Send EMAIL confirmation
-			$this->requesterEmailSend();
+			// Insert New User
+			$this->ToDB->insertRecordOneTable( $anArray ,'TB_ISOC_TECHS', 'issssss' );
+			$lastTransactionID = $this->ToDB->getLastTransactionID();
+			$sql = "SELECT * FROM TB_ISOC_TECHS WHERE ISOC_TECH_EMPLOYEE_ID = '".$id."' OR ISOC_TECH_EMAIL = '".$email."' AND ISOC_TECH_PASSWORD = '".hash('sha256', $_POST['passwd'])."'";
+			$temp = $this->FromDB->multiFieldChangeToArrayAssociative( $sql );		
 			
 			
-			//session_write_close();
-		
-			if ($url != '')
-			{
-				// JavaScript Redirect
-				echo"
-				<script>
-						window.location = '".$url."';
-				</script>";
-            }
-			else
-			{
-				/*
-				echo"
-				<script>
-						window.location = 'dashboard.php';
-				</script>";
-				*/
-				// show pop-up registration complete.
-				$this->messagePopup->addTomessagePopUp( 'OK', 'Registration Complete!', $_SESSION['ISOC_TECH_FIRST_NAME'].', you have successfully registered! A confirmation email has been sent to you.' , 'success' );
-				
-				echo '
-				
-				<script type="text/javascript" src="script/bootstrap.js"></script>
-				<script type="text/javascript" src="script/sweetalert.min.js"></script>
-				<link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
-				<link rel="stylesheet" type="text/css" href="css/sweetalert.css" />
-				
-				<script type="text/javascript"> 
-					swal({   title: "Registration Successful!",   text: "'.$_SESSION['ISOC_TECH_FIRST_NAME'].' , you have finished registering.",   type: "success",   confirmButtonText: "Ok" }); 
-				</script>';
-			}
-				
-				exit();	
+				if ($temp['ISOC_TECH_EMAIL'] == $email ||  $temp['ISOC_TECH_EMPLOYEE_ID'] == $id )
+				{
+					// show pop-up registration complete.
+					$this->messagePopup->addTomessagePopUp( 'OK', 'Registration Complete!', $firstname.', you have successfully registered! A confirmation email has been sent to you.' , 'success' );
+					
+
+				}
+				else
+				{
+					$this->messagePopup->addTomessagePopUp( 'OK', 'Failed to register!', 'Issue with Database' , 'error' );	
+				}
 		}
 		else
 		{
@@ -448,8 +415,10 @@ class LoginLogic extends ValidationUserInput
 	
 	private function startSession( $anArray )
 	{
-		session_start();
-		
+	   if (!isset($_SESSION['ISOC_TECH_EMPLOYEE_ID']))
+	   {
+			session_start();
+	   }
 		
 		  /*   <-- !! not sure why the comment code does'nt work.
 		 if(!isset($_SESSION)) 
@@ -599,7 +568,7 @@ class LoginLogic extends ValidationUserInput
 		else
 		{
 			//echo " you are logged in";
-			$this->messagePopup->addTomessagePopUp( 'OK', 'Logged In', $_SESSION['ISOC_TECH_FIRST_NAME'].', you are logged in!' , 'info' );
+			//$this->messagePopup->addTomessagePopUp( 'OK', 'Logged In', $_SESSION['ISOC_TECH_FIRST_NAME'].', you are logged in!' , 'info' );
 		}
 	}	
 	
@@ -685,7 +654,7 @@ class LoginLogic extends ValidationUserInput
 		if (isset($_SESSION['ISOC_TECH_FIRST_NAME']))
 		{
 			echo '<li><a href="login.php">Login Page</a></li>
-				  <li class="active"><a>Logged in as: '.$_SESSION['ISOC_TECH_FIRST_NAME'].' '.$_SESSION['ISOC_TECH_LAST_NAME'].'</a></li>
+				  <li class="active"><a href="account.php"><u>Logged in as: '.$_SESSION['ISOC_TECH_FIRST_NAME'].' '.$_SESSION['ISOC_TECH_LAST_NAME'].' (account)</u></a></li>
 				  <li class=""><a href="login.php?logout=true">Logout</a></li>';
 		}
 	}

@@ -7,6 +7,7 @@ try
 {
 	$TierTwo->checkSession();
 	$TierTwo->checkPOSTRegisterInfo();
+	$TierTwo->getNavBar();
 	
 }
 catch (Exception  $e)
