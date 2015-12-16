@@ -456,7 +456,7 @@ class Event_Logic extends ValidationUserInput
 		$twelveplus = $this->get12Hours();
 
 		$sql = 'SELECT `EVENT_ID`, `START_DATETIME`, `END_DATETIME`, `ACTION_REQUIRED`, `INITIATOR`, `REFERENCE`, `STATUS` FROM TB_ISOC_EVENT WHERE (`START_DATETIME` < "'.$twelveplus.'"
-				AND (`STATUS` = "ACTIVE" OR `STATUS` = "PENDING")) OR `STATUS` = "EXPIRED" ORDER BY `START_DATETIME` ASC';
+				AND (`STATUS` = "ACTIVE" OR `STATUS` = "PENDING")) OR `STATUS` = "EXPIRED" ORDER BY `EVENT_ID` DESC';
 		
 		$this->createTable($sql);
 	}
@@ -466,7 +466,7 @@ class Event_Logic extends ValidationUserInput
 		$twelveplus = $this->get12Hours();
 
 		$sql = 'SELECT * FROM TB_ISOC_EVENT WHERE (`START_DATETIME` < "'.$twelveplus.'"
-				AND (`STATUS` = "ACTIVE" OR `STATUS` = "PENDING")) OR `STATUS` = "EXPIRED" ORDER BY `START_DATETIME` ASC';
+				AND (`STATUS` = "ACTIVE" OR `STATUS` = "PENDING")) OR `STATUS` = "EXPIRED" ORDER BY `EVENT_ID` DESC';
 		
 		$this->createTable($sql);
 	}

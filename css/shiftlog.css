@@ -24,25 +24,6 @@ body {
 	  top: 20px;
 }
 
-/*
-.header {
-       
-		text-align: center;
-        font-family: Helvetica;
-        font-variant: small-caps;
-        color: #FFFFFF;
-        border-radius: 10px;
-        background: #66C285;
-		margin-bottom: 0px;
-		margin-top: 0px;
-        width: auto;
-        height: auto;
-	
-}
-*/
-
-
-
 
 .other{
 	margin-top: 5px;
@@ -107,12 +88,14 @@ thead{
 		color: white;
 }
 
- 
+/* Sets  the buttons position */
 .selfView, .everyoneView{
 	position: relative;
     top: 55px;
 	z-index:4;
 }
+
+
 
 #dynamicTable{
 	height: 460px;
@@ -176,7 +159,7 @@ thead{
 	text-align: center;
 }
 
-#serverTimeCentral{
+#serverTime{
 	font-weight: bold;
 	font-size: 14px;
 	position: relative;
@@ -186,80 +169,31 @@ thead{
 display:block;
 }
 
-.btn:highlight{
-	font: white;
-}
 .btn-green{
 background-color: #66C285;
 color: white;
 }
- .btn-green:hover,
- .btn-green:active{
-background: #1e1e1e;
-border-color: #66C285;
-color: #66C285;
-
- }
-
-.btn:focus, .btn:hover {
-  background-color: #1e1e1e;
-  }
 
 .btn-clear{
 background-color: #bc9b74;
 color: white;
 }
- .btn-clear:hover,
- .btn-clear:active{
-background: #1e1e1e;
-border-color: #bc9b74;
-color: #bc9b74;
- }
  
  .btn-update{
  background-color: #5993cd;
  color: white;
  }
- .btn-update:hover,
- .btn-update:active{
-background: #1e1e1e;
-border-color: #5993cd;
-color: #5993cd;
- }
  
-/* twelve hour btn*/ 
- .btn-bottomnavbtn{
- background-color:#white;
- color: #68351a;
-  }
-  
- .btn-bottomnavbtn:hover,
- .btn-bottomnavbtn:active{
-background: #1e1e1e;
-border-color:#68351a;
-color: white;
- }
+/* This changes the colour when a button has focus and when you hover */ 
+ .btn:focus, .btn:hover {
+  background-color: black;
+  color: white;
+}
+
+/* This class is usually used by jquery */
+ .highlight{
+	background-color: black;
+	color: white;
+}
+
  
- .btn-toprowbtn{
-background-color:#1e1e1e;
-color:#5993cd;
-border-color: #5993cd;
- }
- .btn-toprowbtn:hover,
- .btn-toprowbtn:active{
-background: #ececec;
-border-color: #5993cd;
-color: #1e1e1e;
- }
- 
- .btn-everyonebtn{
-background-color:#1e1e1e;
-color: #66C285;
-border-color: #66C285;
- }
-  .btn-everyonebtn:hover,
- .btn-everyonebtn:active{
-background: #ececec;
-border-color: #66C285;
-color: #1e1e1e;
- }

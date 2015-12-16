@@ -126,6 +126,9 @@ class ShiftLog_Logic extends ValidationUserInput
 					case "CURRENT TIME":  // Get Current Time
 								echo json_encode( array("SERVER_TIME"=>$this->getCurrentTime() ));
 						break;
+					case "EASTERN TIME":  // Get Current Time
+								echo json_encode( array("SERVER_TIME"=>$this->getEasternTime() ));
+						break;
 					case "1 DAY":  // 1 Day
 								if ($_POST['view'] == 'Your View')
 								{
@@ -187,28 +190,28 @@ class ShiftLog_Logic extends ValidationUserInput
 	private function getYourCalls12Hours()
 	{
 			$twelveMinus = $this->getMinus12Hours();
-			$sql = 'SELECT * FROM TB_SHIFTLOG WHERE `USER` = "'.$_SESSION['ISOC_TECH_EMPLOYEE_ID'].'" AND `DATE_TIME` > "'.$twelveMinus.'" ORDER BY `DATE_TIME` DESC';
+			$sql = 'SELECT ID, DATE_TIME , METHOD, PERSON_CONTACTED, NOTES, TICKET FROM TB_SHIFTLOG WHERE `USER` = "'.$_SESSION['ISOC_TECH_EMPLOYEE_ID'].'" AND `DATE_TIME` > "'.$twelveMinus.'" ORDER BY `DATE_TIME` DESC';
 			$this->createTable($sql);	
 	}
 	
 	private function getEveryOnesCalls12Hours()
 	{
 			$twelveMinus = $this->getMinus12Hours();
-			$sql = 'SELECT * FROM `TB_SHIFTLOG` WHERE `DATE_TIME` > "'.$twelveMinus.'" ORDER BY `DATE_TIME` DESC';
+			$sql = 'SELECT ID, DATE_TIME, METHOD, PERSON_CONTACTED, NOTES, TICKET, (SELECT CONCAT( `ISOC_TECH_FIRST_NAME`, " ", `ISOC_TECH_LAST_NAME`) FROM `TB_ISOC_TECHS` WHERE `USER` = `ISOC_TECH_EMPLOYEE_ID`) AS `USER` FROM `TB_SHIFTLOG` WHERE `DATE_TIME` > "'.$twelveMinus.'" ORDER BY `DATE_TIME` DESC';
 			$this->createTable($sql);
 	}
 	
 	private function getYourCalls1DAY()
 	{
 			$twentyFourMinus = $this->getMinus24Hours();
-			$sql = 'SELECT * FROM TB_SHIFTLOG WHERE `USER` = "'.$_SESSION['ISOC_TECH_EMPLOYEE_ID'].'" AND `DATE_TIME` > "'.$twentyFourMinus.'" ORDER BY `DATE_TIME` DESC';
+			$sql = 'SELECT ID, DATE_TIME , METHOD, PERSON_CONTACTED, NOTES, TICKET FROM TB_SHIFTLOG WHERE `USER` = "'.$_SESSION['ISOC_TECH_EMPLOYEE_ID'].'" AND `DATE_TIME` > "'.$twentyFourMinus.'" ORDER BY `DATE_TIME` DESC';
 			$this->createTable($sql);	
 	}
 	
 	private function getEveryOnesCalls1DAY()
 	{
 			$twentyFourMinus = $this->getMinus24Hours();
-			$sql = 'SELECT * FROM `TB_SHIFTLOG` WHERE `DATE_TIME` > "'.$twentyFourMinus.'" ORDER BY `DATE_TIME` DESC';
+			$sql = 'SELECT ID, DATE_TIME, METHOD, PERSON_CONTACTED, NOTES, TICKET, (SELECT CONCAT( `ISOC_TECH_FIRST_NAME`, " ", `ISOC_TECH_LAST_NAME`) FROM `TB_ISOC_TECHS` WHERE `USER` = `ISOC_TECH_EMPLOYEE_ID`) AS `USER` FROM `TB_SHIFTLOG` WHERE `DATE_TIME` > "'.$twentyFourMinus.'" ORDER BY `DATE_TIME` DESC';
 			$this->createTable($sql);
 	}
 	
@@ -217,14 +220,14 @@ class ShiftLog_Logic extends ValidationUserInput
 	private function getYourCallsAllDAYS()
 	{
 			$twentyFourMinus = $this->getMinus24Hours();
-			$sql = 'SELECT * FROM TB_SHIFTLOG WHERE `USER` = "'.$_SESSION['ISOC_TECH_EMPLOYEE_ID'].'" ORDER BY `DATE_TIME` DESC';
+			$sql = 'SELECT ID, DATE_TIME , METHOD, PERSON_CONTACTED, NOTES, TICKET FROM TB_SHIFTLOG WHERE `USER` = "'.$_SESSION['ISOC_TECH_EMPLOYEE_ID'].'" ORDER BY `DATE_TIME` DESC';
 			$this->createTable($sql);	
 	}
 	
 	private function getEveryOnesCallsAllDAYS()
 	{
 			$twentyFourMinus = $this->getMinus24Hours();
-			$sql = 'SELECT * FROM `TB_SHIFTLOG` ORDER BY `DATE_TIME` DESC';
+			$sql = 'SELECT ID, DATE_TIME, METHOD, PERSON_CONTACTED, NOTES, TICKET, (SELECT CONCAT( `ISOC_TECH_FIRST_NAME`, " ", `ISOC_TECH_LAST_NAME`) FROM `TB_ISOC_TECHS` WHERE `USER` = `ISOC_TECH_EMPLOYEE_ID`) AS `USER` FROM `TB_SHIFTLOG` ORDER BY `DATE_TIME` DESC';
 			$this->createTable($sql);
 	}
 	
@@ -263,7 +266,7 @@ class ShiftLog_Logic extends ValidationUserInput
 		
 		$updateArray = array("DATE_TIME"=>$dateTime, "METHOD"=>$method, "PERSON_CONTACTED" =>$person_contacted, "NOTES"=>$notes, "TICKET"=>$ticket, "USER"=>$_SESSION['ISOC_TECH_EMPLOYEE_ID']);
 		$whereArray = array("ID"=>$aTicketNumber);			
-		$this->ToDB->updateRecordOneTable( $updateArray , $whereArray, 'equals', 'TB_SHIFTLOG' , 'sssssii');
+		$this->ToDB->updateRecordOneTable( $updateArray , $whereArray, 'equals', 'TB_SHIFTLOG' , 'ssssssi');
 	}
 	
 	private function returnAjaxError()
@@ -449,14 +452,13 @@ class ShiftLog_Logic extends ValidationUserInput
 		$values = $this->changeDateFormat( $values );
 		
 		$tableStartDeclaration = '
-							<table id="table"
+							<table tabindex="-1" id="table"
 							   data-toggle="table"
-							   data-toolbar="#toolbar"
-							   data-show-toggle="true"
 							   data-show-columns="true"
 							   data-height="460"
 							   data-search="true"
-							   >';
+							   tabindex="-1"
+							    >';
 							   
 		$tableEndDeclaration = '</table>';
 		
@@ -471,7 +473,7 @@ class ShiftLog_Logic extends ValidationUserInput
 		$cssAndScripts = '	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 						    <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
 							<link type="text/css" rel="stylesheet" href="css/bootstrap-table.css">
-							<link rel="stylesheet" type="text/css" href="css/eventlog.css" />
+							<link rel="stylesheet" type="text/css" href="css/shiftlog.css" />
 						    <script type="text/javascript" src="script/jquery.js"></script>
 							<script type="text/javascript" src="script/bootstrap-table.js"></script>';
 							
@@ -483,12 +485,12 @@ class ShiftLog_Logic extends ValidationUserInput
 	private function createTableHead( &$anArray )
 	{
 		// start the thead and tr
-		$thFields ='<thead><tr>';
+		$thFields ='<thead tabindex="-1"><tr tabindex="-1">';
 		
 		// Create the th data rows
 		for ($x=0;$x < count($anArray); $x++)
 		{
-			$thFields = $thFields.'<th data-field="'.$anArray[$x].'" data-sortable="true">'.$anArray[$x].'</th>';
+			$thFields = $thFields.'<th data-field="'.$anArray[$x].'" data-sortable="true" tabindex="-1">'.$anArray[$x].'</th>';
 		}
 		
 		// end the thead and tr
@@ -525,7 +527,7 @@ class ShiftLog_Logic extends ValidationUserInput
 				// Logic to mark entire row has the class danger if expire exists.
 				if ($anArray[$x+$offset] == 'EXPIRED')
 				{
-					$allData = $allData.'<tr class="expired" >';
+					$allData = $allData.'<tr tabindex="-1" class="expired" >';
 				}
 				else
 				{
@@ -534,7 +536,7 @@ class ShiftLog_Logic extends ValidationUserInput
 			}
 			
 			// Adds the Table Data.
-			$allData = $allData.'<td class="clickMe" id="'.$id.'" data-value="'.$anArray[$x].'">'.$anArray[$x].'</td>';
+			$allData = $allData.'<td tabindex="-1" class="clickMe" id="'.$id.'" data-value="'.$anArray[$x].'">'.$anArray[$x].'</td>';
 			
 			// Adds the end of the row tag
 			// accumulator
@@ -579,6 +581,19 @@ class ShiftLog_Logic extends ValidationUserInput
 	{
 		$date = date('Y-m-d H:i:s', time());
 	;
+		
+		return $date;
+	}
+	
+	private function getEasternTime()
+	{
+	    $dateNow = date('Y-m-d H:i:s', time());
+		$date = new DateTime($dateNow);
+		$date->modify("+1 hours");
+		$date = $date->format("Y-m-d H:i:s");
+		$date = date('Y-m-d H:i:s', strtotime($date ));
+		// convert datetime to date object
+		
 		
 		return $date;
 	}

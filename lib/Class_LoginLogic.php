@@ -3,7 +3,7 @@ require_once 'Class_LoginDB_In.php';
 require_once 'Class_LoginDB_Out.php';
 require_once 'Class_ValidationUserInput.php';
 require_once 'Class_ISOC_EMAIL.php';
-require_once 'lib/Class_ErrorPopup.php';
+require_once 'Class_ErrorPopup.php';
 
 class LoginLogic extends ValidationUserInput
 {
@@ -456,6 +456,50 @@ class LoginLogic extends ValidationUserInput
 		$this->ToDB->updateRecordOneTable( $updateArray , $whereArray, 'equals', 'TB_ISOC_TECHS' , 'ss');
 	}
 	
+	// Edit Account Information Post Function
+	public function checkPost()
+	{
+		if(isset($_POST['submit']))
+		{
+			
+			switch ($_POST['submit']) 
+			{
+				case "Load Page":   
+							echo json_encode( $this->loadAccountInformation() );
+					break;
+				case "Update Account Info": 
+								
+							$_POST['DATE_TIME'] = $this->convertJavaTimeToPHPTime($_POST['DATE_TIME'] );
+							$this->updateCall($_POST['TICKET_NUMBER'], $_POST['DATE_TIME'], $_POST['METHOD'], $_POST['PERSON_CONTACTED'], $_POST['NOTES'], $_POST['TICKET']);
+							
+					break;
+				case "VALIDATION":  // Validation
+							// convert post variables to be compatible with validation class
+							$_POST[$_POST['OBJECT_NAME']] = $_POST['VALUE'];
+							$this->validateHtmlInput( $_POST['OBJECT_NAME'],$_POST['TYPE'] );
+					break;
+				default:
+					//$this->createTableActiveExpiredCustomFields();
+			}
+		}
+	}
+	
+	
+	private function loadAccountInformation()
+	{
+		$userLoginID = $_SESSION['ISOC_TECH_EMPLOYEE_ID'];
+		//$sql = 'SELECT * FROM TB_ISOC_TECHS WHERE ISOC_TECH_EMPLOYEE_ID = "'.$userLoginID.'"';
+		$sql = 'SELECT * FROM TB_ISOC_TECHS WHERE ISOC_TECH_EMPLOYEE_ID = "53741"';
+		$temp = array();
+		$temp = $this->FromDB->multiFieldChangeToArrayAssociative( $sql );	
+		return $temp;
+	}
+	
+	
+	
+	
+	
+	
 	
 //Used to check information after user has "posted" the data from a from
 // Used by the login form only.
@@ -653,9 +697,9 @@ class LoginLogic extends ValidationUserInput
 	{
 		if (isset($_SESSION['ISOC_TECH_FIRST_NAME']))
 		{
-			echo '<li><a href="login.php">Login Page</a></li>
-				  <li class="active"><a href="account.php"><u>Logged in as: '.$_SESSION['ISOC_TECH_FIRST_NAME'].' '.$_SESSION['ISOC_TECH_LAST_NAME'].' (account)</u></a></li>
-				  <li class=""><a href="login.php?logout=true">Logout</a></li>';
+			echo '<li><a href="login.php" tabindex="-1">Login Page</a></li>
+				  <li class="active"><a href="account.php" tabindex="-1"><u>Logged in as: '.$_SESSION['ISOC_TECH_FIRST_NAME'].' '.$_SESSION['ISOC_TECH_LAST_NAME'].' (account)</u></a></li>
+				  <li class=""><a href="login.php?logout=true" tabindex="-1">Logout</a></li>';
 		}
 	}
 	

@@ -1,107 +1,89 @@
 document.write('<script type="text/javascript" src="script/sweetalert.min.js"></script>');  
 
- // Global Variables
- 
- selection = 'Current Calls';
- viewSelection = 'Your View';
- temp ='';
- ID='';
-
-// function to show calendar
-$(function () {	
-	$('#datetime1Input').datetimepicker({
-		
-		minDate: getServerDateTime('CURRENT TIME'),
-		format: 'MM/DD/YYYY H:mm'
-	});
-	
-	$( "#datetime1Input" ).removeClass( "error" )
-	
-	});
-	
-	
 
  // When document has loaded run ajax command every second.
 $(document).ready(function(){
 
-     setInterval(ajaxcall, 1000);
+     //setInterval(ajaxcall, 1000);
+	ajaxcall();
  });
  
- // When document has loaded run ajax command every second.
-$(document).ready(function(){
-
-     setInterval(getServerTimeEastern, 1000);
- });
- 
-
-
  function ajaxcall(){
      $.ajax({
 		 type: "POST",
-         url: 'lib/shiftLogApi.php',
-		 data:{ submit : selection, view : viewSelection },
-         success: function(someData){
-			
-				if ( temp != someData)
+         url: 'lib/editAccountApi.php',
+		 data:{ submit : 'Load Page' },
+         success: function(data){
+					//alert(data);
+					someData = JSON.parse(data);
+	
+					ISOC_TECH_EMPLOYEE_ID =  someData.ISOC_TECH_EMPLOYEE_ID;
+					ISOC_TECH_PASSWORD = someData.ISOC_TECH_PASSWORD;
+					ISOC_TECH_FIRST_NAME = someData.ISOC_TECH_FIRST_NAME;
+					ISOC_TECH_LAST_NAME = someData.ISOC_TECH_LAST_NAME;
+					ISOC_TECH_EMAIL = someData.ISOC_TECH_EMAIL;
+					ISOC_TECH_SECRET_WORD = someData.ISOC_TECH_SECRET_WORD;
+					ISOC_TECH_LAST_LOGIN = someData.ISOC_TECH_LAST_LOGIN;
+					ISOC_TECH_ROLE = someData.ISOC_TECH_ROLE;
+					ISOC_TECH_SHIFT = someData.ISOC_TECH_SHIFT;
+					ACCOUNT_LOCKED = someData.ACCOUNT_LOCKED;
+					
+					
+					//alert("Hello " + ISOC_TECH_FIRST_NAME + " " + ISOC_TECH_LAST_NAME);
+					
+				if ( ISOC_TECH_ROLE == "admin" )
 				{
-					 $(dynamicTable).html(someData);
-					 temp = someData;
-				 }
-         }
-     });
- }
- 
- 
-  function ajaxButton( buttonType, aValue ){
-     $.ajax({
-		 type: "POST",
-         url: 'lib/shiftLogApi.php',
-		 data:{ buttonType : aValue, EVENT_ID : ticketID },
-         success: function(someData){
-			 
-			// alert('buttonType: ' + buttonType + 'aValue: ' + aValue + 'ticket: ' + EVENT_ID + 'ticketID: ' + ticketID );
-			 
-			 
-					//			swal("Change Successful!", "Your change was successful!", "success"); 
-			
-         }
-     });
- }
- 
+				   	// Fill all text boxes with data for admin role
+					$('.firstName').val(ISOC_TECH_FIRST_NAME);
+					$('.lastName').val(ISOC_TECH_LAST_NAME);
+					$('.email').val(ISOC_TECH_EMAIL);
+					$('.secretWord').val(ISOC_TECH_SECRET_WORD);
+					$('.role-select').val(ISOC_TECH_ROLE);
+					$('.shift').val(ISOC_TECH_SHIFT);
+					$('.id').val(ISOC_TECH_EMPLOYEE_ID);
+					
+					// Hide text boxes for regular uses
+					$('.role-text').hide();
+				
+				}
+				
+				else
+				{
+				
+					// Fill all text boxes with data for user role
+					$('.firstName').val(ISOC_TECH_FIRST_NAME);
+					$('.lastName').val(ISOC_TECH_LAST_NAME);
+					$('.email').val(ISOC_TECH_EMAIL);
+					$('.secretWord').val(ISOC_TECH_SECRET_WORD);
+					$('.role-text').val(ISOC_TECH_ROLE);
+					$('.shift').val(ISOC_TECH_SHIFT);
+					$('.id').val(ISOC_TECH_EMPLOYEE_ID);
+					
+					//Hide drop downs for Admin
+					$('.role-select').hide();
+					
+					//show textboxes for users
+					$('.role-text').show();
+					
+					// modify textboxes to be read only
+					$('.role-text').attr('readonly', true);
+					
+				}	
+					
+					
+					
 
+         }
+     });
+ }
+ 
  
  function clearAllValues()
  {
 	$('#initiatorInput').val("");
-	$('#actionRequiredInput').val("");
-	$('#reference').val('IM');				
-	$('#datetime1').val("");
-
-	$( "#datetime1Input" ).val("");
-	$('#method').val('IM');
-	$('#personContacted').val('');
-	$('#notes').val('');
-	$('#ticketNumber').val( '');
  }
  
 
- 
-
- 
-	// convert a mysql time and date to a customer time and date
-   function convertDate( dateTime )
-   {
-		// Split timestamp into [ Y, M, D, h, m, s ]
-		var t = dateTime.split(/[- :]/);
-
-		// Apply each element to the Date function
-		var timeNow = new Date(t[0], t[1], t[2], t[3], t[4], t[5]);
-
-		timeString = t[1] + '/' + t[2] + '/' + t[0] + ' ' + t[3] + ':' + t[4] + ':' + t[5];
-		
-		return timeString;
-   }
-   
 
  
 
@@ -209,12 +191,6 @@ function checkIfEmptyAndValidateOnupdateCallSend()
 	return true;
 }
 
-// Fix the issue where table columns were not updating when the window was resized.
-
-$( window ).resize(function() {
-  //alert('Resize has cicked off');
-  $('#table').bootstrapTable('resetView', '460');
-});
 
 
 function validation( aHtmlElementName, typeOfValidation )

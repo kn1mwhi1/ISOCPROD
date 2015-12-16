@@ -6,18 +6,24 @@
 require_once 'lib/Class_LoginLogic.php'; 
 $TierTwo = new LoginLogic();
 ?>
-<script type="text/javascript" src="script/bootstrap.js"></script>
-<script type="text/javascript" src="script/jquery.js"></script>
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
-<script type="text/javascript" src="script/sweetalert.min.js"></script>
-
-<link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
-<link rel="stylesheet" type="text/css" href="css/sweetalert.css" />
 
 
-<script>
-loadCookies();
-</script>
+
+	<!-- Load CSS --> 
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" /> 
+	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" /> 
+	<link rel="stylesheet" type="text/css" href="css/sweetalert.css" />	
+	<link rel="stylesheet" type="text/css" href="css/shiftlog.css" />
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.css" />
+	
+	
+	<!-- Load Javascript -->
+	<script type="text/javascript" src="script/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="script/bootstrap.min.js"></script>
+	<script type="text/javascript" src="script/moment-with-locales.js"></script>
+	<script type="text/javascript" src="script/bootstrap-datetimepicker.js"></script>
+	<script type="text/javascript" src="script/getdatetime.js"></script>
+	<script type="text/javascript" src="script/editAccount.js"></script>
 
 <?php
 try
@@ -33,152 +39,149 @@ catch (Exception  $e)
 ?>
 
 
-<script>
-// Uses HTML5 features to save local info from username and password to local computer.
 
-            $(function() {
-
-                if (localStorage.chkbx && localStorage.chkbx != '') {
-                    $('#loginremember').attr('checked', 'checked');
-                    $('#username').val(localStorage.usrname);
-                    $('#loginpassword').val(localStorage.pass);
-                } else {
-                    $('#loginremember').removeAttr('checked');
-                    $('#username').val('');
-                    $('#loginpassword').val('');
-                }
-
-                $('#loginremember').click(function() {
-
-                    if ($('#loginremember').is(':checked')) {
-                        // save username and password
-                        localStorage.usrname = $('#username').val();
-                        localStorage.pass = $('#loginpassword').val();
-                        localStorage.chkbx = $('#loginremember').val();
-                    } else {
-                        localStorage.usrname = '';
-                        localStorage.pass = '';
-                        localStorage.chkbx = '';
-                    }
-                });
-            });
-			
-			
-			
-			
-			
-			
-
- </script>
 
 
 </head>
 <body>
 
+<div class="container">
+    <h1>Edit Account Information</h1>
+  	<hr>
+	<div class="row">
 
- <div class="container">    
-        <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">                    
-            <div class="panel panel-info" >
-                    <div class="panel-heading">
-                        <div class="panel-title">Account Settings ( Under Construction)</div>
-                        <div style="float:right; font-size: 80%; position: relative; top:-10px">
-						
-						</div>
-                    </div>     
-
-                    <div style="padding-top:30px" class="panel-body" >
-
-                        <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
-<!-- Beginning of login Form -->
-                            
-                        <form id="loginform" class="form-horizontal" role="form" method="post" action="login.php" >
-                                    
-									
-									
-						            <div style="margin-bottom: 25px" class="input-group">
-                                        <label for="techID">Technician ID: </label> 
-                                        <input style="width:200px; float:right;" id="techID" type="text" class="form-control"  name="techID"  >                                   
-                                    </div>			
-
-						            <div style="margin-bottom: 25px" class="input-group">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                        <input id="techFirstName" type="text" class="form-control"  name="techFirstName"  >                                        
-                                    </div>										
-									
-						            <div style="margin-bottom: 25px" class="input-group">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                        <input id="techLastName" type="text" class="form-control"  name="techLastName"  >                                        
-                                    </div>	 
-
-						            <div style="margin-bottom: 25px" class="input-group">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                        <input id="techEmail" type="text" class="form-control"  name="techEmail"  >                                        
-                                    </div>
-
-						            <div style="margin-bottom: 25px" class="input-group">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                        <input id="techSecretWord" type="text" class="form-control"  name="techSecretWord"  >                                        
-                                    </div>
-									
-						            <div style="margin-bottom: 25px" class="input-group">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                        <input id="techSecretWord" type="text" class="form-control"  name="techSecretWord"  >                                        
-                                    </div>
-
-						            <div style="margin-bottom: 25px" class="input-group">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                        <input id="techRole" type="text" class="form-control"  name="techRole"  >                                        
-                                    </div>									
-									
-						            <div style="margin-bottom: 25px" class="input-group">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                        <input id="techShift" type="text" class="form-control"  name="techShift"  >                                        
-                                    </div>	
-
-
-									
-                            <div style="margin-bottom: 25px" class="input-group">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                        <input id="loginpassword" type="password" class="form-control <?php $TierTwo->getError('password');?>" name="password" placeholder="password" >
-                                    </div>
-                                    
-
-
-
-
-                                <div style="margin-top:10px" class="form-group">
-                                    <!-- Button -->
-
-                                    <div class="col-sm-12 controls">
- <!-- Submit button -->            
-										<input class="btn btn-primary" type="submit" id='btn-login' value='Login' href="login.php">
-										<a class="btn btn-danger right" href="login.php?logout=true">Log Out</a>
-                                    </div>
-
-                                </div>
-
-
-                                <div class="form-group">
-                                    <div class="col-md-12 control">
-                                        <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%" >
-                                     Create an Account for another ISOC Tech (Must be logged in first)! 
-                                       <a href="register.php">
-                                            Sign Up Here               
-                                        </a>            
-                                        </div>
-                                    </div>
-                                </div>    
-                            </form>   
-
-
-<!-- End of login Form --->							
-
-
-
-                        </div>                     
-                    </div>  
+      
+      <!-- edit form column -->
+      <div class="col-md-9 personal-info">
+        <div class="alert alert-info alert-dismissable">
+          <a class="panel-close close" data-dismiss="alert">×</a> 
+     
+          This page is under construction and does not work yet.
         </div>
-    </div>
+		
+		
+        <h3>Personal info</h3>
+        
+        <form class="form-horizontal" role="form">
+          <div class="form-group">
+            <label class="col-lg-3 control-label">First name:</label>
+            <div class="col-lg-8">
+              <input class="form-control firstName" type="text" value="">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-lg-3 control-label">Last name:</label>
+            <div class="col-lg-8">
+              <input class="form-control lastName" type="text" value="">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-lg-3 control-label">Email:</label>
+            <div class="col-lg-8">
+              <input class="form-control email" type="text" value="">
+            </div>
+          </div>
+		  
+		  <div class="form-group">
+            <label class="col-lg-3 control-label">Secret Word:</label>
+            <div class="col-lg-8">
+              <input class="form-control secretWord" type="text" value="">
+            </div>
+          </div>
+		  
+		  <!--
+          <div class="form-group">
+            <label class="col-lg-3 control-label">Time Zone:</label>
+            <div class="col-lg-8">
+              <div class="ui-select">
+                <select id="user_time_zone" class="form-control">
+                  <option value="Hawaii">(GMT-10:00) Hawaii</option>
+                  <option value="Alaska">(GMT-09:00) Alaska</option>
+                  <option value="Pacific Time (US &amp; Canada)">(GMT-08:00) Pacific Time (US &amp; Canada)</option>
+                  <option value="Arizona">(GMT-07:00) Arizona</option>
+                  <option value="Mountain Time (US &amp; Canada)">(GMT-07:00) Mountain Time (US &amp; Canada)</option>
+                  <option value="Central Time (US &amp; Canada)" selected="selected">(GMT-06:00) Central Time (US &amp; Canada)</option>
+                  <option value="Eastern Time (US &amp; Canada)">(GMT-05:00) Eastern Time (US &amp; Canada)</option>
+                  <option value="Indiana (East)">(GMT-05:00) Indiana (East)</option>
+                </select>
+              </div>
+            </div>
+          </div>  
+		 
+          <div class="form-group">
+            <label class="col-md-3 control-label">Username:</label>
+            <div class="col-md-8">
+              <input class="form-control" type="text" value="janeuser">
+            </div>
+          </div>
+		   -->
+		   
+		  <div class="form-group">
+             <label class="col-lg-3 control-label">Role:</label>
+			   <div class="col-lg-8">
+				<select class="form-control role-select" name="role" id="role"  style="">
+				  <option value="1">User</option>
+				  <option value="2">Admin</option>
+				  <option value=""></option>
+				</select>
+				<input class="form-control role-text" type="text" value="">
+             </div>
+          </div>
+		  
+		  <div class="form-group">
+             <label class="col-lg-3 control-label">Shift:</label>
+			   <div class="col-lg-8">
+				<select class="form-control shift" name="shift" id="shift"  style="">
+				  <option value="1">1st</option>
+				  <option value="2">2nd</option>
+				  <option value="3">3rd</option>
+				  <option value="Cross Shift">Cross Shift</option>
+				  <option value="Unix">Unix</option>
+				  <option value=""></option>
+				</select>
+			
+             </div>
+          </div>
+		  <div class="form-group">
+            <label class="col-lg-3 control-label">Employee ID:</label>
+            <div class="col-lg-8">
+              <input class="form-control id" type="text" value="">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label password1">Password:</label>
+            <div class="col-md-8">
+              <input class="form-control" type="password" value="">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label password2">Confirm password:</label>
+            <div class="col-md-8">
+              <input class="form-control" type="password" value="">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label"></label>
+            <div class="col-md-8">
+              <input type="submit" class="btn btn-primary save" value="Save Changes">
+              <span></span>
+              <input type="reset" class="btn btn-default clear" value="clear">
+            </div>
+          </div>
+        </form>
+		
+		
+		
+      </div>
+  </div>
+</div>
+
+
+<hr>
+
+
+
  <?php 
 $TierTwo->notifyMessage();
 ?>

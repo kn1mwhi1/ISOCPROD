@@ -9,7 +9,6 @@
 	<!-- Load CSS --> 
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" /> 
 	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" /> 
-	
 	<link rel="stylesheet" type="text/css" href="css/sweetalert.css" />	
 	<link rel="stylesheet" type="text/css" href="css/shiftlog.css" />
 	<link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.css" />
@@ -59,18 +58,18 @@ $login->getNavBar();
 					<tr id="shiftLogDynamicTableRow " >
 							
 						<!-- normalView Button -->
-						<button type="submit" class="navbar-btn btn-toprowbtn btn selfView" name="selfButton" id='selfButton' value="Your Calls">
+						<button type="submit" class="navbar-btn btn-toprowbtn btn selfView highlight" name="selfButton" id='selfButton' value="Your Calls" tabindex="-1">
 						  <i class="glyphicon glyphicon-hand-right"></i> You
 						</button>
 						
-						<button type="submit" class="navbar-btn btn-everyonebtn btn everyoneView" name="everyoneButton" id='everyoneButton' value="All Calls">
+						<button type="submit" class="navbar-btn btn-everyonebtn btn everyoneView" name="everyoneButton" id='everyoneButton' value="All Calls" tabindex="-1">
 						  <i class="glyphicon glyphicon-eye-open"></i> Everyone
 						</button>
 						
-						<div class="center" id="serverTimeCentral"></div>
+						<div class="center" id="serverTime"></div>
 					
 					
-						<div id="dynamicTable" class="">
+						<div id="dynamicTable" class="" tabindex="-1">
 					</tr>
 					
 					<!-- added css style here to ensure buttons work.-->
@@ -139,7 +138,7 @@ $login->getNavBar();
 						
 						
 						<td id="ticketNumberTD" name="ticketNumberTD" class="table-hover">
-							 <input class="form-control" style="width:210px" type="text" id="ticketNumber"  name="ticketNumber" tabindex="5" placeholder="Any ticket Number(if applicable)" onblur="validation( this, 'ALL' );" />
+							 <input class="form-control" style="width:210px" type="text" id="ticketNumber"  name="ticketNumber" tabindex="5" placeholder="(if applicable)" />
 						</td>
 					</tr>
 				</tbody>
@@ -151,10 +150,10 @@ $login->getNavBar();
 
 		
 		<div>
-					<input class="btn btn-green pull-right addCall highlight" type="submit" name="submit" id='submit' tabindex="5" value="Add Call">
-					<input class="btn btn-update pull-right updateCall highlight"  type="submit" name="submit" id='submit' value="Update Call">
-					<input class="btn btn-clear  pull-right clear highlight"  type="submit" name="submit" id='submit' value="Clear">
-					<input class="btn btn-clear  pull-left delete highlight"  type="submit" name="submit" id='submit' value="Delete">
+					<input class="btn btn-green pull-right addCall" type="submit" name="submit" id='submit' tabindex="5" value="Add">
+					<input class="btn btn-update pull-right updateCall"  type="submit" name="submit" id='submit' value="Update">
+					<input class="btn btn-clear  pull-right clear"  type="submit" name="submit" id='submit' value="Clear">
+					<input class="btn btn-clear  pull-left delete"  type="submit" name="submit" id='submit' value="Delete">
 		</div>
 
 	
@@ -168,26 +167,26 @@ $login->getNavBar();
 
 
 <!-- footer navbar-->
-<nav class="navbar navbar-inverse navbar-fixed-bottom">
+<nav class="navbar navbar-inverse navbar-fixed-bottom" tabindex="-1">
      <div class="container">
-      <p class="navbar-text pull-left">Created: 2015 IS Operations Center 
-	  <a href="IsocLogo2.jpg"><img src="img/IsocLogo2.jpg"alt=""></a>
+      <p class="navbar-text pull-left" tabindex="-1">Created: 2015 IS Operations Center 
+	  <a href="IsocLogo2.jpg" tabindex="-1"><img src="img/IsocLogo2.jpg"alt="" tabindex="-1"></a>
       </p>
 	  
        <div  class="btn-toolbar pull-right"> 
 	   
 			<!-- 12 Hours Button -->
-			<button type="submit" class="navbar-btn btn-bottomnavbtn btn twelveHours highlight" name="submit" id='submit' value="Current Calls">
+			<button type="submit" class="navbar-btn btn-bottomnavbtn btn twelveHours highlight" name="submit" id='submit' value="Current Calls" tabindex="-1">
 			  <i class="glyphicon glyphicon-search"></i> 12 Hours
 			</button>
 			
 			<!-- 1 Day Button -->
-			<button type="submit" class="navbar-btn btn-bottomnavbtn btn oneDay" name="submit" id='submit' value="One Day">
+			<button type="submit" class="navbar-btn btn-bottomnavbtn btn oneDay" name="submit" id='submit' value="One Day" tabindex="-1">
 			  <i class="glyphicon glyphicon-search"></i> 1 Day
 			</button>
 			
 			<!-- All Button -->
-			<button type="submit" class="navbar-btn btn-bottomnavbtn btn allDays" name="submit" id='submit' value="All Days">
+			<button type="submit" class="navbar-btn btn-bottomnavbtn btn allDays" name="submit" id='submit' value="All Days" tabindex="-1">
 			  <i class="glyphicon glyphicon-search"></i> All
 			</button>
 			
