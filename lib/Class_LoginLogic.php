@@ -1,6 +1,6 @@
 <?php 
-require_once 'Class_LoginDB_In.php';
-require_once 'Class_LoginDB_Out.php';
+require_once 'Class_DB_In.php';
+require_once 'Class_DB_Out.php';
 require_once 'Class_ValidationUserInput.php';
 require_once 'Class_ISOC_EMAIL.php';
 require_once 'Class_ErrorPopup.php';
@@ -23,8 +23,8 @@ class LoginLogic extends ValidationUserInput
 	private function instantiateVariables()
 	{
 		 // Database communication variables
-		 $this->FromDB = new LoginDB_Out();
-		 $this->ToDB = new LoginDB_In();
+		 $this->FromDB = new DB_Out();
+		 $this->ToDB = new DB_In();
 		 $this->email = new ISOC_EMAIL();		
 		 $this->validation = new ValidationUserInput();
 		 $this->messagePopup = new ErrorPopup();
@@ -144,9 +144,10 @@ class LoginLogic extends ValidationUserInput
 		$lastname = $_POST['lastname'];
 		$passwd = $_POST['passwd'];
 		$secretWord = $_POST['secretWord'];
+		$shift = $_POST['shift'];
 		$dateTimeNow = date('Y-m-d H:i:s');
 		$anArray = array("ISOC_TECH_EMPLOYEE_ID"=>"$id", "ISOC_TECH_PASSWORD"=>hash('sha256', $_POST['passwd']), "ISOC_TECH_FIRST_NAME"=>"$firstname", "ISOC_TECH_LAST_NAME"=>"$lastname",
-						 "ISOC_TECH_EMAIL"=>"$email", "ISOC_TECH_SECRET_WORD"=>"$secretWord", "ISOC_TECH_LAST_LOGIN"=>"$dateTimeNow");
+						 "ISOC_TECH_EMAIL"=>"$email", "ISOC_TECH_SECRET_WORD"=>"$secretWord", "ISOC_TECH_LAST_LOGIN"=>"$dateTimeNow" , "ISOC_TECH_SHIFT"=>$shift, "ACCOUNT_STATUS"=>"Active", "ISOC_TECH_ROLE"=>"User");
 		
 		
 		$sql = "SELECT * FROM TB_ISOC_TECHS WHERE ISOC_TECH_EMPLOYEE_ID = '".$id."' OR ISOC_TECH_EMAIL = '".$email."' AND ISOC_TECH_PASSWORD = '".hash('sha256', $_POST['passwd'])."'";
@@ -156,7 +157,7 @@ class LoginLogic extends ValidationUserInput
 		if ($temp['ISOC_TECH_EMAIL'] != $email ||  $temp['ISOC_TECH_EMPLOYEE_ID'] != $id )
 		{
 			// Insert New User
-			$this->ToDB->insertRecordOneTable( $anArray ,'TB_ISOC_TECHS', 'issssss' );
+			$this->ToDB->insertRecordOneTable( $anArray ,'TB_ISOC_TECHS', 'isssssssss' );
 			$lastTransactionID = $this->ToDB->getLastTransactionID();
 			$sql = "SELECT * FROM TB_ISOC_TECHS WHERE ISOC_TECH_EMPLOYEE_ID = '".$id."' OR ISOC_TECH_EMAIL = '".$email."' AND ISOC_TECH_PASSWORD = '".hash('sha256', $_POST['passwd'])."'";
 			$temp = $this->FromDB->multiFieldChangeToArrayAssociative( $sql );		
@@ -165,8 +166,9 @@ class LoginLogic extends ValidationUserInput
 				if ($temp['ISOC_TECH_EMAIL'] == $email ||  $temp['ISOC_TECH_EMPLOYEE_ID'] == $id )
 				{
 					// show pop-up registration complete.
-					$this->messagePopup->addTomessagePopUp( 'OK', 'Registration Complete!', $firstname.', you have successfully registered! A confirmation email has been sent to you.' , 'success' );
-					
+					$this->messagePopup->addTomessagePopUp( 'OK', 'Registration Complete!', $firstname.' has been successfully registered.' , 'success');
+					//$this->messagePopup->addTomessagePopUp( 'OK', 'Registration Complete!', $firstname.', you have successfully registered! A confirmation email has been sent to you.' , 'success' );
+					//$this->requesterEmailSend();
 
 				}
 				else
@@ -465,13 +467,25 @@ class LoginLogic extends ValidationUserInput
 			switch ($_POST['submit']) 
 			{
 				case "Load Page":   
-							echo json_encode( $this->loadAccountInformation() );
+							$userLoginID = $_SESSION['ISOC_TECH_EMPLOYEE_ID'];
+							echo json_encode( $this->loadAccountInformation( $userLoginID ) );
 					break;
-				case "Update Account Info": 
+				case "Load Other":
+							$userLoginID = $_POST['OTHER_ID'];
+							echo json_encode( $this->loadAccountInformation( $userLoginID ) );
+					break;
+				case "Update Account All": 
 								
-							$_POST['DATE_TIME'] = $this->convertJavaTimeToPHPTime($_POST['DATE_TIME'] );
-							$this->updateCall($_POST['TICKET_NUMBER'], $_POST['DATE_TIME'], $_POST['METHOD'], $_POST['PERSON_CONTACTED'], $_POST['NOTES'], $_POST['TICKET']);
+							$this->updateAccountAll($_POST['ACC_FIRST_NAME'], $_POST['ACC_LAST_NAME'], $_POST['ACC_EMAIL'], $_POST['ACC_SECRET_WORD'], $_POST['ACC_ROLE'], $_POST['ACC_SHIFT'], $_POST['ACCT_NEW_ID'],
+							$_POST['ACCT_OLD_ID'], hash('sha256', $_POST['ACC_NEW_PASSWORD']) );
+							echo json_encode( array( "UPDATE_STATUS"=>"success"));
 							
+					break;
+				case "Update Account No Password": 
+								
+							$this->updateAccountNoPassword($_POST['ACC_FIRST_NAME'], $_POST['ACC_LAST_NAME'], $_POST['ACC_EMAIL'], $_POST['ACC_SECRET_WORD'], $_POST['ACC_ROLE'], $_POST['ACC_SHIFT'], $_POST['ACCT_NEW_ID'],
+							$_POST['ACCT_OLD_ID']);
+							echo json_encode( array( "UPDATE_STATUS"=>"success"));
 					break;
 				case "VALIDATION":  // Validation
 							// convert post variables to be compatible with validation class
@@ -484,19 +498,44 @@ class LoginLogic extends ValidationUserInput
 		}
 	}
 	
-	
-	private function loadAccountInformation()
+	private function updateAccountAll( $accountFirstName, $accountLastName, $accountEmail, $accountSecretWord, $accountRole, $accountShift, $accountNewID, $accountOldID, $accountNewPassword )
 	{
-		$userLoginID = $_SESSION['ISOC_TECH_EMPLOYEE_ID'];
-		//$sql = 'SELECT * FROM TB_ISOC_TECHS WHERE ISOC_TECH_EMPLOYEE_ID = "'.$userLoginID.'"';
-		$sql = 'SELECT * FROM TB_ISOC_TECHS WHERE ISOC_TECH_EMPLOYEE_ID = "53741"';
+		$updateArray = array("ISOC_TECH_EMPLOYEE_ID"=>$accountNewID, "ISOC_TECH_PASSWORD"=>$accountNewPassword, "ISOC_TECH_FIRST_NAME" =>$accountFirstName, "ISOC_TECH_LAST_NAME"=>$accountLastName, "ISOC_TECH_EMAIL"=>$accountEmail, 
+					"ISOC_TECH_SECRET_WORD"=>$accountSecretWord, "ISOC_TECH_ROLE"=>$accountRole, "ISOC_TECH_SHIFT"=>$accountShift);
+		$whereArray = array("ISOC_TECH_EMPLOYEE_ID"=>$accountOldID );			
+		$this->ToDB->updateRecordOneTable( $updateArray , $whereArray, 'equals', 'TB_ISOC_TECHS' , 'ssssssssi');
+	}
+	
+	private function updateAccountNoPassword( $accountFirstName, $accountLastName, $accountEmail, $accountSecretWord, $accountRole, $accountShift, $accountNewID, $accountOldID)
+	{
+		$updateArray = array("ISOC_TECH_EMPLOYEE_ID"=>$accountNewID, "ISOC_TECH_FIRST_NAME" =>$accountFirstName, "ISOC_TECH_LAST_NAME"=>$accountLastName, "ISOC_TECH_EMAIL"=>$accountEmail, 
+					"ISOC_TECH_SECRET_WORD"=>$accountSecretWord, "ISOC_TECH_ROLE"=>$accountRole, "ISOC_TECH_SHIFT"=>$accountShift);
+		$whereArray = array("ISOC_TECH_EMPLOYEE_ID"=>$accountOldID );			
+		$this->ToDB->updateRecordOneTable( $updateArray , $whereArray, 'equals', 'TB_ISOC_TECHS' , 'sssssssi');
+	}
+	
+	private function loadAccountInformation( $userLoginID )
+	{
+		$sql = 'SELECT * FROM TB_ISOC_TECHS WHERE ISOC_TECH_EMPLOYEE_ID = "'.$userLoginID.'"';
 		$temp = array();
 		$temp = $this->FromDB->multiFieldChangeToArrayAssociative( $sql );	
 		return $temp;
 	}
 	
 	
-	
+	private function validateHtmlInput( $nameOfObject, $aType )
+	{
+		$value = $this->validation->validateInformation( $nameOfObject , $aType);
+
+			if ($value === false)
+			{
+				echo json_encode( array("PASS_VALIDATION"=>"false", "VALUE"=>$_POST[$nameOfObject]) );
+				exit;
+			}
+		
+		// all items have passed validation
+		echo json_encode( array("PASS_VALIDATION"=>"true", "VALUE"=>$_POST[$nameOfObject]) );
+	}
 	
 	
 	
@@ -549,6 +588,36 @@ class LoginLogic extends ValidationUserInput
 		}
 		
 	}
+	
+	
+	
+	public function createDropDownListAllTechs()
+	{
+		$sql = 'SELECT * FROM TB_ISOC_TECHS WHERE ACCOUNT_STATUS = "Active"';	
+		$getArray = array();
+		$keyNames = array();
+		$values = array();
+		
+		// Separate Arrays in order to get keys and values easier
+		$getArray = $this->FromDB->multiRowAndFieldChangeToArrayAssociative( $sql );
+		$keyNames = $getArray['KEYS'];
+		$values = $getArray['VALUES'];
+		$columnCount = count($keyNames);
+		
+		for ($x=0; $x < count($values); $x=$x+$columnCount)
+		{	
+			  echo '<option value="'.$values[$x].'">'.$values[$x+2].' '.$values[$x+3].'</option>';
+		}	 
+			
+			// Display select code in html
+			//echo implode("\n", $options);
+			
+			//echo '<option value="Central Time (US &amp; Canada)" selected="selected">(GMT-06:00) Central Time (US &amp; Canada)</option>';
+		//	print_r($data);
+	}
+	
+	
+	
 	
 	public function checkPOSTRegisterInfo()
 	{

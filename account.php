@@ -44,49 +44,59 @@ catch (Exception  $e)
 
 </head>
 <body>
-
 <div class="container">
     <h1>Edit Account Information</h1>
   	<hr>
 	<div class="row">
 
       
-      <!-- edit form column -->
+      <!-- edit form column 
       <div class="col-md-9 personal-info">
         <div class="alert alert-info alert-dismissable">
           <a class="panel-close close" data-dismiss="alert">×</a> 
      
           This page is under construction and does not work yet.
         </div>
-		
+		-->
 		
         <h3>Personal info</h3>
+		<form class="form-horizontal" role="form">
         
-        <form class="form-horizontal" role="form">
+		<div class="form-group adminUserPicker">
+             <label class="col-lg-3 control-label">Choose User:</label>
+			   <div class="col-lg-8">
+				<select class="form-control adminSelect" name="adminSelect" id="adminSelect"  style="">
+					<?php $TierTwo->createDropDownListAllTechs(); ?>
+				</select>
+			
+             </div>
+          </div>
+		  
+        
           <div class="form-group">
             <label class="col-lg-3 control-label">First name:</label>
             <div class="col-lg-8">
-              <input class="form-control firstName" type="text" value="">
+              <input class="form-control firstName" type="text" value="" onblur="validation( this, 'ALL' );">
             </div>
           </div>
           <div class="form-group">
             <label class="col-lg-3 control-label">Last name:</label>
             <div class="col-lg-8">
-              <input class="form-control lastName" type="text" value="">
+              <input class="form-control lastName" type="text" value="" onblur="validation( this, 'ALL' );">
             </div>
           </div>
 
           <div class="form-group">
             <label class="col-lg-3 control-label">Email:</label>
             <div class="col-lg-8">
-              <input class="form-control email" type="text" value="">
+              <input class="form-control email" type="text" value="" onblur="validation( this, 'ALL' );">
             </div>
           </div>
 		  
 		  <div class="form-group">
             <label class="col-lg-3 control-label">Secret Word:</label>
             <div class="col-lg-8">
-              <input class="form-control secretWord" type="text" value="">
+              <input class="form-control secretWord" type="text" value="" onblur="validation( this, 'ALL' );">
             </div>
           </div>
 		  
@@ -121,9 +131,8 @@ catch (Exception  $e)
              <label class="col-lg-3 control-label">Role:</label>
 			   <div class="col-lg-8">
 				<select class="form-control role-select" name="role" id="role"  style="">
-				  <option value="1">User</option>
-				  <option value="2">Admin</option>
-				  <option value=""></option>
+				  <option value="User">User</option>
+				  <option value="Admin">Admin</option>
 				</select>
 				<input class="form-control role-text" type="text" value="">
              </div>
@@ -138,7 +147,6 @@ catch (Exception  $e)
 				  <option value="3">3rd</option>
 				  <option value="Cross Shift">Cross Shift</option>
 				  <option value="Unix">Unix</option>
-				  <option value=""></option>
 				</select>
 			
              </div>
@@ -146,21 +154,24 @@ catch (Exception  $e)
 		  <div class="form-group">
             <label class="col-lg-3 control-label">Employee ID:</label>
             <div class="col-lg-8">
-              <input class="form-control id" type="text" value="">
+              <input class="form-control id" type="text" value="" onblur="validation( this, 'ALL' );">
             </div>
           </div>
           <div class="form-group">
-            <label class="col-md-3 control-label password1">Password:</label>
+            <label class="col-md-3 control-label">Password:</label>
             <div class="col-md-8">
-              <input class="form-control" type="password" value="">
+              <input class="form-control password1" type="password" value="" onblur="validation( this, 'SANITIZE' );">
             </div>
           </div>
           <div class="form-group">
-            <label class="col-md-3 control-label password2">Confirm password:</label>
+            <label class="col-md-3 control-label ">Confirm password:</label>
             <div class="col-md-8">
-              <input class="form-control" type="password" value="">
+              <input class="form-control password2" type="password" value="" onblur="validation( this, 'SANITIZE' );">
             </div>
           </div>
+		  </form>
+		  
+		  <!-- Buttons -->
           <div class="form-group">
             <label class="col-md-3 control-label"></label>
             <div class="col-md-8">
@@ -169,7 +180,7 @@ catch (Exception  $e)
               <input type="reset" class="btn btn-default clear" value="clear">
             </div>
           </div>
-        </form>
+        
 		
 		
 		

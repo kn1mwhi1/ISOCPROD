@@ -115,6 +115,19 @@ catch (Exception e)
                                 </div>
 								
 								<div class="form-group">
+								 <label class="col-lg-3 control-label">Shift</label>
+								   <div class="col-lg-8">
+									<select class="form-control shift" name="shift" id="shift"  style="">
+									  <option value="1">1st</option>
+									  <option value="2">2nd</option>
+									  <option value="3">3rd</option>
+									  <option value="Cross Shift">Cross Shift</option>
+									  <option value="Unix">Unix</option>
+									</select>
+								 </div>
+							  </div>
+								
+								<div class="form-group">
                                     <label for="secretWord" class="col-md-3 control-label">Secret Word</label>
                                     <div class="col-md-9">
                                         <input type="text" class="form-control <?php $TierTwo->getError('secretWord');?>" id="secretWord" name="secretWord" placeholder="Secret Word"  >

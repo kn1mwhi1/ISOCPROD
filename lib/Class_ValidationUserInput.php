@@ -209,6 +209,13 @@ class ValidationUserInput extends BaseDataBase
 		
 	}
 	
+	public function sanitizeReturnInput( $nameOfObject )
+	{
+			// Calls sanitize function and then saves results in the name box variable located in this class.
+			$_POST[$nameOfObject] = $this->sanitize_input($_POST[$nameOfObject]);
+			return true; // pass validation
+	}
+	
 	
 	public function validateInformation( $nameOfObject, $aType )
 	{
@@ -234,6 +241,9 @@ class ValidationUserInput extends BaseDataBase
 				break;
 			case "DATE":
 					return $this->validateDate( $nameOfObject );//******************
+				break;
+			case "SANITIZE":
+					return $this->sanitizeReturnInput( $nameOfObject );
 				break;
 			default:
 					return $this->validateAllCharaters( $nameOfObject );

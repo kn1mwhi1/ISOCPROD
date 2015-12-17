@@ -1,0 +1,199 @@
+
+.table-sortable tbody tr {
+    cursor: move;
+}
+
+body {
+	height: auto;
+	font-family: Helevetica;
+	font-variant: small-caps;
+}
+
+
+.header {
+        text-align: center;
+        font-family: Helvetica;
+        font-variant: small-caps;
+        color: #FFFFFF;
+        border-radius: 10px;
+        background: #66C285;
+     
+        width: auto;
+        height: auto;
+   
+	  top: 20px;
+}
+
+
+.other{
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-left: 0px;
+	margin-right: 10px;
+	width: 130px;
+	float: right;
+
+}
+
+
+.spacing{
+	margin-top: 10px;
+}
+
+textarea {
+    width: 300px;
+    height: 1000px;
+}
+
+.updateCall{
+	display: none;
+	margin-left: 10px;
+}
+
+.delete{
+	display: none;
+}
+
+.addCall{
+	margin-left: 10px;
+}
+
+#datetimepickerDiv{
+	width: 200px;
+	
+}
+
+.everyoneView{
+	margin-left: 5px;
+}
+
+
+thead{
+	    color: #FFFFFF;
+        background: #66C285
+}
+
+.error {
+  border:2px solid red;
+}
+
+
+.expired {
+	
+	-webkit-animation: blinkRed 2.0s infinite;
+	-moz-animation: blinkRed 2.0s infinite;
+	-ms-animation: blinkRed 2.0s infinite;
+	-o-animation: blinkRed 2.0s infinite;
+		animation: blinkRed 2.0s infinite;
+		color: white;
+}
+
+/* Sets  the buttons position */
+.selfView, .everyoneView{
+	position: relative;
+    top: 55px;
+	z-index:4;
+}
+
+
+
+#dynamicTable{
+	height: 460px;
+	width: auto;	
+}
+
+
+.nodisplay{
+	display: none;
+}
+
+
+.testBlue {
+	border-style: solid;
+	border-width: medium;
+	border-color: blue;
+	border-radius: 10px;
+}
+
+
+
+
+.navbarCustom{
+	
+	padding: 0px;
+	margin-bottom: 0px;
+	margin-top: 0px;
+}
+
+.moveUp40{
+	position: relative;
+	bottom: 40px;
+	
+}
+
+.moveUp35{
+	position: relative;
+	bottom: 35px;
+	
+}
+
+.moveUp25{
+	position: relative;
+	bottom: 25px;
+	
+}
+
+.moveDown10{
+	position: relative;
+	top: 20px;
+	
+}
+
+.h850{
+	height: 850px;
+}
+
+.center{
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+#serverTime{
+	font-weight: bold;
+	font-size: 14px;
+	position: relative;
+	top: 25px;
+}
+.block{
+display:block;
+}
+
+.btn-green{
+background-color: #66C285;
+color: white;
+}
+
+.btn-clear{
+background-color: #bc9b74;
+color: white;
+}
+ 
+ .btn-update{
+ background-color: #5993cd;
+ color: white;
+ }
+ 
+/* This changes the colour when a button has focus and when you hover */ 
+ .btn:focus, .btn:hover {
+  background-color: black;
+  color: white;
+}
+
+/* This class is usually used by jquery */
+ .highlight{
+	background-color: black;
+	color: white;
+}
+
+ 
